@@ -27,9 +27,18 @@ def canonical_json(obj: Any) -> str:
     return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
 
 
+# 128 bits of SHA-256, hex-encoded. Measured (experiments/c1_identifier_storage.py):
+# 42% smaller database and 2.5x insert throughput versus the full 64-char digest,
+# at identical lookup latency, while staying readable in a sqlite3 shell and in
+# JSON. A 16-byte BLOB is smaller still (62% reduction) but is opaque and cannot
+# be embedded in the evidence_ids JSON array without encoding it back to hex.
+# Collision bound: 2^64 identifiers before a 50% chance of one collision.
+ID_HEX_CHARS = 32
+
+
 def _h(*parts: Any) -> str:
     joined = _SEP.join("" if p is None else str(p) for p in parts)
-    return hashlib.sha256(joined.encode("utf-8")).hexdigest()
+    return hashlib.sha256(joined.encode("utf-8")).hexdigest()[:ID_HEX_CHARS]
 
 
 def content_sha256(data: bytes) -> str:

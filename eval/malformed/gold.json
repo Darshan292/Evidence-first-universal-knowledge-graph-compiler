@@ -1,0 +1,61 @@
+{
+  "provenance": "Authored by construction: each file has a deliberate syntax error at a known line, and the symbols that a recovering parser SHOULD still find are enumerated independently of any parser output.",
+  "cases": [
+    {
+      "file": "m1_bad_signature.py",
+      "error_line": 5,
+      "recoverable_symbols": [
+        "before_ok",
+        "after_ok"
+      ],
+      "note": "error is inside one def; the defs before and after are intact"
+    },
+    {
+      "file": "m2_unclosed_paren.py",
+      "error_line": 2,
+      "recoverable_symbols": [
+        "tail_fn"
+      ],
+      "note": "unclosed paren swallows the following lines until the next def"
+    },
+    {
+      "file": "m3_bad_indent.py",
+      "error_line": 4,
+      "recoverable_symbols": [
+        "Klass",
+        "good_method"
+      ],
+      "note": "indentation error inside a class body"
+    },
+    {
+      "file": "m4_py2_print.py",
+      "error_line": 2,
+      "recoverable_symbols": [
+        "legacy",
+        "modern"
+      ],
+      "note": "Python 2 print statement -- valid Py2, invalid Py3"
+    },
+    {
+      "file": "m5_stray_token.py",
+      "error_line": 3,
+      "recoverable_symbols": [
+        "alpha",
+        "beta"
+      ],
+      "note": "stray token between two valid defs"
+    }
+  ],
+  "version": "1.0.1",
+  "corrections": [
+    {
+      "version": "1.0.1",
+      "date": "2026-09-22",
+      "case": "m2_unclosed_paren.py",
+      "field": "error_line",
+      "was": 3,
+      "now": 2,
+      "reason": "Authoring error in v1.0.0. The unclosed bracket opens on line 2, so that is where the parse fails; line 3 is merely the first line consumed by the unterminated expression. Corrected before any parser comparison was scored. Scoring uses recoverable_symbols, which is unchanged."
+    }
+  ]
+}

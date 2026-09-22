@@ -1,0 +1,121 @@
+{
+  "cases": [
+    {
+      "file": "m1_bad_signature.py",
+      "gold": [
+        "after_ok",
+        "before_ok"
+      ],
+      "ast_recovered": [],
+      "ast_status": "SyntaxError",
+      "ts_recovered": [
+        "after_ok",
+        "before_ok",
+        "broken"
+      ],
+      "ts_flags_error": true,
+      "ts_correct": [
+        "after_ok",
+        "before_ok"
+      ],
+      "ts_spurious": [
+        "broken"
+      ],
+      "ts_missed": []
+    },
+    {
+      "file": "m2_unclosed_paren.py",
+      "gold": [
+        "tail_fn"
+      ],
+      "ast_recovered": [],
+      "ast_status": "SyntaxError",
+      "ts_recovered": [
+        "head_fn",
+        "tail_fn"
+      ],
+      "ts_flags_error": true,
+      "ts_correct": [
+        "tail_fn"
+      ],
+      "ts_spurious": [
+        "head_fn"
+      ],
+      "ts_missed": []
+    },
+    {
+      "file": "m3_bad_indent.py",
+      "gold": [
+        "Klass",
+        "good_method"
+      ],
+      "ast_recovered": [],
+      "ast_status": "SyntaxError",
+      "ts_recovered": [
+        "Klass",
+        "bad_indent",
+        "good_method"
+      ],
+      "ts_flags_error": false,
+      "ts_correct": [
+        "Klass",
+        "good_method"
+      ],
+      "ts_spurious": [
+        "bad_indent"
+      ],
+      "ts_missed": []
+    },
+    {
+      "file": "m4_py2_print.py",
+      "gold": [
+        "legacy",
+        "modern"
+      ],
+      "ast_recovered": [],
+      "ast_status": "SyntaxError",
+      "ts_recovered": [
+        "legacy",
+        "modern"
+      ],
+      "ts_flags_error": false,
+      "ts_correct": [
+        "legacy",
+        "modern"
+      ],
+      "ts_spurious": [],
+      "ts_missed": []
+    },
+    {
+      "file": "m5_stray_token.py",
+      "gold": [
+        "alpha",
+        "beta"
+      ],
+      "ast_recovered": [],
+      "ast_status": "SyntaxError",
+      "ts_recovered": [
+        "alpha",
+        "beta"
+      ],
+      "ts_flags_error": true,
+      "ts_correct": [
+        "alpha",
+        "beta"
+      ],
+      "ts_spurious": [],
+      "ts_missed": []
+    }
+  ],
+  "summary": {
+    "gold_recoverable_symbols": 9,
+    "ast_recovered": 0,
+    "ast_recall": 0.0,
+    "treesitter_recovered_total": 12,
+    "treesitter_correct": 9,
+    "treesitter_recall": 1.0,
+    "treesitter_spurious": 3,
+    "treesitter_precision": 0.75,
+    "treesitter_flags_error_on_all_malformed": false
+  }
+}

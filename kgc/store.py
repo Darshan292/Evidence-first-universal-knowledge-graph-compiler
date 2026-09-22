@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS artifact(
   size_bytes    INTEGER NOT NULL,
   media_type    TEXT NOT NULL,
   modality      TEXT NOT NULL,
-  parse_status  TEXT NOT NULL CHECK(parse_status IN ('OK','PARTIAL','FAILED','SKIPPED')),
+  parse_status  TEXT NOT NULL CHECK(parse_status IN ('OK','PARTIAL','FAILED','SKIPPED','UNSUPPORTED')),
   parse_error   TEXT,
   parser_id     TEXT,
   parser_version TEXT,
@@ -412,12 +412,20 @@ class Store:
                       ).fetchone()["n"]
         if n: v.append(f"{n} UNRESOLVED reference(s) with a resolved target")
 
+        # The converse, and the one that actually bit: claiming DETERMINISTIC
+        # resolution while carrying no target is an unsupported assertion.
+        n = c.execute("SELECT count(*) n FROM reference r JOIN claim cl USING(claim_id)"
+                      " WHERE r.resolution='DETERMINISTIC' AND cl.object_id IS NULL"
+                      ).fetchone()["n"]
+        if n: v.append(f"{n} DETERMINISTIC reference(s) with no resolved target")
+
         n = c.execute("SELECT count(*) n FROM reference r"
                       " WHERE NOT EXISTS (SELECT 1 FROM claim cl WHERE cl.claim_id=r.claim_id)"
                       ).fetchone()["n"]
         if n: v.append(f"{n} reference detail row(s) with no claim")
 
-        n = c.execute("SELECT count(*) n FROM artifact WHERE parse_status IN ('FAILED','PARTIAL')"
+        n = c.execute("SELECT count(*) n FROM artifact WHERE parse_status IN"
+                      " ('FAILED','PARTIAL','UNSUPPORTED','SKIPPED')"
                       " AND (parse_error IS NULL OR parse_error='')").fetchone()["n"]
         if n: v.append(f"{n} failed artifact(s) with no recorded reason")
 

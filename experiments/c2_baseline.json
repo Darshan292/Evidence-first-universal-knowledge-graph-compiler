@@ -1,0 +1,135 @@
+{
+  "results": [
+    {
+      "id": "CS-01",
+      "case": "qualified call via direct import",
+      "expected": "DETERMINISTIC",
+      "actual": "DETERMINISTIC",
+      "target": "pkg.core.helper",
+      "true_target": "pkg.core.helper",
+      "outcome": "TP"
+    },
+    {
+      "id": "CS-02",
+      "case": "qualified call through module alias",
+      "expected": "DETERMINISTIC",
+      "actual": "DETERMINISTIC",
+      "target": "pkg.core.helper",
+      "true_target": "pkg.core.helper",
+      "outcome": "TP"
+    },
+    {
+      "id": "CS-03",
+      "case": "from-import-as binding",
+      "expected": "DETERMINISTIC",
+      "actual": "DETERMINISTIC",
+      "target": "pkg.other.shared_name",
+      "true_target": "pkg.other.shared_name",
+      "outcome": "TP"
+    },
+    {
+      "id": "CS-04",
+      "case": "plain from-import binding",
+      "expected": "DETERMINISTIC",
+      "actual": "DETERMINISTIC",
+      "target": "pkg.core.helper",
+      "true_target": "pkg.core.helper",
+      "outcome": "TP"
+    },
+    {
+      "id": "CS-05",
+      "case": "intra-module local function",
+      "expected": "DETERMINISTIC",
+      "actual": "DETERMINISTIC",
+      "target": "from_import.local_helper",
+      "true_target": "from_import.local_helper",
+      "outcome": "TP"
+    },
+    {
+      "id": "CS-06",
+      "case": "same-name symbol exists in pkg.other and must NOT be chosen",
+      "expected": "DETERMINISTIC",
+      "actual": "DETERMINISTIC",
+      "target": "pkg.core.shared_name",
+      "true_target": "pkg.core.shared_name",
+      "outcome": "TP"
+    },
+    {
+      "id": "CS-07",
+      "case": "re-export: requires following pkg/__init__ to reach the definition",
+      "expected": "HEURISTIC",
+      "actual": "HEURISTIC",
+      "target": "pkg.core.helper",
+      "true_target": "pkg.core.helper",
+      "outcome": "TP"
+    },
+    {
+      "id": "CS-08",
+      "case": "local def shadows the imported name -- the trap",
+      "expected": "DETERMINISTIC",
+      "actual": "DETERMINISTIC",
+      "target": "shadowed.helper",
+      "true_target": "shadowed.helper",
+      "outcome": "TP"
+    },
+    {
+      "id": "CS-09",
+      "case": "third-party package absent from corpus",
+      "expected": "UNRESOLVED",
+      "actual": "UNRESOLVED",
+      "target": null,
+      "true_target": null,
+      "outcome": "TP"
+    },
+    {
+      "id": "CS-10",
+      "case": "third-party symbol absent from corpus",
+      "expected": "UNRESOLVED",
+      "actual": "UNRESOLVED",
+      "target": null,
+      "true_target": null,
+      "outcome": "TP"
+    },
+    {
+      "id": "CS-11",
+      "case": "circular import, side A",
+      "expected": "DETERMINISTIC",
+      "actual": "DETERMINISTIC",
+      "target": "cycle_b.beta",
+      "true_target": "cycle_b.beta",
+      "outcome": "TP"
+    },
+    {
+      "id": "CS-12",
+      "case": "function-local import inside a cycle",
+      "expected": "DETERMINISTIC",
+      "actual": "DETERMINISTIC",
+      "target": "cycle_a.alpha",
+      "true_target": "cycle_a.alpha",
+      "outcome": "TP"
+    },
+    {
+      "id": "CS-13",
+      "case": "stdlib call -- outside the corpus",
+      "expected": "UNRESOLVED",
+      "actual": "UNRESOLVED",
+      "target": null,
+      "true_target": null,
+      "outcome": "TP"
+    }
+  ],
+  "confusion": {
+    "TP": 13,
+    "WRONG_TARGET": 0,
+    "UNDER": 0,
+    "OVER": 0,
+    "MISSING": 0
+  },
+  "deterministic_recall": 1.0,
+  "deterministic_gold_n": 9,
+  "unresolved_correct_rate": 1.0,
+  "false_positive_targets": 0,
+  "false_positive_rate": 0.0,
+  "under_resolved": 0,
+  "missing": 0
+}

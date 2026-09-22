@@ -1,0 +1,3530 @@
+{
+  "summary": {
+    "R0": {
+      "overall": {
+        "recall@1": 0.238,
+        "recall@5": 0.333,
+        "recall@10": 0.333,
+        "MRR": 0.278,
+        "answer_correct@10": 0.333,
+        "evidence_correct@10": 0.286,
+        "evidence_gap": 0.048
+      },
+      "per_class": {
+        "adversarial_misleading_lexical": {
+          "recall@1": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0
+        },
+        "adversarial_structural_not_lexical": {
+          "recall@1": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0
+        },
+        "conflict": {
+          "recall@1": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0
+        },
+        "cross_document": {
+          "recall@1": 0.5,
+          "recall@5": 0.5,
+          "recall@10": 0.5
+        },
+        "entity_ambiguity": {
+          "recall@1": 0.5,
+          "recall@5": 0.5,
+          "recall@10": 0.5
+        },
+        "evidence_localization": {
+          "recall@1": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0
+        },
+        "exact_identifier": {
+          "recall@1": 1.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "lexical": {
+          "recall@1": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0
+        },
+        "multi_hop": {
+          "recall@1": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0
+        },
+        "paraphrase": {
+          "recall@1": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0
+        },
+        "structural_code": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        }
+      },
+      "negative": {
+        "n": 2,
+        "false_support_rate": 0.0
+      },
+      "conflict_preservation_rate": 0.0,
+      "distractor_beats_gold": 0.0,
+      "latency_ms_p50": 0.01,
+      "latency_ms_p95": 0.23
+    },
+    "R1": {
+      "overall": {
+        "recall@1": 0.429,
+        "recall@5": 0.905,
+        "recall@10": 0.952,
+        "MRR": 0.609,
+        "answer_correct@10": 0.952,
+        "evidence_correct@10": 0.81,
+        "evidence_gap": 0.143
+      },
+      "per_class": {
+        "adversarial_misleading_lexical": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "adversarial_structural_not_lexical": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "conflict": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "cross_document": {
+          "recall@1": 0.5,
+          "recall@5": 0.5,
+          "recall@10": 1.0
+        },
+        "entity_ambiguity": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "evidence_localization": {
+          "recall@1": 1.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "exact_identifier": {
+          "recall@1": 1.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "lexical": {
+          "recall@1": 0.5,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "multi_hop": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "paraphrase": {
+          "recall@1": 0.333,
+          "recall@5": 0.667,
+          "recall@10": 0.667
+        },
+        "structural_code": {
+          "recall@1": 0.5,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        }
+      },
+      "negative": {
+        "n": 2,
+        "false_support_rate": 1.0
+      },
+      "conflict_preservation_rate": 1.0,
+      "distractor_beats_gold": 0.0,
+      "latency_ms_p50": 0.07,
+      "latency_ms_p95": 0.21
+    },
+    "R2": {
+      "overall": {
+        "recall@1": 0.429,
+        "recall@5": 0.952,
+        "recall@10": 0.952,
+        "MRR": 0.574,
+        "answer_correct@10": 0.952,
+        "evidence_correct@10": 0.81,
+        "evidence_gap": 0.143
+      },
+      "per_class": {
+        "adversarial_misleading_lexical": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "adversarial_structural_not_lexical": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "conflict": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "cross_document": {
+          "recall@1": 0.5,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "entity_ambiguity": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "evidence_localization": {
+          "recall@1": 0.5,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "exact_identifier": {
+          "recall@1": 1.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "lexical": {
+          "recall@1": 0.5,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "multi_hop": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "paraphrase": {
+          "recall@1": 0.333,
+          "recall@5": 0.667,
+          "recall@10": 0.667
+        },
+        "structural_code": {
+          "recall@1": 1.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        }
+      },
+      "negative": {
+        "n": 2,
+        "false_support_rate": 1.0
+      },
+      "conflict_preservation_rate": 1.0,
+      "distractor_beats_gold": 0.0,
+      "latency_ms_p50": 0.33,
+      "latency_ms_p95": 0.58
+    },
+    "R3": {
+      "overall": {
+        "recall@1": 0.476,
+        "recall@5": 0.857,
+        "recall@10": 0.905,
+        "MRR": 0.623,
+        "answer_correct@10": 0.905,
+        "evidence_correct@10": 0.762,
+        "evidence_gap": 0.143
+      },
+      "per_class": {
+        "adversarial_misleading_lexical": {
+          "recall@1": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0
+        },
+        "adversarial_structural_not_lexical": {
+          "recall@1": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 1.0
+        },
+        "conflict": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "cross_document": {
+          "recall@1": 1.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "entity_ambiguity": {
+          "recall@1": 1.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "evidence_localization": {
+          "recall@1": 0.5,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "exact_identifier": {
+          "recall@1": 1.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "lexical": {
+          "recall@1": 0.5,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "multi_hop": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "paraphrase": {
+          "recall@1": 0.333,
+          "recall@5": 0.667,
+          "recall@10": 0.667
+        },
+        "structural_code": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        }
+      },
+      "negative": {
+        "n": 2,
+        "false_support_rate": 1.0
+      },
+      "conflict_preservation_rate": 1.0,
+      "distractor_beats_gold": 1.0,
+      "latency_ms_p50": 0.04,
+      "latency_ms_p95": 0.06
+    },
+    "R4": {
+      "overall": {
+        "recall@1": 0.429,
+        "recall@5": 0.857,
+        "recall@10": 0.952,
+        "MRR": 0.593,
+        "answer_correct@10": 0.952,
+        "evidence_correct@10": 0.81,
+        "evidence_gap": 0.143
+      },
+      "per_class": {
+        "adversarial_misleading_lexical": {
+          "recall@1": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 1.0
+        },
+        "adversarial_structural_not_lexical": {
+          "recall@1": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 1.0
+        },
+        "conflict": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "cross_document": {
+          "recall@1": 0.5,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "entity_ambiguity": {
+          "recall@1": 0.5,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "evidence_localization": {
+          "recall@1": 1.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "exact_identifier": {
+          "recall@1": 1.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "lexical": {
+          "recall@1": 0.5,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "multi_hop": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "paraphrase": {
+          "recall@1": 0.333,
+          "recall@5": 0.667,
+          "recall@10": 0.667
+        },
+        "structural_code": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        }
+      },
+      "negative": {
+        "n": 2,
+        "false_support_rate": 1.0
+      },
+      "conflict_preservation_rate": 1.0,
+      "distractor_beats_gold": 1.0,
+      "latency_ms_p50": 0.09,
+      "latency_ms_p95": 0.14
+    },
+    "R5": {
+      "overall": {
+        "recall@1": 0.333,
+        "recall@5": 0.857,
+        "recall@10": 0.952,
+        "MRR": 0.507,
+        "answer_correct@10": 0.952,
+        "evidence_correct@10": 0.81,
+        "evidence_gap": 0.143
+      },
+      "per_class": {
+        "adversarial_misleading_lexical": {
+          "recall@1": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 1.0
+        },
+        "adversarial_structural_not_lexical": {
+          "recall@1": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 1.0
+        },
+        "conflict": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "cross_document": {
+          "recall@1": 0.5,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "entity_ambiguity": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "evidence_localization": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "exact_identifier": {
+          "recall@1": 1.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "lexical": {
+          "recall@1": 0.5,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "multi_hop": {
+          "recall@1": 0.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        },
+        "paraphrase": {
+          "recall@1": 0.333,
+          "recall@5": 0.667,
+          "recall@10": 0.667
+        },
+        "structural_code": {
+          "recall@1": 0.5,
+          "recall@5": 1.0,
+          "recall@10": 1.0
+        }
+      },
+      "negative": {
+        "n": 2,
+        "false_support_rate": 1.0
+      },
+      "conflict_preservation_rate": 1.0,
+      "distractor_beats_gold": 1.0,
+      "latency_ms_p50": 0.26,
+      "latency_ms_p95": 0.36
+    }
+  },
+  "cost": {
+    "chunks": 87,
+    "chunking_s": 0.004,
+    "fts_index_s": 0.01,
+    "lsa_build_s": 0.059,
+    "lsa_dims": 64,
+    "model_download_mb": 0,
+    "dense_method": "LSA (TF-IDF + truncated SVD)"
+  },
+  "detail": {
+    "R0": [
+      {
+        "id": "Q1-a",
+        "class": "exact_identifier",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q1-b",
+        "class": "exact_identifier",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q1-c",
+        "class": "exact_identifier",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/gateway.py",
+          "docs/api.md",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/payments.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q2-a",
+        "class": "lexical",
+        "answerable": true,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q2-b",
+        "class": "lexical",
+        "answerable": true,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q3-a",
+        "class": "paraphrase",
+        "answerable": true,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q3-b",
+        "class": "paraphrase",
+        "answerable": true,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q3-c",
+        "class": "paraphrase",
+        "answerable": true,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q4-a",
+        "class": "multi_hop",
+        "answerable": true,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q4-b",
+        "class": "multi_hop",
+        "answerable": true,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q5-a",
+        "class": "cross_document",
+        "answerable": true,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q5-b",
+        "class": "cross_document",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "docs/api.md",
+          "orderflow/payments.py",
+          "orderflow/payments.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q6-a",
+        "class": "entity_ambiguity",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/reporting.py",
+          "docs/architecture.md",
+          "orderflow/reporting.py",
+          "orderflow/reporting.py",
+          "orderflow/reporting.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q6-b",
+        "class": "entity_ambiguity",
+        "answerable": true,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q7-a",
+        "class": "negative",
+        "answerable": false,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q7-b",
+        "class": "negative",
+        "answerable": false,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q8-a",
+        "class": "conflict",
+        "answerable": true,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {},
+        "conflict_ok": false,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q9-a",
+        "class": "evidence_localization",
+        "answerable": true,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q9-b",
+        "class": "evidence_localization",
+        "answerable": true,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q10-a",
+        "class": "structural_code",
+        "answerable": true,
+        "rank": 2,
+        "evidence_rank": 2,
+        "grounded": true,
+        "paths": [
+          "orderflow/api.py",
+          "orderflow/payments.py",
+          "docs/api.md",
+          "docs/api.md",
+          "docs/architecture.md",
+          "docs/checkout-abandonment.md",
+          "orderflow/api.py",
+          "orderflow/config.py",
+          "orderflow/payments.py",
+          "orderflow/payments.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q10-b",
+        "class": "structural_code",
+        "answerable": true,
+        "rank": 3,
+        "evidence_rank": 3,
+        "grounded": true,
+        "paths": [
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q13-a",
+        "class": "adversarial_misleading_lexical",
+        "answerable": true,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": false
+      },
+      {
+        "id": "Q13-b",
+        "class": "adversarial_structural_not_lexical",
+        "answerable": true,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      }
+    ],
+    "R1": [
+      {
+        "id": "Q1-a",
+        "class": "exact_identifier",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/config.py",
+          "orderflow/gateway.py",
+          "orderflow/config.py",
+          "orderflow/gateway.py",
+          "docs/runbook.md",
+          "data/settings.json",
+          "orderflow/gateway.py",
+          "data/settings.json",
+          "docs/architecture.md",
+          "orderflow/config.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q1-b",
+        "class": "exact_identifier",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "orderflow/config.py",
+          "data/fees.csv",
+          "data/fees.csv"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q1-c",
+        "class": "exact_identifier",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "docs/api.md",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/payments.py",
+          "data/settings.json",
+          "data/settings.json",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/payments.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q2-a",
+        "class": "lexical",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "docs/adr-007-payment-timeout.md",
+          "docs/runbook.md",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "docs/runbook.md",
+          "docs/architecture.md",
+          "orderflow/gateway.py",
+          "docs/api.md",
+          "orderflow/config.py",
+          "docs/architecture.md"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q2-b",
+        "class": "lexical",
+        "answerable": true,
+        "rank": 3,
+        "evidence_rank": 3,
+        "grounded": true,
+        "paths": [
+          "docs/architecture.md",
+          "docs/architecture.md",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/reporting.py",
+          "orderflow/payments.py",
+          "orderflow/reporting.py",
+          "orderflow/reporting.py",
+          "orderflow/payments.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q3-a",
+        "class": "paraphrase",
+        "answerable": true,
+        "rank": 2,
+        "evidence_rank": 2,
+        "grounded": true,
+        "paths": [
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/checkout-abandonment.md",
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/config.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q3-b",
+        "class": "paraphrase",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "docs/checkout-abandonment.md",
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q3-c",
+        "class": "paraphrase",
+        "answerable": true,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q4-a",
+        "class": "multi_hop",
+        "answerable": true,
+        "rank": 5,
+        "evidence_rank": 5,
+        "grounded": true,
+        "paths": [
+          "docs/runbook.md",
+          "docs/architecture.md",
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "docs/architecture.md",
+          "data/settings.json",
+          "docs/runbook.md"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q4-b",
+        "class": "multi_hop",
+        "answerable": true,
+        "rank": 4,
+        "evidence_rank": 4,
+        "grounded": true,
+        "paths": [
+          "docs/api.md",
+          "docs/api.md",
+          "docs/architecture.md",
+          "orderflow/api.py",
+          "orderflow/api.py",
+          "docs/runbook.md",
+          "docs/architecture.md",
+          "docs/api.md",
+          "orderflow/gateway.py",
+          "docs/runbook.md"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q5-a",
+        "class": "cross_document",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "docs/adr-007-payment-timeout.md",
+          "docs/runbook.md",
+          "docs/architecture.md",
+          "docs/runbook.md",
+          "docs/api.md",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "data/routing.xml",
+          "data/routing.xml"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q5-b",
+        "class": "cross_document",
+        "answerable": true,
+        "rank": 10,
+        "evidence_rank": 10,
+        "grounded": true,
+        "paths": [
+          "data/settings.json",
+          "orderflow/payments.py",
+          "data/settings.json",
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/payments.py",
+          "orderflow/gateway.py",
+          "orderflow/api.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q6-a",
+        "class": "entity_ambiguity",
+        "answerable": true,
+        "rank": 2,
+        "evidence_rank": 6,
+        "grounded": true,
+        "paths": [
+          "orderflow/api.py",
+          "orderflow/reporting.py",
+          "orderflow/api.py",
+          "orderflow/api.py",
+          "orderflow/payments.py",
+          "orderflow/reporting.py",
+          "data/routing.xml",
+          "data/routing.xml",
+          "data/routing.xml",
+          "orderflow/reporting.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q6-b",
+        "class": "entity_ambiguity",
+        "answerable": true,
+        "rank": 2,
+        "evidence_rank": 2,
+        "grounded": true,
+        "paths": [
+          "orderflow/payments.py",
+          "orderflow/ledger.py",
+          "orderflow/payments.py",
+          "docs/architecture.md",
+          "docs/architecture.md",
+          "orderflow/payments.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/payments.py",
+          "docs/architecture.md"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q7-a",
+        "class": "negative",
+        "answerable": false,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "orderflow/payments.py",
+          "data/routing.xml",
+          "data/fees.csv",
+          "data/fees.csv",
+          "orderflow/payments.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q7-b",
+        "class": "negative",
+        "answerable": false,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "orderflow/reporting.py",
+          "docs/architecture.md",
+          "orderflow/reporting.py",
+          "orderflow/reporting.py",
+          "orderflow/api.py",
+          "docs/api.md",
+          "orderflow/reporting.py",
+          "orderflow/api.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q8-a",
+        "class": "conflict",
+        "answerable": true,
+        "rank": 2,
+        "evidence_rank": 2,
+        "grounded": true,
+        "paths": [
+          "data/settings.json",
+          "docs/runbook.md",
+          "data/settings.json",
+          "docs/architecture.md",
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "data/settings.json"
+        ],
+        "meta": {},
+        "conflict_ok": true,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q9-a",
+        "class": "evidence_localization",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "docs/adr-007-payment-timeout.md",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/gateway.py",
+          "docs/architecture.md",
+          "docs/api.md",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "docs/architecture.md",
+          "orderflow/gateway.py",
+          "orderflow/api.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q9-b",
+        "class": "evidence_localization",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "orderflow/config.py",
+          "data/fees.csv",
+          "data/fees.csv"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q10-a",
+        "class": "structural_code",
+        "answerable": true,
+        "rank": 2,
+        "evidence_rank": 4,
+        "grounded": true,
+        "paths": [
+          "docs/architecture.md",
+          "orderflow/payments.py",
+          "orderflow/reporting.py",
+          "orderflow/payments.py",
+          "orderflow/reporting.py",
+          "orderflow/api.py",
+          "docs/runbook.md",
+          "docs/api.md",
+          "orderflow/api.py",
+          "docs/architecture.md"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q10-b",
+        "class": "structural_code",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/ledger.py",
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "orderflow/config.py",
+          "docs/api.md",
+          "orderflow/api.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q13-a",
+        "class": "adversarial_misleading_lexical",
+        "answerable": true,
+        "rank": 5,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "data/routing.xml",
+          "data/routing.xml",
+          "data/routing.xml",
+          "orderflow/api.py",
+          "orderflow/gateway.py",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/reporting.py",
+          "orderflow/api.py",
+          "docs/runbook.md",
+          "docs/architecture.md"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": false
+      },
+      {
+        "id": "Q13-b",
+        "class": "adversarial_structural_not_lexical",
+        "answerable": true,
+        "rank": 5,
+        "evidence_rank": 5,
+        "grounded": true,
+        "paths": [
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/config.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      }
+    ],
+    "R2": [
+      {
+        "id": "Q1-a",
+        "class": "exact_identifier",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/config.py",
+          "orderflow/gateway.py",
+          "docs/runbook.md",
+          "data/settings.json",
+          "data/settings.json",
+          "docs/architecture.md"
+        ],
+        "meta": {
+          "total_reachable": 14,
+          "truncated": true,
+          "returned": 10
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q1-b",
+        "class": "exact_identifier",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "data/fees.csv",
+          "data/fees.csv"
+        ],
+        "meta": {
+          "total_reachable": 9,
+          "truncated": false,
+          "returned": 9
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q1-c",
+        "class": "exact_identifier",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "docs/api.md",
+          "orderflow/payments.py",
+          "data/settings.json",
+          "data/settings.json",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/payments.py"
+        ],
+        "meta": {
+          "total_reachable": 9,
+          "truncated": false,
+          "returned": 9
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q2-a",
+        "class": "lexical",
+        "answerable": true,
+        "rank": 4,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "docs/adr-007-payment-timeout.md",
+          "docs/runbook.md",
+          "docs/runbook.md",
+          "docs/architecture.md",
+          "docs/api.md",
+          "orderflow/config.py",
+          "docs/architecture.md"
+        ],
+        "meta": {
+          "total_reachable": 8,
+          "truncated": false,
+          "returned": 8
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q2-b",
+        "class": "lexical",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/ledger.py",
+          "orderflow/reporting.py",
+          "orderflow/ledger.py",
+          "orderflow/payments.py",
+          "orderflow/reporting.py",
+          "docs/architecture.md",
+          "docs/architecture.md",
+          "orderflow/ledger.py",
+          "orderflow/payments.py",
+          "orderflow/reporting.py"
+        ],
+        "meta": {
+          "total_reachable": 12,
+          "truncated": true,
+          "returned": 10
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q3-a",
+        "class": "paraphrase",
+        "answerable": true,
+        "rank": 2,
+        "evidence_rank": 2,
+        "grounded": true,
+        "paths": [
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/checkout-abandonment.md",
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/config.py"
+        ],
+        "meta": {
+          "total_reachable": 0,
+          "truncated": false
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q3-b",
+        "class": "paraphrase",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "docs/checkout-abandonment.md",
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md"
+        ],
+        "meta": {
+          "total_reachable": 0,
+          "truncated": false
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q3-c",
+        "class": "paraphrase",
+        "answerable": true,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {
+          "total_reachable": 0,
+          "truncated": false
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q4-a",
+        "class": "multi_hop",
+        "answerable": true,
+        "rank": 5,
+        "evidence_rank": 5,
+        "grounded": true,
+        "paths": [
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "docs/runbook.md",
+          "docs/architecture.md",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "docs/architecture.md",
+          "data/settings.json",
+          "docs/runbook.md"
+        ],
+        "meta": {
+          "total_reachable": 6,
+          "truncated": false,
+          "returned": 6
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q4-b",
+        "class": "multi_hop",
+        "answerable": true,
+        "rank": 4,
+        "evidence_rank": 4,
+        "grounded": true,
+        "paths": [
+          "docs/api.md",
+          "docs/api.md",
+          "docs/architecture.md",
+          "orderflow/api.py",
+          "orderflow/api.py",
+          "docs/runbook.md",
+          "docs/architecture.md",
+          "docs/api.md",
+          "orderflow/gateway.py",
+          "docs/runbook.md"
+        ],
+        "meta": {
+          "total_reachable": 0,
+          "truncated": false
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q5-a",
+        "class": "cross_document",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "docs/adr-007-payment-timeout.md",
+          "docs/runbook.md",
+          "docs/architecture.md",
+          "docs/runbook.md",
+          "docs/api.md",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "data/routing.xml",
+          "data/routing.xml"
+        ],
+        "meta": {
+          "total_reachable": 0,
+          "truncated": false
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q5-b",
+        "class": "cross_document",
+        "answerable": true,
+        "rank": 4,
+        "evidence_rank": 4,
+        "grounded": true,
+        "paths": [
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "orderflow/api.py",
+          "data/settings.json",
+          "data/settings.json",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/payments.py",
+          "orderflow/gateway.py"
+        ],
+        "meta": {
+          "total_reachable": 8,
+          "truncated": false,
+          "returned": 8
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q6-a",
+        "class": "entity_ambiguity",
+        "answerable": true,
+        "rank": 4,
+        "evidence_rank": 5,
+        "grounded": true,
+        "paths": [
+          "orderflow/api.py",
+          "orderflow/api.py",
+          "orderflow/api.py",
+          "orderflow/reporting.py",
+          "orderflow/reporting.py",
+          "orderflow/payments.py",
+          "orderflow/reporting.py",
+          "data/routing.xml",
+          "data/routing.xml",
+          "data/routing.xml"
+        ],
+        "meta": {
+          "total_reachable": 12,
+          "truncated": true,
+          "returned": 10
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q6-b",
+        "class": "entity_ambiguity",
+        "answerable": true,
+        "rank": 4,
+        "evidence_rank": 4,
+        "grounded": true,
+        "paths": [
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "orderflow/ledger.py",
+          "orderflow/payments.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "docs/architecture.md",
+          "docs/architecture.md",
+          "docs/architecture.md"
+        ],
+        "meta": {
+          "total_reachable": 14,
+          "truncated": true,
+          "returned": 10
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q7-a",
+        "class": "negative",
+        "answerable": false,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "data/routing.xml",
+          "data/fees.csv",
+          "data/fees.csv",
+          "orderflow/ledger.py",
+          "orderflow/api.py",
+          "orderflow/api.py",
+          "orderflow/payments.py",
+          "orderflow/ledger.py"
+        ],
+        "meta": {
+          "total_reachable": 15,
+          "truncated": true,
+          "returned": 10
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q7-b",
+        "class": "negative",
+        "answerable": false,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "orderflow/reporting.py",
+          "orderflow/reporting.py",
+          "orderflow/reporting.py",
+          "orderflow/reporting.py",
+          "orderflow/api.py",
+          "docs/architecture.md",
+          "docs/api.md",
+          "orderflow/api.py",
+          "orderflow/reporting.py",
+          "orderflow/reporting.py"
+        ],
+        "meta": {
+          "total_reachable": 7,
+          "truncated": false,
+          "returned": 7
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q8-a",
+        "class": "conflict",
+        "answerable": true,
+        "rank": 2,
+        "evidence_rank": 2,
+        "grounded": true,
+        "paths": [
+          "data/settings.json",
+          "docs/runbook.md",
+          "data/settings.json",
+          "docs/architecture.md",
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "data/settings.json"
+        ],
+        "meta": {
+          "total_reachable": 0,
+          "truncated": false
+        },
+        "conflict_ok": true,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q9-a",
+        "class": "evidence_localization",
+        "answerable": true,
+        "rank": 5,
+        "evidence_rank": 5,
+        "grounded": true,
+        "paths": [
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "docs/adr-007-payment-timeout.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/architecture.md",
+          "docs/api.md",
+          "docs/architecture.md",
+          "orderflow/api.py"
+        ],
+        "meta": {
+          "total_reachable": 9,
+          "truncated": false,
+          "returned": 9
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q9-b",
+        "class": "evidence_localization",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "data/fees.csv",
+          "data/fees.csv"
+        ],
+        "meta": {
+          "total_reachable": 9,
+          "truncated": false,
+          "returned": 9
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q10-a",
+        "class": "structural_code",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/payments.py",
+          "orderflow/reporting.py",
+          "orderflow/api.py",
+          "orderflow/api.py",
+          "docs/architecture.md",
+          "orderflow/payments.py",
+          "orderflow/reporting.py",
+          "docs/runbook.md",
+          "docs/api.md",
+          "docs/architecture.md"
+        ],
+        "meta": {
+          "total_reachable": 21,
+          "truncated": true,
+          "returned": 10
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q10-b",
+        "class": "structural_code",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/config.py",
+          "data/settings.json",
+          "data/settings.json",
+          "docs/api.md",
+          "orderflow/api.py"
+        ],
+        "meta": {
+          "total_reachable": 14,
+          "truncated": true,
+          "returned": 10
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q13-a",
+        "class": "adversarial_misleading_lexical",
+        "answerable": true,
+        "rank": 5,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "data/routing.xml",
+          "data/routing.xml",
+          "data/routing.xml",
+          "orderflow/api.py",
+          "orderflow/gateway.py",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/reporting.py",
+          "orderflow/api.py",
+          "docs/runbook.md",
+          "docs/architecture.md"
+        ],
+        "meta": {
+          "total_reachable": 0,
+          "truncated": false
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": false
+      },
+      {
+        "id": "Q13-b",
+        "class": "adversarial_structural_not_lexical",
+        "answerable": true,
+        "rank": 5,
+        "evidence_rank": 5,
+        "grounded": true,
+        "paths": [
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/config.py"
+        ],
+        "meta": {
+          "total_reachable": 0,
+          "truncated": false
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      }
+    ],
+    "R3": [
+      {
+        "id": "Q1-a",
+        "class": "exact_identifier",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/config.py",
+          "orderflow/gateway.py",
+          "data/settings.json",
+          "orderflow/config.py",
+          "orderflow/gateway.py",
+          "data/settings.json",
+          "orderflow/config.py",
+          "docs/runbook.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/architecture.md"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q1-b",
+        "class": "exact_identifier",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "data/fees.csv",
+          "data/fees.csv"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q1-c",
+        "class": "exact_identifier",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "docs/api.md",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "data/settings.json",
+          "orderflow/payments.py",
+          "docs/runbook.md"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q2-a",
+        "class": "lexical",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "docs/adr-007-payment-timeout.md",
+          "docs/runbook.md",
+          "docs/architecture.md",
+          "orderflow/gateway.py",
+          "docs/runbook.md",
+          "orderflow/gateway.py",
+          "docs/architecture.md",
+          "orderflow/config.py",
+          "orderflow/gateway.py",
+          "orderflow/payments.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q2-b",
+        "class": "lexical",
+        "answerable": true,
+        "rank": 3,
+        "evidence_rank": 3,
+        "grounded": true,
+        "paths": [
+          "docs/architecture.md",
+          "docs/architecture.md",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/reporting.py",
+          "orderflow/payments.py",
+          "orderflow/ledger.py",
+          "orderflow/payments.py",
+          "orderflow/reporting.py",
+          "orderflow/reporting.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q3-a",
+        "class": "paraphrase",
+        "answerable": true,
+        "rank": 3,
+        "evidence_rank": 3,
+        "grounded": true,
+        "paths": [
+          "docs/checkout-abandonment.md",
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "docs/adr-007-payment-timeout.md",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/config.py",
+          "data/settings.json"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q3-b",
+        "class": "paraphrase",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "docs/checkout-abandonment.md",
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/checkout-abandonment.md",
+          "orderflow/config.py",
+          "docs/api.md",
+          "docs/api.md",
+          "orderflow/ledger.py",
+          "orderflow/api.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q3-c",
+        "class": "paraphrase",
+        "answerable": true,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q4-a",
+        "class": "multi_hop",
+        "answerable": true,
+        "rank": 5,
+        "evidence_rank": 5,
+        "grounded": true,
+        "paths": [
+          "docs/architecture.md",
+          "orderflow/config.py",
+          "docs/runbook.md",
+          "data/settings.json",
+          "orderflow/gateway.py",
+          "orderflow/config.py",
+          "docs/runbook.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/architecture.md",
+          "data/settings.json"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q4-b",
+        "class": "multi_hop",
+        "answerable": true,
+        "rank": 4,
+        "evidence_rank": 4,
+        "grounded": true,
+        "paths": [
+          "docs/api.md",
+          "docs/api.md",
+          "docs/architecture.md",
+          "orderflow/api.py",
+          "orderflow/api.py",
+          "orderflow/payments.py",
+          "docs/checkout-abandonment.md",
+          "docs/api.md",
+          "orderflow/payments.py",
+          "orderflow/payments.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q5-a",
+        "class": "cross_document",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "docs/adr-007-payment-timeout.md",
+          "docs/architecture.md",
+          "docs/runbook.md",
+          "docs/runbook.md",
+          "orderflow/gateway.py",
+          "docs/api.md",
+          "orderflow/gateway.py",
+          "data/routing.xml",
+          "orderflow/gateway.py",
+          "data/routing.xml"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q5-b",
+        "class": "cross_document",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 6,
+        "grounded": true,
+        "paths": [
+          "docs/api.md",
+          "data/settings.json",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/payments.py",
+          "orderflow/gateway.py",
+          "orderflow/api.py",
+          "orderflow/payments.py",
+          "docs/api.md",
+          "docs/api.md",
+          "orderflow/payments.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q6-a",
+        "class": "entity_ambiguity",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 4,
+        "grounded": true,
+        "paths": [
+          "orderflow/reporting.py",
+          "orderflow/api.py",
+          "orderflow/api.py",
+          "orderflow/reporting.py",
+          "orderflow/payments.py",
+          "orderflow/reporting.py",
+          "orderflow/api.py",
+          "data/routing.xml",
+          "docs/architecture.md",
+          "orderflow/reporting.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q6-b",
+        "class": "entity_ambiguity",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/ledger.py",
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "docs/architecture.md",
+          "orderflow/payments.py",
+          "orderflow/payments.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q7-a",
+        "class": "negative",
+        "answerable": false,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "orderflow/api.py",
+          "orderflow/gateway.py",
+          "orderflow/payments.py",
+          "orderflow/ledger.py",
+          "orderflow/payments.py",
+          "docs/api.md",
+          "orderflow/gateway.py",
+          "orderflow/reporting.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q7-b",
+        "class": "negative",
+        "answerable": false,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "orderflow/reporting.py",
+          "orderflow/reporting.py",
+          "orderflow/api.py",
+          "orderflow/reporting.py",
+          "docs/api.md",
+          "orderflow/reporting.py",
+          "orderflow/api.py",
+          "docs/architecture.md",
+          "orderflow/payments.py",
+          "orderflow/ledger.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q8-a",
+        "class": "conflict",
+        "answerable": true,
+        "rank": 2,
+        "evidence_rank": 8,
+        "grounded": true,
+        "paths": [
+          "data/settings.json",
+          "orderflow/config.py",
+          "data/settings.json",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/payments.py",
+          "docs/runbook.md",
+          "orderflow/config.py",
+          "orderflow/gateway.py"
+        ],
+        "meta": {},
+        "conflict_ok": true,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q9-a",
+        "class": "evidence_localization",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "docs/adr-007-payment-timeout.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/architecture.md",
+          "docs/api.md",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/payments.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/payments.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q9-b",
+        "class": "evidence_localization",
+        "answerable": true,
+        "rank": 2,
+        "evidence_rank": 2,
+        "grounded": true,
+        "paths": [
+          "orderflow/ledger.py",
+          "orderflow/config.py",
+          "data/settings.json",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "data/fees.csv",
+          "data/fees.csv"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q10-a",
+        "class": "structural_code",
+        "answerable": true,
+        "rank": 3,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "docs/architecture.md",
+          "orderflow/reporting.py",
+          "orderflow/payments.py",
+          "docs/runbook.md",
+          "orderflow/api.py",
+          "docs/architecture.md",
+          "orderflow/api.py",
+          "docs/api.md",
+          "orderflow/reporting.py",
+          "orderflow/reporting.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q10-b",
+        "class": "structural_code",
+        "answerable": true,
+        "rank": 2,
+        "evidence_rank": 5,
+        "grounded": true,
+        "paths": [
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "docs/api.md",
+          "docs/architecture.md"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q13-a",
+        "class": "adversarial_misleading_lexical",
+        "answerable": true,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "orderflow/reporting.py",
+          "orderflow/api.py",
+          "data/routing.xml",
+          "data/routing.xml",
+          "data/routing.xml",
+          "orderflow/api.py",
+          "orderflow/reporting.py",
+          "orderflow/payments.py",
+          "orderflow/reporting.py",
+          "docs/adr-007-payment-timeout.md"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": true
+      },
+      {
+        "id": "Q13-b",
+        "class": "adversarial_structural_not_lexical",
+        "answerable": true,
+        "rank": 8,
+        "evidence_rank": 9,
+        "grounded": true,
+        "paths": [
+          "docs/checkout-abandonment.md",
+          "orderflow/payments.py",
+          "docs/api.md",
+          "orderflow/payments.py",
+          "orderflow/reporting.py",
+          "orderflow/payments.py",
+          "orderflow/api.py",
+          "orderflow/gateway.py",
+          "orderflow/config.py",
+          "orderflow/api.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      }
+    ],
+    "R4": [
+      {
+        "id": "Q1-a",
+        "class": "exact_identifier",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/config.py",
+          "orderflow/gateway.py",
+          "orderflow/config.py",
+          "data/settings.json",
+          "orderflow/gateway.py",
+          "docs/runbook.md",
+          "data/settings.json",
+          "orderflow/config.py",
+          "orderflow/gateway.py",
+          "docs/architecture.md"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q1-b",
+        "class": "exact_identifier",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/config.py",
+          "data/settings.json",
+          "data/fees.csv",
+          "data/fees.csv"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q1-c",
+        "class": "exact_identifier",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "docs/api.md",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/payments.py",
+          "data/settings.json",
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "data/settings.json"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q2-a",
+        "class": "lexical",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "docs/adr-007-payment-timeout.md",
+          "docs/runbook.md",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "docs/architecture.md",
+          "docs/runbook.md",
+          "orderflow/gateway.py",
+          "docs/architecture.md",
+          "docs/api.md",
+          "orderflow/config.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q2-b",
+        "class": "lexical",
+        "answerable": true,
+        "rank": 3,
+        "evidence_rank": 3,
+        "grounded": true,
+        "paths": [
+          "docs/architecture.md",
+          "docs/architecture.md",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/reporting.py",
+          "orderflow/ledger.py",
+          "orderflow/payments.py",
+          "orderflow/reporting.py",
+          "orderflow/payments.py",
+          "orderflow/reporting.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q3-a",
+        "class": "paraphrase",
+        "answerable": true,
+        "rank": 3,
+        "evidence_rank": 3,
+        "grounded": true,
+        "paths": [
+          "docs/checkout-abandonment.md",
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/checkout-abandonment.md",
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "docs/adr-007-payment-timeout.md"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q3-b",
+        "class": "paraphrase",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "docs/checkout-abandonment.md",
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/config.py",
+          "docs/api.md",
+          "docs/api.md",
+          "orderflow/ledger.py",
+          "orderflow/api.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q3-c",
+        "class": "paraphrase",
+        "answerable": true,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q4-a",
+        "class": "multi_hop",
+        "answerable": true,
+        "rank": 5,
+        "evidence_rank": 5,
+        "grounded": true,
+        "paths": [
+          "docs/architecture.md",
+          "docs/runbook.md",
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "orderflow/gateway.py",
+          "data/settings.json",
+          "docs/runbook.md",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "docs/architecture.md"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q4-b",
+        "class": "multi_hop",
+        "answerable": true,
+        "rank": 4,
+        "evidence_rank": 4,
+        "grounded": true,
+        "paths": [
+          "docs/api.md",
+          "docs/api.md",
+          "docs/architecture.md",
+          "orderflow/api.py",
+          "orderflow/api.py",
+          "docs/runbook.md",
+          "orderflow/payments.py",
+          "docs/architecture.md",
+          "docs/checkout-abandonment.md",
+          "docs/api.md"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q5-a",
+        "class": "cross_document",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "docs/adr-007-payment-timeout.md",
+          "docs/architecture.md",
+          "docs/runbook.md",
+          "docs/runbook.md",
+          "docs/api.md",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "data/routing.xml",
+          "data/routing.xml",
+          "orderflow/gateway.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q5-b",
+        "class": "cross_document",
+        "answerable": true,
+        "rank": 4,
+        "evidence_rank": 4,
+        "grounded": true,
+        "paths": [
+          "data/settings.json",
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "orderflow/api.py",
+          "docs/api.md",
+          "data/settings.json",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/payments.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q6-a",
+        "class": "entity_ambiguity",
+        "answerable": true,
+        "rank": 2,
+        "evidence_rank": 4,
+        "grounded": true,
+        "paths": [
+          "orderflow/api.py",
+          "orderflow/reporting.py",
+          "orderflow/api.py",
+          "orderflow/reporting.py",
+          "orderflow/payments.py",
+          "orderflow/api.py",
+          "data/routing.xml",
+          "orderflow/reporting.py",
+          "data/routing.xml",
+          "data/routing.xml"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q6-b",
+        "class": "entity_ambiguity",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/ledger.py",
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "orderflow/ledger.py",
+          "orderflow/payments.py",
+          "orderflow/ledger.py",
+          "docs/architecture.md",
+          "docs/architecture.md",
+          "docs/architecture.md"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q7-a",
+        "class": "negative",
+        "answerable": false,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "data/routing.xml",
+          "data/fees.csv",
+          "orderflow/api.py",
+          "data/fees.csv",
+          "orderflow/gateway.py",
+          "orderflow/payments.py",
+          "orderflow/ledger.py",
+          "orderflow/payments.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q7-b",
+        "class": "negative",
+        "answerable": false,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "orderflow/reporting.py",
+          "orderflow/reporting.py",
+          "orderflow/reporting.py",
+          "orderflow/api.py",
+          "docs/architecture.md",
+          "docs/api.md",
+          "orderflow/reporting.py",
+          "orderflow/api.py",
+          "orderflow/payments.py",
+          "orderflow/ledger.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q8-a",
+        "class": "conflict",
+        "answerable": true,
+        "rank": 3,
+        "evidence_rank": 4,
+        "grounded": true,
+        "paths": [
+          "data/settings.json",
+          "data/settings.json",
+          "orderflow/config.py",
+          "docs/runbook.md",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/config.py",
+          "docs/architecture.md",
+          "orderflow/gateway.py",
+          "orderflow/payments.py"
+        ],
+        "meta": {},
+        "conflict_ok": true,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q9-a",
+        "class": "evidence_localization",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "docs/adr-007-payment-timeout.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/architecture.md",
+          "orderflow/gateway.py",
+          "docs/api.md",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/payments.py",
+          "docs/architecture.md"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q9-b",
+        "class": "evidence_localization",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/config.py",
+          "data/settings.json",
+          "data/fees.csv",
+          "data/fees.csv"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q10-a",
+        "class": "structural_code",
+        "answerable": true,
+        "rank": 2,
+        "evidence_rank": 8,
+        "grounded": true,
+        "paths": [
+          "docs/architecture.md",
+          "orderflow/payments.py",
+          "docs/runbook.md",
+          "orderflow/reporting.py",
+          "orderflow/reporting.py",
+          "orderflow/api.py",
+          "orderflow/reporting.py",
+          "orderflow/payments.py",
+          "orderflow/api.py",
+          "docs/architecture.md"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q10-b",
+        "class": "structural_code",
+        "answerable": true,
+        "rank": 2,
+        "evidence_rank": 3,
+        "grounded": true,
+        "paths": [
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/config.py",
+          "data/settings.json",
+          "docs/api.md",
+          "orderflow/api.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q13-a",
+        "class": "adversarial_misleading_lexical",
+        "answerable": true,
+        "rank": 8,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "data/routing.xml",
+          "data/routing.xml",
+          "orderflow/api.py",
+          "orderflow/reporting.py",
+          "data/routing.xml",
+          "orderflow/api.py",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/gateway.py",
+          "orderflow/reporting.py",
+          "orderflow/payments.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": true
+      },
+      {
+        "id": "Q13-b",
+        "class": "adversarial_structural_not_lexical",
+        "answerable": true,
+        "rank": 8,
+        "evidence_rank": 8,
+        "grounded": true,
+        "paths": [
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/payments.py",
+          "docs/checkout-abandonment.md",
+          "docs/api.md",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/payments.py",
+          "orderflow/config.py",
+          "orderflow/reporting.py",
+          "orderflow/payments.py"
+        ],
+        "meta": {},
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      }
+    ],
+    "R5": [
+      {
+        "id": "Q1-a",
+        "class": "exact_identifier",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "orderflow/gateway.py",
+          "orderflow/config.py",
+          "orderflow/gateway.py",
+          "data/settings.json",
+          "docs/runbook.md",
+          "data/settings.json",
+          "orderflow/gateway.py",
+          "docs/architecture.md"
+        ],
+        "meta": {
+          "total_reachable": 14,
+          "truncated": true,
+          "returned": 10
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q1-b",
+        "class": "exact_identifier",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "data/fees.csv",
+          "data/fees.csv"
+        ],
+        "meta": {
+          "total_reachable": 9,
+          "truncated": false,
+          "returned": 9
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q1-c",
+        "class": "exact_identifier",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "docs/api.md",
+          "orderflow/payments.py",
+          "data/settings.json",
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "data/settings.json"
+        ],
+        "meta": {
+          "total_reachable": 9,
+          "truncated": false,
+          "returned": 9
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q2-a",
+        "class": "lexical",
+        "answerable": true,
+        "rank": 4,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "docs/adr-007-payment-timeout.md",
+          "docs/runbook.md",
+          "docs/architecture.md",
+          "docs/runbook.md",
+          "docs/architecture.md",
+          "docs/api.md",
+          "orderflow/config.py"
+        ],
+        "meta": {
+          "total_reachable": 8,
+          "truncated": false,
+          "returned": 8
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q2-b",
+        "class": "lexical",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/ledger.py",
+          "orderflow/reporting.py",
+          "orderflow/ledger.py",
+          "orderflow/payments.py",
+          "orderflow/reporting.py",
+          "docs/architecture.md",
+          "docs/architecture.md",
+          "orderflow/ledger.py",
+          "orderflow/payments.py",
+          "orderflow/reporting.py"
+        ],
+        "meta": {
+          "total_reachable": 12,
+          "truncated": true,
+          "returned": 10
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q3-a",
+        "class": "paraphrase",
+        "answerable": true,
+        "rank": 3,
+        "evidence_rank": 3,
+        "grounded": true,
+        "paths": [
+          "docs/checkout-abandonment.md",
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/checkout-abandonment.md",
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "docs/adr-007-payment-timeout.md"
+        ],
+        "meta": {
+          "total_reachable": 0,
+          "truncated": false
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q3-b",
+        "class": "paraphrase",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "docs/checkout-abandonment.md",
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/config.py",
+          "docs/api.md",
+          "docs/api.md",
+          "orderflow/ledger.py",
+          "orderflow/api.py"
+        ],
+        "meta": {
+          "total_reachable": 0,
+          "truncated": false
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q3-c",
+        "class": "paraphrase",
+        "answerable": true,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": false,
+        "paths": [],
+        "meta": {
+          "total_reachable": 0,
+          "truncated": false
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q4-a",
+        "class": "multi_hop",
+        "answerable": true,
+        "rank": 5,
+        "evidence_rank": 5,
+        "grounded": true,
+        "paths": [
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "docs/architecture.md",
+          "docs/runbook.md",
+          "orderflow/gateway.py",
+          "data/settings.json",
+          "docs/runbook.md",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "docs/architecture.md"
+        ],
+        "meta": {
+          "total_reachable": 6,
+          "truncated": false,
+          "returned": 6
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q4-b",
+        "class": "multi_hop",
+        "answerable": true,
+        "rank": 4,
+        "evidence_rank": 4,
+        "grounded": true,
+        "paths": [
+          "docs/api.md",
+          "docs/api.md",
+          "docs/architecture.md",
+          "orderflow/api.py",
+          "orderflow/api.py",
+          "docs/runbook.md",
+          "orderflow/payments.py",
+          "docs/architecture.md",
+          "docs/checkout-abandonment.md",
+          "docs/api.md"
+        ],
+        "meta": {
+          "total_reachable": 0,
+          "truncated": false
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q5-a",
+        "class": "cross_document",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "docs/adr-007-payment-timeout.md",
+          "docs/architecture.md",
+          "docs/runbook.md",
+          "docs/runbook.md",
+          "docs/api.md",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "data/routing.xml",
+          "data/routing.xml",
+          "orderflow/gateway.py"
+        ],
+        "meta": {
+          "total_reachable": 0,
+          "truncated": false
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q5-b",
+        "class": "cross_document",
+        "answerable": true,
+        "rank": 3,
+        "evidence_rank": 3,
+        "grounded": true,
+        "paths": [
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "orderflow/api.py",
+          "data/settings.json",
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "docs/api.md",
+          "data/settings.json",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/gateway.py"
+        ],
+        "meta": {
+          "total_reachable": 8,
+          "truncated": false,
+          "returned": 8
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q6-a",
+        "class": "entity_ambiguity",
+        "answerable": true,
+        "rank": 2,
+        "evidence_rank": 4,
+        "grounded": true,
+        "paths": [
+          "orderflow/api.py",
+          "orderflow/reporting.py",
+          "orderflow/api.py",
+          "orderflow/reporting.py",
+          "orderflow/api.py",
+          "orderflow/payments.py",
+          "orderflow/reporting.py",
+          "data/routing.xml",
+          "orderflow/reporting.py",
+          "data/routing.xml"
+        ],
+        "meta": {
+          "total_reachable": 12,
+          "truncated": true,
+          "returned": 10
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q6-b",
+        "class": "entity_ambiguity",
+        "answerable": true,
+        "rank": 5,
+        "evidence_rank": 5,
+        "grounded": true,
+        "paths": [
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "docs/architecture.md",
+          "orderflow/payments.py",
+          "orderflow/payments.py"
+        ],
+        "meta": {
+          "total_reachable": 14,
+          "truncated": true,
+          "returned": 10
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q7-a",
+        "class": "negative",
+        "answerable": false,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "orderflow/payments.py",
+          "data/routing.xml",
+          "data/fees.csv",
+          "orderflow/api.py",
+          "data/fees.csv",
+          "orderflow/gateway.py",
+          "orderflow/ledger.py"
+        ],
+        "meta": {
+          "total_reachable": 15,
+          "truncated": true,
+          "returned": 10
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q7-b",
+        "class": "negative",
+        "answerable": false,
+        "rank": null,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "orderflow/reporting.py",
+          "orderflow/reporting.py",
+          "orderflow/reporting.py",
+          "orderflow/api.py",
+          "orderflow/reporting.py",
+          "docs/architecture.md",
+          "docs/api.md",
+          "orderflow/api.py",
+          "orderflow/payments.py",
+          "orderflow/ledger.py"
+        ],
+        "meta": {
+          "total_reachable": 7,
+          "truncated": false,
+          "returned": 7
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q8-a",
+        "class": "conflict",
+        "answerable": true,
+        "rank": 3,
+        "evidence_rank": 4,
+        "grounded": true,
+        "paths": [
+          "data/settings.json",
+          "data/settings.json",
+          "orderflow/config.py",
+          "docs/runbook.md",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/config.py",
+          "docs/architecture.md",
+          "orderflow/gateway.py",
+          "orderflow/payments.py"
+        ],
+        "meta": {
+          "total_reachable": 0,
+          "truncated": false
+        },
+        "conflict_ok": true,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q9-a",
+        "class": "evidence_localization",
+        "answerable": true,
+        "rank": 4,
+        "evidence_rank": 4,
+        "grounded": true,
+        "paths": [
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "docs/adr-007-payment-timeout.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/architecture.md",
+          "docs/api.md",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/payments.py"
+        ],
+        "meta": {
+          "total_reachable": 9,
+          "truncated": false,
+          "returned": 9
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q9-b",
+        "class": "evidence_localization",
+        "answerable": true,
+        "rank": 2,
+        "evidence_rank": 2,
+        "grounded": true,
+        "paths": [
+          "orderflow/ledger.py",
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "data/fees.csv",
+          "data/fees.csv"
+        ],
+        "meta": {
+          "total_reachable": 9,
+          "truncated": false,
+          "returned": 9
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q10-a",
+        "class": "structural_code",
+        "answerable": true,
+        "rank": 4,
+        "evidence_rank": 7,
+        "grounded": true,
+        "paths": [
+          "orderflow/reporting.py",
+          "orderflow/api.py",
+          "docs/architecture.md",
+          "orderflow/payments.py",
+          "docs/runbook.md",
+          "orderflow/reporting.py",
+          "orderflow/payments.py",
+          "orderflow/api.py",
+          "orderflow/reporting.py",
+          "docs/architecture.md"
+        ],
+        "meta": {
+          "total_reachable": 21,
+          "truncated": true,
+          "returned": 10
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q10-b",
+        "class": "structural_code",
+        "answerable": true,
+        "rank": 1,
+        "evidence_rank": 1,
+        "grounded": true,
+        "paths": [
+          "orderflow/ledger.py",
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/config.py",
+          "orderflow/ledger.py",
+          "data/settings.json",
+          "data/settings.json",
+          "docs/api.md",
+          "orderflow/api.py"
+        ],
+        "meta": {
+          "total_reachable": 14,
+          "truncated": true,
+          "returned": 10
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      },
+      {
+        "id": "Q13-a",
+        "class": "adversarial_misleading_lexical",
+        "answerable": true,
+        "rank": 8,
+        "evidence_rank": null,
+        "grounded": true,
+        "paths": [
+          "data/routing.xml",
+          "data/routing.xml",
+          "orderflow/api.py",
+          "orderflow/reporting.py",
+          "data/routing.xml",
+          "orderflow/api.py",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/gateway.py",
+          "orderflow/reporting.py",
+          "orderflow/payments.py"
+        ],
+        "meta": {
+          "total_reachable": 0,
+          "truncated": false
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": true
+      },
+      {
+        "id": "Q13-b",
+        "class": "adversarial_structural_not_lexical",
+        "answerable": true,
+        "rank": 8,
+        "evidence_rank": 8,
+        "grounded": true,
+        "paths": [
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/payments.py",
+          "docs/checkout-abandonment.md",
+          "docs/api.md",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/payments.py",
+          "orderflow/config.py",
+          "orderflow/reporting.py",
+          "orderflow/payments.py"
+        ],
+        "meta": {
+          "total_reachable": 0,
+          "truncated": false
+        },
+        "conflict_ok": null,
+        "distractor_above_gold": null
+      }
+    ]
+  }
+}

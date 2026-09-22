@@ -18,13 +18,16 @@ from pathlib import Path
 from kgc import SOFTWARE_VERSION
 from kgc.analysis import python_backend
 from kgc.analysis.mapper import map_analysis
+from kgc.analysis.resolver import (RESOLVER_VERSION, ModuleIndex,
+                                   collect_reexports, resolve)
 from kgc.ids import artifact_id as mk_artifact_id
 from kgc.ids import config_hash, content_sha256, run_id as mk_run_id, source_id as mk_source_id
 from kgc.ir import Artifact, Diagnostic, Modality, ParseStatus
-from kgc.safety import classify, walk_corpus
+from kgc.safety import ANALYSED_SUFFIXES, classify, detect_language, walk_corpus
 from kgc.store import Store
 
 STAGE = "extract"
+STAGE_RESOLVE = "resolve"
 MAX_ATTEMPTS = 3   # a work item that crashes the process repeatedly is quarantined
 
 
@@ -39,6 +42,7 @@ class IngestReport:
     parsed: int = 0
     failed: int = 0
     skipped: int = 0
+    unsupported: int = 0
     unchanged: int = 0
     symbols: int = 0
     claims: int = 0
@@ -60,6 +64,7 @@ def ingest(store: Store, root: Path, *, resume: bool = True,
     root = Path(root).resolve(strict=True)
     cfg = {"root": str(root), "backend": python_backend.BACKEND_ID,
            "backend_version": python_backend.BACKEND_VERSION,
+           "resolver_version": RESOLVER_VERSION,
            "software_version": SOFTWARE_VERSION, "suffixes": [".py"]}
     cfg_h = config_hash(cfg)
 
@@ -81,10 +86,16 @@ def ingest(store: Store, root: Path, *, resume: bool = True,
     # ── enqueue (its own transaction, so the worklist survives a crash) ──
     store.begin()
     todo = []
-    for path in walk_corpus(root, (".py",)):
+    for path in walk_corpus(root):
         rel = str(path.relative_to(root))
-        data, rej = classify(path, root=root)
         rep.seen += 1
+        if path.suffix not in ANALYSED_SUFFIXES:
+            lang = detect_language(path) or "unknown"
+            rep.unsupported += 1
+            rep.rejections.append((rel, f"UNSUPPORTED_LANGUAGE:{lang}"))
+            _record_unsupported(store, src, rel, path, lang, run)
+            continue
+        data, rej = classify(path, root=root)
         if rej is not None:
             rep.skipped += 1
             rep.rejections.append((rel, rej.code))
@@ -145,26 +156,19 @@ def ingest(store: Store, root: Path, *, resume: bool = True,
                 store.commit()
                 continue
 
-            symbols, claims, refs = map_analysis(an, artifact_id=aid, data=data, run_id=run)
+            symbols, _, _ = map_analysis(an, artifact_id=aid, data=data, run_id=run)
             for s in symbols:
                 store.add_symbol(s)
             rep.symbols += len(symbols)
 
             if crash_at and crash_at[0] == "during_relationship" and n == crash_at[1]:
                 raise CrashPoint("during_relationship")
-
-            for claim, evidence in claims:
-                store.add_claim(claim, evidence)
-            rep.claims += len(claims)
-
             if crash_at and crash_at[0] == "during_evidence" and n == crash_at[1]:
                 raise CrashPoint("during_evidence")
 
-            for cid, to_name, res, reason in refs:
-                store.add_reference_detail(cid, to_name, res, reason)
             for d in an.diagnostics:
                 store.add_diagnostic(d, run)
-
+            store.enqueue(_resolve_item(item), run, STAGE_RESOLVE, rel, sha)
             store.finish_work(item, "DONE")
             if crash_at and crash_at[0] == "before_commit" and n == crash_at[1]:
                 raise CrashPoint("before_commit")
@@ -180,8 +184,85 @@ def ingest(store: Store, root: Path, *, resume: bool = True,
             store.begin(); store.finish_work(item, "FAILED", str(e)); store.commit()
             rep.failed += 1
 
+    _resolve_stage(store, root, src, run, rep, todo)
     store.begin(); store.finish_run(run, "COMPLETE", _now()); store.commit()
     return rep
+
+
+def _resolve_item(extract_item: str) -> str:
+    return hashlib.sha256(f"{STAGE_RESOLVE}\x1f{extract_item}".encode()).hexdigest()
+
+
+def _resolve_stage(store: Store, root: Path, src: str, run: str,
+                   rep: "IngestReport", todo: list) -> None:
+    """Stage 2: resolve references against the corpus-wide symbol table.
+
+    The symbol table is read from the database rather than held in memory, so
+    this stage costs no extra memory and resumes independently of stage 1.
+    """
+    index = ModuleIndex.from_store(store)
+
+    analyses: dict[str, object] = {}
+    for _item, rel, _path, data in todo:
+        mod = _module_name(rel)
+        sha = content_sha256(data)
+        aid = mk_artifact_id(src, rel, sha)
+        an = python_backend.analyze(aid, data, module_name=mod)
+        if an.parse_status is not ParseStatus.FAILED:
+            analyses[mod] = an
+    reexports = collect_reexports(analyses)
+
+    done = {r["item_id"] for r in store.con.execute(
+        "SELECT item_id FROM work_item WHERE run_id=? AND stage=? AND state='DONE'",
+        (run, STAGE_RESOLVE))}
+
+    for item, rel, _path, data in todo:
+        ritem = _resolve_item(item)
+        if ritem in done:
+            continue
+        mod = _module_name(rel)
+        an = analyses.get(mod)
+        if an is None:
+            store.begin(); store.finish_work(ritem, "SKIPPED"); store.commit()
+            continue
+        sha = content_sha256(data)
+        aid = mk_artifact_id(src, rel, sha)
+        resolved = resolve(an, mod, index, reexports)
+
+        store.begin()
+        try:
+            store.claim_work(ritem)
+            _sym, claims, refs = map_analysis(
+                an, artifact_id=aid, data=data, run_id=run,
+                resolved_refs=resolved,
+                extractor_version=f"{an.backend_version}+r{RESOLVER_VERSION}",
+                global_symbols=index.symbol_ids)
+            for claim, evidence in claims:
+                store.add_claim(claim, evidence)
+            for cid, to_name, res, reason in refs:
+                store.add_reference_detail(cid, to_name, res, reason)
+            rep.claims += len(claims)
+            store.finish_work(ritem, "DONE")
+            store.commit()
+        except Exception as e:
+            store.rollback()
+            store.begin(); store.finish_work(ritem, "FAILED", str(e)); store.commit()
+
+
+def _record_unsupported(store: Store, src, rel, path, lang, run):
+    """An unanalysed file is a recorded fact, never an absence."""
+    try:
+        size = path.stat().st_size
+    except OSError:
+        size = 0
+    aid = mk_artifact_id(src, rel, f"unsupported:{lang}")
+    store.add_artifact(Artifact(
+        artifact_id=aid, source_id=src, rel_path=rel, sha256="", size_bytes=size,
+        media_type="application/octet-stream", modality=Modality.CODE,
+        parse_status=ParseStatus.UNSUPPORTED,
+        parse_error=f"no analyser for language {lang!r}"), run)
+    store.add_diagnostic(Diagnostic(aid, "INFO", "UNSUPPORTED_LANGUAGE",
+                                    f"{rel}: language {lang!r} has no analyser"), run)
 
 
 def _record_rejection(store: Store, src, rel, rej, run):

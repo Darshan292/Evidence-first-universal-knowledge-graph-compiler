@@ -25,6 +25,7 @@ class ParseStatus(str, Enum):
     PARTIAL = "PARTIAL"
     FAILED = "FAILED"
     SKIPPED = "SKIPPED"
+    UNSUPPORTED = "UNSUPPORTED"   # recognised, no analyser -- never silently absent
 
 
 class LocatorKind(str, Enum):

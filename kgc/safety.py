@@ -76,16 +76,50 @@ def classify(path: Path, *, root: Path) -> tuple[bytes | None, Rejection | None]
     return data, None
 
 
-def walk_corpus(root: Path, suffixes: tuple[str, ...] = (".py",)):
-    """Yield candidate files without following symlinked directories."""
+# Deterministic language identification by extension. An unknown extension is
+# reported as unknown -- never guessed from content.
+LANGUAGE_BY_SUFFIX = {
+    ".py": "python", ".js": "javascript", ".mjs": "javascript", ".ts": "typescript",
+    ".tsx": "typescript", ".java": "java", ".go": "go", ".rs": "rust",
+    ".c": "c", ".h": "c", ".cc": "cpp", ".cpp": "cpp", ".hpp": "cpp",
+    ".rb": "ruby", ".php": "php", ".cs": "csharp", ".kt": "kotlin",
+    ".swift": "swift", ".scala": "scala", ".sh": "shell", ".sql": "sql",
+    ".md": "markdown", ".json": "json", ".xml": "xml", ".csv": "csv",
+    ".yaml": "yaml", ".yml": "yaml", ".toml": "toml", ".html": "html",
+}
+
+ANALYSED_SUFFIXES = (".py",)          # what an analyser exists for today
+
+IGNORED_DIRS = {".git", "__pycache__", ".venv", "venv", "node_modules", ".mypy_cache"}
+IGNORED_SUFFIXES = {".pyc", ".pyo", ".so", ".dylib", ".dll", ".o", ".a",
+                    ".zip", ".gz", ".tar", ".whl", ".png", ".jpg", ".pdf",
+                    ".db", ".sqlite", ".lbug", ".wal", ".shm"}
+
+
+def detect_language(path: Path) -> str | None:
+    return LANGUAGE_BY_SUFFIX.get(path.suffix.lower())
+
+
+def walk_corpus(root: Path, suffixes: tuple[str, ...] | None = None):
+    """Yield EVERY candidate file, not only the analysable ones.
+
+    A file in an unanalysed language must reach the pipeline so it can be
+    recorded with an explicit UNSUPPORTED status. Filtering it out here is what
+    made non-Python files invisible: the coverage report claimed total success
+    on a corpus it had silently ignored.
+    """
     root = root.resolve(strict=True)
     for dirpath, dirnames, filenames in os.walk(root, followlinks=False):
         dirnames[:] = [d for d in dirnames
-                       if not d.startswith(".") and not Path(dirpath, d).is_symlink()]
+                       if d not in IGNORED_DIRS and not d.startswith(".")
+                       and not Path(dirpath, d).is_symlink()]
         for fn in sorted(filenames):           # sorted: deterministic ordering
             p = Path(dirpath, fn)
-            if p.suffix in suffixes:
-                yield p
+            if p.suffix.lower() in IGNORED_SUFFIXES:
+                continue
+            if suffixes is not None and p.suffix not in suffixes:
+                continue
+            yield p
 
 
 # --------------------------------------------------------------------------

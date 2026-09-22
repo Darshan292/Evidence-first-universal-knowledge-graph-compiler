@@ -144,6 +144,8 @@ def analyze(artifact_id: str, data: bytes, module_name: str = "module") -> CodeA
                 walk(child, parent_q, is_class)
 
     walk(tree, module_name, False)
+    an.bindings = dict(imported)
+    an.module_defs = set(module_scope)
 
     # Calls are collected after the full scope is known: a call may precede
     # the definition it targets.

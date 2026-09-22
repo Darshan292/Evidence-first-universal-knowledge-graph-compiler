@@ -49,3 +49,10 @@ class CodeAnalysis:
     references: list[RawReference] = field(default_factory=list)
     diagnostics: list[Diagnostic] = field(default_factory=list)
     parse_error: str | None = None
+    # Import bindings: local name -> dotted origin. Populated by the backend so a
+    # corpus-level resolver can bind names without re-implementing the grammar.
+    bindings: dict = field(default_factory=dict)
+    # Names defined at module level in THIS module. A local definition shadows an
+    # imported name of the same name -- resolving without this produces a wrong
+    # deterministic edge, which D-H vetoes.
+    module_defs: set = field(default_factory=set)

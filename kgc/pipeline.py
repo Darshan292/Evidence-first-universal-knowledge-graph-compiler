@@ -137,7 +137,7 @@ def ingest(store: Store, root: Path, *, resume: bool = True,
 
             sha = content_sha256(data)
             aid = mk_artifact_id(src, rel, sha)
-            an = python_backend.analyze(aid, data, module_name=_module_name(rel))
+            an = python_backend.analyze(aid, data, module_name=_module_name(rel, root))
 
             store.add_artifact(Artifact(
                 artifact_id=aid, source_id=src, rel_path=rel, sha256=sha,
@@ -204,7 +204,7 @@ def _resolve_stage(store: Store, root: Path, src: str, run: str,
 
     analyses: dict[str, object] = {}
     for _item, rel, _path, data in todo:
-        mod = _module_name(rel)
+        mod = _module_name(rel, root)
         sha = content_sha256(data)
         aid = mk_artifact_id(src, rel, sha)
         an = python_backend.analyze(aid, data, module_name=mod)
@@ -220,7 +220,7 @@ def _resolve_stage(store: Store, root: Path, src: str, run: str,
         ritem = _resolve_item(item)
         if ritem in done:
             continue
-        mod = _module_name(rel)
+        mod = _module_name(rel, root)
         an = analyses.get(mod)
         if an is None:
             store.begin(); store.finish_work(ritem, "SKIPPED"); store.commit()
@@ -274,9 +274,26 @@ def _record_rejection(store: Store, src, rel, rej, run):
     store.add_diagnostic(Diagnostic(aid, "WARNING", rej.code, rej.message), run)
 
 
-def _module_name(rel: str) -> str:
+def _module_name(rel: str, root: Path | None = None) -> str:
+    """Name a module by its PACKAGE root, not by the ingestion root.
+
+    `src/itsdangerous/signer.py` must be `itsdangerous.signer`, because that is
+    what its own imports say. Naming it `src.itsdangerous.signer` made every
+    absolute import miss, silently losing every cross-file edge -- measured as
+    0 edges on a real repository where the correct naming yields many.
+    """
     p = rel[:-3] if rel.endswith(".py") else rel
     parts = [x for x in p.replace("\\", "/").split("/") if x]
     if parts and parts[-1] == "__init__":
         parts = parts[:-1]
+    if root is not None and len(parts) > 1:
+        # drop leading directories that are not Python packages
+        for i in range(len(parts) - 1):
+            pkg_dir = root.joinpath(*parts[: i + 1])
+            if (pkg_dir / "__init__.py").exists():
+                parts = parts[i:]
+                break
+        else:
+            parts = parts[-1:] if (root / parts[0]).is_dir() and not (
+                root / parts[0] / "__init__.py").exists() else parts
     return ".".join(parts) or "__root__"

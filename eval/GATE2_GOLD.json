@@ -1,0 +1,643 @@
+{
+  "version": "1.1.0",
+  "authored": "2026-09-22",
+  "corpus": "eval/corpus2 (itsdangerous @ 672971d66a2ef9f85151e53283113f33d642dabd, BSD-3-Clause)",
+  "provenance": "Authored by reading the itsdangerous source and documentation directly. The corpus was written by the Pallets project, not by this project. No output of the implementation under test was consulted when authoring answers.",
+  "corpus_root": "eval/corpus2",
+  "claim_target_note": "For each positive, the compiled claim that SHOULD answer the query, expressed as entity+property or entity+relation+object. Used by the claim-first experiment.",
+  "split_rule": "Stratified by (kind, class). Within a stratum, ordered by sha256('g2split-v2:'+id) and dealt round-robin over CALIBRATION/VALIDATION/TEST with a per-stratum starting offset, so small strata are not starved of any split. Fixed before any measurement.",
+  "queries": [
+    {
+      "id": "G2P-01",
+      "kind": "positive",
+      "class": "exact_identifier",
+      "query": "SignatureExpired",
+      "answerable": true,
+      "answer_units": [
+        "src/itsdangerous/exc.py"
+      ],
+      "evidence_must_contain": "class SignatureExpired",
+      "claim_target": {
+        "entity": "SignatureExpired",
+        "property": "definition"
+      },
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "TEST"
+    },
+    {
+      "id": "G2P-02",
+      "kind": "positive",
+      "class": "exact_identifier",
+      "query": "default_key_derivation",
+      "answerable": true,
+      "answer_units": [
+        "src/itsdangerous/signer.py"
+      ],
+      "evidence_must_contain": "default_key_derivation: str = \"django-concat\"",
+      "claim_target": {
+        "entity": "Signer",
+        "property": "default_key_derivation"
+      },
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "VALIDATION"
+    },
+    {
+      "id": "G2P-03",
+      "kind": "positive",
+      "class": "exact_identifier",
+      "query": "_base64_alphabet",
+      "answerable": true,
+      "answer_units": [
+        "src/itsdangerous/encoding.py"
+      ],
+      "evidence_must_contain": "_base64_alphabet",
+      "claim_target": {
+        "entity": "_base64_alphabet",
+        "property": "definition"
+      },
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "G2P-04",
+      "kind": "positive",
+      "class": "lexical",
+      "query": "what is the default key derivation scheme",
+      "answerable": true,
+      "answer_units": [
+        "src/itsdangerous/signer.py"
+      ],
+      "evidence_must_contain": "django-concat",
+      "claim_target": {
+        "entity": "Signer",
+        "property": "default_key_derivation"
+      },
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "TEST"
+    },
+    {
+      "id": "G2P-05",
+      "kind": "positive",
+      "class": "lexical",
+      "query": "default salt for Serializer",
+      "answerable": true,
+      "answer_units": [
+        "src/itsdangerous/serializer.py"
+      ],
+      "evidence_must_contain": "salt: str | bytes | None = b\"itsdangerous\"",
+      "claim_target": {
+        "entity": "Serializer",
+        "property": "salt"
+      },
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "VALIDATION"
+    },
+    {
+      "id": "G2P-06",
+      "kind": "positive",
+      "class": "paraphrase",
+      "query": "how is the signing key derived from the secret",
+      "answerable": true,
+      "answer_units": [
+        "docs/concepts.rst",
+        "src/itsdangerous/signer.py"
+      ],
+      "evidence_must_contain": "salt",
+      "claim_target": {
+        "entity": "Signer",
+        "property": "key_derivation"
+      },
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "G2P-07",
+      "kind": "positive",
+      "class": "zero_overlap_paraphrase",
+      "query": "which component turns bytes into a shortened textual form",
+      "answerable": true,
+      "answer_units": [
+        "src/itsdangerous/encoding.py"
+      ],
+      "evidence_must_contain": "base64_encode",
+      "claim_target": {
+        "entity": "base64_encode",
+        "property": "definition"
+      },
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "VALIDATION"
+    },
+    {
+      "id": "G2P-08",
+      "kind": "positive",
+      "class": "zero_overlap_paraphrase",
+      "query": "what is raised when a token is too old",
+      "answerable": true,
+      "answer_units": [
+        "src/itsdangerous/exc.py"
+      ],
+      "evidence_must_contain": "class SignatureExpired",
+      "claim_target": {
+        "entity": "SignatureExpired",
+        "property": "definition"
+      },
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "G2P-09",
+      "kind": "positive",
+      "class": "structural_relation",
+      "query": "what does Serializer.dump_payload call",
+      "answerable": true,
+      "answer_units": [
+        "src/itsdangerous/serializer.py"
+      ],
+      "evidence_must_contain": "want_bytes",
+      "claim_target": {
+        "entity": "Serializer.dump_payload",
+        "relation": "CALLS",
+        "object": "want_bytes"
+      },
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "G2P-10",
+      "kind": "positive",
+      "class": "structural_relation",
+      "query": "which class does TimestampSigner extend",
+      "answerable": true,
+      "answer_units": [
+        "src/itsdangerous/timed.py"
+      ],
+      "evidence_must_contain": "class TimestampSigner(Signer)",
+      "claim_target": {
+        "entity": "TimestampSigner",
+        "relation": "EXTENDS",
+        "object": "Signer"
+      },
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "G2P-11",
+      "kind": "positive",
+      "class": "structural_relation",
+      "query": "what does SignatureExpired inherit from",
+      "answerable": true,
+      "answer_units": [
+        "src/itsdangerous/exc.py"
+      ],
+      "evidence_must_contain": "class SignatureExpired(BadTimeSignature)",
+      "claim_target": {
+        "entity": "SignatureExpired",
+        "relation": "EXTENDS",
+        "object": "BadTimeSignature"
+      },
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "VALIDATION"
+    },
+    {
+      "id": "G2P-12",
+      "kind": "positive",
+      "class": "cross_file",
+      "query": "which module does serializer.py import want_bytes from",
+      "answerable": true,
+      "answer_units": [
+        "src/itsdangerous/serializer.py"
+      ],
+      "evidence_must_contain": "from .encoding import want_bytes",
+      "claim_target": {
+        "entity": "itsdangerous.serializer",
+        "relation": "IMPORTS",
+        "object": "itsdangerous.encoding.want_bytes"
+      },
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "VALIDATION"
+    },
+    {
+      "id": "G2P-13",
+      "kind": "positive",
+      "class": "cross_file",
+      "query": "what does itsdangerous re-export from exc",
+      "answerable": true,
+      "answer_units": [
+        "src/itsdangerous/__init__.py"
+      ],
+      "evidence_must_contain": "from .exc import BadSignature as BadSignature",
+      "claim_target": {
+        "entity": "itsdangerous",
+        "relation": "IMPORTS",
+        "object": "itsdangerous.exc"
+      },
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "G2P-14",
+      "kind": "positive",
+      "class": "cross_document",
+      "query": "what is the default serializer for URL safe serializers",
+      "answerable": true,
+      "answer_units": [
+        "src/itsdangerous/url_safe.py"
+      ],
+      "evidence_must_contain": "_CompactJSON",
+      "claim_target": {
+        "entity": "URLSafeSerializerMixin",
+        "property": "default_serializer"
+      },
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "VALIDATION"
+    },
+    {
+      "id": "G2P-15",
+      "kind": "positive",
+      "class": "cross_document",
+      "query": "why should different salts be used",
+      "answerable": true,
+      "answer_units": [
+        "docs/concepts.rst"
+      ],
+      "evidence_must_contain": "different salts",
+      "claim_target": {
+        "entity": "salt",
+        "property": "rationale"
+      },
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "TEST"
+    },
+    {
+      "id": "G2P-16",
+      "kind": "positive",
+      "class": "ambiguous_entity",
+      "query": "salt",
+      "answerable": true,
+      "answer_units": [
+        "src/itsdangerous/signer.py",
+        "docs/concepts.rst"
+      ],
+      "evidence_must_contain": "salt",
+      "claim_target": {
+        "entity": "salt",
+        "property": "definition"
+      },
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "VALIDATION"
+    },
+    {
+      "id": "G2P-17",
+      "kind": "positive",
+      "class": "ambiguous_entity",
+      "query": "default_serializer",
+      "answerable": true,
+      "answer_units": [
+        "src/itsdangerous/serializer.py",
+        "src/itsdangerous/url_safe.py"
+      ],
+      "evidence_must_contain": "default_serializer",
+      "claim_target": {
+        "entity": "default_serializer",
+        "property": "definition"
+      },
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "TEST"
+    },
+    {
+      "id": "G2P-18",
+      "kind": "positive",
+      "class": "evidence_right",
+      "query": "what separator does Signer use by default",
+      "answerable": true,
+      "answer_units": [
+        "src/itsdangerous/signer.py"
+      ],
+      "evidence_must_contain": "sep: str | bytes = b\".\"",
+      "claim_target": {
+        "entity": "Signer",
+        "property": "sep"
+      },
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "VALIDATION"
+    },
+    {
+      "id": "G2P-19",
+      "kind": "positive",
+      "class": "evidence_multi_source",
+      "query": "what is a salt used for",
+      "answerable": true,
+      "answer_units": [
+        "docs/concepts.rst",
+        "src/itsdangerous/signer.py"
+      ],
+      "evidence_must_contain": "salt",
+      "claim_target": {
+        "entity": "salt",
+        "property": "purpose"
+      },
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "TEST"
+    },
+    {
+      "id": "G2P-20",
+      "kind": "positive",
+      "class": "structural_relation",
+      "query": "what does base64_decode raise on failure",
+      "answerable": true,
+      "answer_units": [
+        "src/itsdangerous/encoding.py"
+      ],
+      "evidence_must_contain": "BadData",
+      "claim_target": {
+        "entity": "base64_decode",
+        "relation": "CALLS",
+        "object": "BadData"
+      },
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "TEST"
+    },
+    {
+      "id": "G2N-01",
+      "kind": "negative",
+      "class": "unsupported_entity",
+      "query": "what does the RedisSessionStore class do",
+      "answerable": false,
+      "rationale": "no such class in itsdangerous",
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "G2N-02",
+      "kind": "negative",
+      "class": "unsupported_entity",
+      "query": "where is JWTSigner defined",
+      "answerable": false,
+      "rationale": "plausible but absent",
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "split": "VALIDATION"
+    },
+    {
+      "id": "G2N-03",
+      "kind": "negative",
+      "class": "unsupported_entity",
+      "query": "what is the default_encryption_method",
+      "answerable": false,
+      "rationale": "no encryption in this library",
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "split": "TEST"
+    },
+    {
+      "id": "G2N-04",
+      "kind": "negative",
+      "class": "unsupported_property",
+      "query": "what is the default salt of BadSignature",
+      "answerable": false,
+      "rationale": "BadSignature is an exception; it has no salt",
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "G2N-05",
+      "kind": "negative",
+      "class": "unsupported_property",
+      "query": "what is the timeout of Signer",
+      "answerable": false,
+      "rationale": "Signer has no timeout",
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "G2N-06",
+      "kind": "negative",
+      "class": "unsupported_property",
+      "query": "what port does TimestampSigner listen on",
+      "answerable": false,
+      "rationale": "no networking anywhere",
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "split": "TEST"
+    },
+    {
+      "id": "G2N-07",
+      "kind": "negative",
+      "class": "wrong_numeric_value",
+      "query": "is the default max_age 3600 seconds",
+      "answerable": false,
+      "rationale": "max_age has no default value in the library",
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "G2N-08",
+      "kind": "negative",
+      "class": "wrong_numeric_value",
+      "query": "the default key derivation uses 256 rounds",
+      "answerable": false,
+      "rationale": "no round count exists",
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "split": "VALIDATION"
+    },
+    {
+      "id": "G2N-09",
+      "kind": "negative",
+      "class": "wrong_relationship",
+      "query": "does encoding.py import Serializer",
+      "answerable": false,
+      "rationale": "encoding imports only exc and stdlib",
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "G2N-10",
+      "kind": "negative",
+      "class": "wrong_relationship",
+      "query": "does Signer extend Serializer",
+      "answerable": false,
+      "rationale": "Signer extends nothing; TimestampSigner extends Signer",
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "split": "TEST"
+    },
+    {
+      "id": "G2N-11",
+      "kind": "negative",
+      "class": "wrong_relationship",
+      "query": "which method of BadData calls base64_encode",
+      "answerable": false,
+      "rationale": "BadData is an exception with no such call",
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "split": "VALIDATION"
+    },
+    {
+      "id": "G2N-12",
+      "kind": "negative",
+      "class": "wrong_file_scope",
+      "query": "is default_key_derivation defined in serializer.py",
+      "answerable": false,
+      "rationale": "it is defined in signer.py",
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "split": "TEST"
+    },
+    {
+      "id": "G2N-13",
+      "kind": "negative",
+      "class": "wrong_file_scope",
+      "query": "is want_bytes defined in signer.py",
+      "answerable": false,
+      "rationale": "it is defined in encoding.py",
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "G2N-14",
+      "kind": "negative",
+      "class": "stale_statement",
+      "query": "is the default key derivation still concat as in older versions",
+      "answerable": false,
+      "rationale": "CHANGES documents history; the current default is django-concat",
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "split": "VALIDATION"
+    },
+    {
+      "id": "G2N-15",
+      "kind": "negative",
+      "class": "near_neighbour",
+      "query": "what is the default_serializer of Signer",
+      "answerable": false,
+      "rationale": "default_serializer belongs to Serializer, not Signer",
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "split": "VALIDATION"
+    },
+    {
+      "id": "G2N-16",
+      "kind": "negative",
+      "class": "near_neighbour",
+      "query": "what is the salt of HMACAlgorithm",
+      "answerable": false,
+      "rationale": "salt belongs to Signer/Serializer, not the algorithm class",
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "G2N-17",
+      "kind": "negative",
+      "class": "near_neighbour",
+      "query": "what is the default_digest_method of Serializer",
+      "answerable": false,
+      "rationale": "default_digest_method belongs to Signer and HMACAlgorithm",
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "split": "TEST"
+    },
+    {
+      "id": "G2N-18",
+      "kind": "negative",
+      "class": "unsupported_property",
+      "query": "what is the license expiry date of itsdangerous",
+      "answerable": false,
+      "rationale": "licenses do not expire; not in corpus",
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "split": "VALIDATION"
+    }
+  ],
+  "split_rule_history": [
+    {
+      "version": "1.0.0",
+      "replaced_because": "a fixed 8-slot pattern starved TEST on small strata: TEST received only 6 of 38 queries (2 positives). Replaced before any measurement."
+    }
+  ]
+}

@@ -110,7 +110,18 @@ def analyze(artifact_id: str, data: bytes, module_name: str = "module") -> CodeA
                         "import target is in another artifact; binding known, definition not analysed"))
 
             elif isinstance(child, ast.ImportFrom):
-                mod = child.module or "."
+                # `from .encoding import x` inside package.sub.mod resolves to
+                # package.sub.encoding. Ignoring `level` silently discarded the
+                # dominant import style in real Python packages: on a real
+                # repository it produced ZERO cross-file edges.
+                if child.level:
+                    parts = module_name.split(".")
+                    base = parts[:-child.level] if child.level <= len(parts) else []
+                    mod = ".".join([*base, child.module]) if child.module else ".".join(base)
+                    if not mod:
+                        mod = child.module or "."
+                else:
+                    mod = child.module or "."
                 for alias in child.names:
                     if alias.name == "*":
                         an.references.append(RawReference(

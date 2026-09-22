@@ -2,6 +2,10 @@
 
 **Status:** Planning (Phase 0). No implementation exists.
 **Last verified against upstream sources:** 2026-09-22.
+> ⚠ **AMENDED 2026-09-22 by the Phase 0 adversarial review.** See
+> [ARCHITECTURE_CHALLENGE.md](ARCHITECTURE_CHALLENGE.md) and ADR-0005/0006/0007. Sections marked
+> **[AMENDED]** below were found defective and are superseded by that report.
+
 
 > Every technology claim in this document was verified on 2026-09-22 by direct
 > installation, execution, registry metadata, or official source. Claims that
@@ -89,6 +93,15 @@ stdlib `sqlite3` with recursive CTEs, indexed `edge(src)`:
 | 4-hop neighbourhood | 1.63 ms | 4.23 ms |
 | exact identifier lookup | 0.063 ms | — |
 
+> **[AMENDED]** These figures came from a *uniform random* graph whose 4-hop
+> neighbourhood was ~300 nodes. The adversarial review re-measured on a
+> power-law graph with hub nodes at 1M/5M scale and found the load-bearing
+> evidence is different: **4 readers performed 1,049 queries with 0 blocked and
+> max 5.7 ms latency during sustained writes.** Reader concurrency, not traversal
+> speed, is why SQLite survives. Unbounded traversal was also found *semantically*
+> broken at scale regardless of engine — see ARCHITECTURE_CHALLENGE.md D-1 and
+> ADR-0007.
+
 A dedicated graph engine buys nothing at this scale, and it costs something
 specific and severe:
 
@@ -168,7 +181,7 @@ resource exhaustion are handled at the router before any parser sees a byte.
 | Rejected | Why | Re-open when |
 |---|---|---|
 | Qdrant / any vector server | SQLite FTS5 (stdlib) gives BM25 offline; a server contradicts local-first | BM25+graph misses the Recall@10 target on the semantic query class |
-| Dense embeddings in M1 | Unproven need; adds model download, breaks zero-setup | same trigger as above |
+| Dense embeddings in M1 | **[AMENDED]** status downgraded to *undecided*: BM25 measured 0 hits on 3/5 query classes. Blocking experiment X-1 decides. | X-1 reports (EVALUATION_PLAN) |
 | Docling as default parser | Resolves to **119 packages incl. full CUDA/torch stack** (measured) | opt-in extra for scanned/OCR/complex-layout PDFs |
 | Tree-sitter in M1 | stdlib `ast` is the *normative* Python grammar | language #2, or parse-failure rate > 2% |
 | Graph database as store of record | 4-hop p95 = 4.2 ms in SQLite; 2 stores = no atomic commit | traversal p95 > 200 ms or > 5M edges |

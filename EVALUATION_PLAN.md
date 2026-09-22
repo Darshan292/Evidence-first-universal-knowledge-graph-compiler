@@ -1,6 +1,10 @@
 # EVALUATION PLAN
 
 **Status:** Planning. **Date:** 2026-09-22.
+> ⚠ **AMENDED 2026-09-22 by the Phase 0 adversarial review.** See
+> [ARCHITECTURE_CHALLENGE.md](ARCHITECTURE_CHALLENGE.md) — experiment X-1 is blocking. Sections marked
+> **[AMENDED]** below were found defective and are superseded by that report.
+
 
 > **Rule:** "An LLM judge says it looks good" is not evidence. Every headline
 > metric below is computed against a hand-labelled gold set with exact evidence
@@ -68,8 +72,12 @@ text appears **only** as extracted content of the document. This suite is
 mandatory and a failure blocks release.
 
 ### E-7 · Query set (≥ 60 queries, labelled by class)
-`exact_lookup` · `local_entity` · `multi_hop` · `comparison_conflict` ·
-`temporal_version` · `global_synthesis`.
+`exact_lookup` · `code_symbol_lookup` · `semantic_lookup` · `local_entity` ·
+`multi_hop` · `cross_document` · `comparison_conflict` · `temporal_version` ·
+`broad_synthesis`. (`cross_modal` is defined for M2 and not scored in M1.)
+**[AMENDED]** — `code_symbol_lookup`, `semantic_lookup`, `cross_document` and
+`broad_synthesis` were added by the adversarial review; they are the classes
+X-1 discriminates on.
 Each has gold answer spans and gold evidence locations. Metrics are reported
 **per class**, because an aggregate hides the broken class.
 
@@ -123,9 +131,23 @@ Each has gold answer spans and gold evidence locations. Metrics are reported
 | MRR (all classes) | ≥ 0.70 |
 | NDCG@10 | ≥ 0.75 |
 
-> **Dense-vector trigger.** If `local_entity` or `global_synthesis` Recall@10
-> falls below target with BM25 + graph expansion alone, add local ONNX
-> embeddings. Not before. This is the experiment that decides U-3.
+> **[AMENDED] Experiment X-1 is BLOCKING.** Phase 0 framed dense vectors as
+> "defer until a gap appears", placing the burden of proof on vectors. The
+> adversarial review measured BM25 returning **ZERO hits on 3 of 5 query
+> classes** (FTS5 `MATCH` defaults to implicit AND). The honest position is that
+> it is **unproven either way** and must be settled *before* retrieval is
+> implemented — not after.
+>
+> **X-1** measures Recall@10 per class on the real eval corpus for:
+> **A** = exact + BM25(OR, preprocessed) + graph;
+> **B** = A + alias expansion derived **automatically** by entity resolution
+> (no hand curation, no knowledge of gold answers);
+> **C** = B + local ONNX embeddings (`fastembed`, Apache-2.0, no torch, ~90–130 MB).
+>
+> **Decision rule, fixed in advance:** adopt **C** iff **B** misses
+> Recall@10 ≥ 0.80 on `semantic_lookup`, `cross_document`, or `broad_synthesis`.
+> Adopt **B** over **A** iff B gains ≥ 0.05 Recall@10 on any class with no
+> regression. X-1 must complete before IMPLEMENTATION_PLAN Step 4.
 
 ### Answers
 | Metric | M1 target |
@@ -166,23 +188,28 @@ Each is a pass/fail statement, executable by one command.
 | A-04 | Evidence verbatim check | 100% of evidence rows re-verify against source bytes |
 | A-05 | DOCX locator honesty | no DOCX evidence row carries a page number |
 | A-06 | Unsupported claim rejected | injecting a claim with a non-existent quote aborts the transaction |
-| A-07 | Structural edge protection | a model-sourced `CALLS` claim is rejected by the claim builder |
+| A-07 | Establishment rule **[AMENDED]** | a model-sourced `CALLS` claim is **rewritten** to `SEMANTICALLY_RELATED_TO` at `establishment='PROPOSED'` with evidence retained — not discarded; a later `DERIVED` claim links via `SUPPORTS` (ADR-0006) |
 | A-08 | Entity resolution on E-4 | false-merge rate ≤ 0.01; every decision has score + reason |
 | A-09 | Contradiction on E-2 | both claims present, `CONTRADICTS` edge, neither deleted |
 | A-10 | Supersession on E-5 | superseded claim still queryable with `valid_to` set |
 | A-11 | Prompt injection E-6 | zero behavioural change; injected text present only as content |
-| A-12 | Reproducibility | two full compiles produce identical row sets |
+| A-12 | Reproducibility **[AMENDED]** | two compiles produce identical row sets **and identical IDs except `run_id`**, compared as sets, excluding the documented may-differ list (DATA_MODEL §11) |
 | A-13 | Cache | re-index unchanged corpus → cache hit ratio 1.00, zero new LLM calls |
-| A-14 | Crash recovery | kill mid-run, resume → database identical to uninterrupted run |
+| A-14 | Crash recovery **[AMENDED]** | kill at **10/30/50/90%**, resume → row set identical to uninterrupted run **and** `llm_ledger` shows no duplicate paid calls, no orphan claims |
 | A-15 | Retrieval | per-class Recall@10 meets targets |
 | A-16 | Evidence click-through | every UI evidence link resolves to correct byte range / page bbox / paragraph |
-| A-17 | Graph materialisation | UI never loads the full graph; respects depth and node caps |
+| A-17 | Bounded expansion **[AMENDED]** | **no expansion API can return an unbounded result set**; every truncated response carries `total_reachable`; hub expansion at 1M scale returns within `k` (ADR-0007) |
 | A-18 | No-egress | deterministic-only run opens no network socket |
 | A-19 | Provider parity | same extraction task against all 4 providers yields schema-valid, evidence-verified output or a clean recorded failure |
 | A-20 | License gate | dependency scan finds no copyleft in the required dependency set |
+| A-21 | **Hostile archives** | zip-slip, symlink escape, zip bomb, oversized file, binary-as-text all rejected at the router with a recorded reason; never extracted |
+| A-22 | **Hardened XML** | XXE and entity-expansion payloads are inert in both the XML adapter **and** the XML evidence verifier |
+| A-23 | **Verification honesty** | no evidence row carries a strength its modality cannot support; `STRUCTURAL`-only claims never reach `CONFIRMED` |
+| A-24 | **Contradicted claims stay queryable** | a claim with a `CONTRADICTS` relation is still returned by ordinary queries |
+| A-25 | **Resolution class completeness** | every unresolvable reference emits `UNRESOLVED`; none is silently omitted (ADR-0005) |
 
-**Milestone 1 is complete when A-01 … A-20 pass.** Not before, and not on the
-strength of a demo.
+**Milestone 1 is complete when A-01 … A-25 pass** and **X-1 has reported**. Not
+before, and not on the strength of a demo.
 
 ---
 

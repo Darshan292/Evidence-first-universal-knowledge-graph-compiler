@@ -70,14 +70,24 @@ The decisive argument is not performance — it is atomicity:
 Performance merely confirms there is no reason to pay that price: a 4-hop
 traversal at p95 = 4.2 ms is roughly 50× under any interactive threshold.
 
+## [AMENDED 2026-09-22] Review outcome
+
+The adversarial review re-attacked this decision at 1M nodes / 5M edges with
+power-law hubs, reverse traversal and concurrent readers. **The decision
+survives**, but the load-bearing evidence changed: the decisive result is
+**1,049 concurrent reads with 0 blocked and 5.7 ms max latency under sustained
+write load**, not traversal speed. The review also found that *unbounded*
+traversal is semantically broken at scale regardless of engine (ADR-0007), so
+the trigger below is restated in terms of **bounded** expansion.
+
 ## Adoption triggers (measurable, not aspirational)
 
 LadybugDB is not rejected — it is **deferred with conditions**, and it has
 already been validated so the path is known. Add it as a *derived, rebuildable
 projection* (never a second source of truth) when **any** of:
 
-- graph traversal p95 exceeds 200 ms on the real workload, or
-- the graph exceeds ~5M edges, or
+- **bounded** expansion p95 (after ADR-0007 ranking) exceeds 200 ms on the real workload, or
+- the graph exceeds ~20M edges **and** the latency trigger above is also met, or
 - a query genuinely requires Cypher expressiveness that recursive CTEs cannot
   express readably (e.g. weighted shortest-path over typed edges).
 

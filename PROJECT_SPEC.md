@@ -1,6 +1,10 @@
 # PROJECT SPEC
 
 **Status:** Planning (Phase 0). **Verified:** 2026-09-22.
+> ⚠ **AMENDED 2026-09-22 by the Phase 0 adversarial review.** See
+> [ARCHITECTURE_CHALLENGE.md](ARCHITECTURE_CHALLENGE.md) and ADR-0005/0006/0007. Sections marked
+> **[AMENDED]** below were found defective and are superseded by that report.
+
 
 ## 1. What this is
 
@@ -108,19 +112,41 @@ Before any model call, in order:
 Only then may a request be issued, and only with the minimum evidence span
 needed — never a whole repository, never a whole PDF.
 
-## 6. Claim status lattice
+## 6. Claim status model  **[AMENDED]**
 
-| Status | Meaning |
-|---|---|
-| `DETERMINISTIC` | produced by a parser/analyzer; reproducible byte-for-byte |
-| `EXTRACTED` | model-produced, evidence verified verbatim in source |
-| `INFERRED` | model-produced, evidence supports but does not literally state it |
-| `AMBIGUOUS` | multiple readings survive; all retained |
-| `CONTRADICTED` | another claim asserts the negation; both retained + linked |
-| `SUPERSEDED` | a later source replaces it; remains queryable with `valid_to` set |
+> Phase 0 used a single `status` column. The adversarial review found this
+> conflated four orthogonal concerns and produced a real bug: `CONTRADICTED` as a
+> status value removed a claim from the `ACTIVE` set, so **a contradicted claim
+> vanished from queries** — the opposite of this project's commitment. Replaced by
+> four independent axes. Full specification in
+> [ADR/0006](ADR/0006-claim-lifecycle-and-verification.md).
 
-Transitions are append-only. Nothing is deleted. `SUPERSEDED` sets a validity
-bound; it does not remove history.
+| Axis | On | Values |
+|---|---|---|
+| `lifecycle` | claim | `CANDIDATE` → `VALIDATING` → `VERIFIED` → `ACTIVE`; terminal `REJECTED` |
+| `establishment` | claim | `DERIVED`, `CONFIRMED`, `PROPOSED`, `DISPUTED` |
+| `verification_strength` | evidence | `EXACT`, `REPRODUCIBLE`, `STRUCTURAL` |
+| `epistemic_state` | claim_relation | `CONTRADICTS`, `SUPERSEDES`, `SUPPORTS`, `DERIVED_FROM` |
+
+A contradicted claim stays `ACTIVE` and queryable; its standing is a *relation*,
+not a state. `confidence` is the producer's self-reported score, is `NULL` for
+`DERIVED` claims, and **gates nothing anywhere in the system**.
+
+### 6.1 The LLM boundary rule  **[AMENDED]**
+
+Phase 0's rule — "models may not create structural edge kinds" — was a blacklist
+and failed at its edges. Replaced by a total, verification-based rule:
+
+> **A claim may stand as a structural fact if and only if an independent
+> deterministic analysis establishes it.** A model may propose anything; a
+> model's proposal alone never establishes a structural fact.
+
+A model emitting `CALLS` is not discarded: the predicate is rewritten to its
+semantic counterpart (`SEMANTICALLY_RELATED_TO`) at `establishment = PROPOSED`,
+retaining its evidence. If an analyser later derives the real edge, a separate
+`DERIVED` claim is created and linked via `SUPPORTS`. If an analyser derives that
+no such edge exists, the proposal becomes `DISPUTED`. Nothing is promoted in
+place.
 
 ## 7. Milestone 1 scope
 

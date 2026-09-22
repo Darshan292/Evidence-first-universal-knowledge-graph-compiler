@@ -2,6 +2,10 @@
 
 **Status:** Planning. **Verified:** 2026-09-22.
 Physical model targets stdlib `sqlite3` (3.45.1 verified, FTS5 confirmed present).
+> ⚠ **AMENDED 2026-09-22 by the Phase 0 adversarial review.** See
+> [ARCHITECTURE_CHALLENGE.md](ARCHITECTURE_CHALLENGE.md) and ADR-0006 (lifecycle, verification strength, IDs). Sections marked
+> **[AMENDED]** below were found defective and are superseded by that report.
+
 
 ---
 
@@ -119,7 +123,16 @@ shapes M1 emits, because these are the only ones the parsers verifiably produce
 | `docx_para` | `{"paragraph_index":int,"run_index":int|null,"char_start":int,"char_end":int}` | `python-docx` | yes |
 | `docx_cell` | `{"table_index":int,"row":int,"col":int,"char_start":int,"char_end":int}` | `python-docx` | yes |
 
-Reserved for M2, **not emitted in M1**: `image_box`, `audio_span`, `video_span`.
+Structured-data kinds (added by the review; M1 where the adapter exists):
+
+| `locator_kind` | JSON | Verification strength |
+|---|---|---|
+| `csv_cell` | `{"row":int,"col":int,"header":str}` | `EXACT` |
+| `json_pointer` | `{"pointer":"/a/b/0"}` (RFC 6901) | `EXACT` |
+| `xml_path` | `{"path":"/root/item[2]"}` (restricted, **non-evaluating parser**) | `EXACT` |
+
+Reserved for M2, **not emitted in M1**: `image_box` (`STRUCTURAL`),
+`audio_span` (`STRUCTURAL`), `video_span` (`STRUCTURAL`).
 Adding them requires a new `locator_kind` value and a UI renderer — **no schema
 migration**. That is the ADR-0002 extensibility test.
 
@@ -173,9 +186,14 @@ CREATE TABLE claim (
   object_id    TEXT,                   -- NULL for attribute-style claims
   object_kind  TEXT,
   object_literal TEXT,
-  status       TEXT NOT NULL CHECK(status IN
-                 ('DETERMINISTIC','EXTRACTED','INFERRED','AMBIGUOUS','CONTRADICTED','SUPERSEDED')),
-  confidence   REAL,                   -- NULL for DETERMINISTIC: it is not a probability
+  -- [AMENDED] four orthogonal axes replace the single status column (ADR-0006)
+  lifecycle     TEXT NOT NULL CHECK(lifecycle IN
+                  ('CANDIDATE','VALIDATING','VERIFIED','ACTIVE','REJECTED')),
+  establishment TEXT NOT NULL CHECK(establishment IN
+                  ('DERIVED','CONFIRMED','PROPOSED','DISPUTED')),
+  rejected_reason TEXT,                -- required when lifecycle='REJECTED'
+  confidence   REAL,                   -- producer's self-report. NULL for DERIVED.
+                                       -- GATES NOTHING. confidence != verified.
   extractor    TEXT NOT NULL,
   model_id     TEXT,                   -- NULL unless a model produced it
   prompt_version TEXT,
@@ -194,7 +212,12 @@ CREATE TABLE evidence (
   locator_kind TEXT NOT NULL,
   locator      TEXT NOT NULL,
   quoted_text  TEXT NOT NULL,          -- MUST be verbatim at the locator
-  verified     INTEGER NOT NULL DEFAULT 0   -- 1 only after substring check passed
+  -- [AMENDED] strength replaces the boolean: byte-compare does not generalise
+  -- beyond text. Never claim verification the modality cannot support. (ADR-0006)
+  verification_strength TEXT CHECK(verification_strength IN
+                  ('EXACT','REPRODUCIBLE','STRUCTURAL')),   -- NULL until checked
+  verifier_engine TEXT,                -- pinned engine+version for REPRODUCIBLE
+  verified_at  TEXT
 );
 
 CREATE TABLE claim_relation (            -- claim-to-claim, for conflict/versioning
@@ -209,13 +232,28 @@ CREATE TABLE claim_relation (            -- claim-to-claim, for conflict/version
 ### 6.1 The constraint that makes the project honest
 
 ```sql
+-- [AMENDED] Evidence is written and verified BEFORE the claim, in the SAME
+-- transaction. Phase 0 fired this AFTER INSERT ON claim, when evidence may
+-- legitimately not exist yet -- it would have forced orphans or false rejects.
 CREATE TRIGGER claim_requires_verified_evidence
 AFTER INSERT ON claim
-WHEN NEW.status IN ('EXTRACTED','INFERRED')
+WHEN NEW.establishment IN ('PROPOSED','CONFIRMED','DISPUTED')
   AND NOT EXISTS (SELECT 1 FROM evidence
-                  WHERE claim_id = NEW.claim_id AND verified = 1)
+                  WHERE claim_id = NEW.claim_id
+                    AND verification_strength IN ('EXACT','REPRODUCIBLE'))
 BEGIN
-  SELECT RAISE(ABORT, 'model-derived claim has no verified evidence');
+  SELECT RAISE(ABORT, 'model-derived claim has no verifiable evidence');
+END;
+
+-- A claim whose evidence is only STRUCTURAL may never be CONFIRMED.
+CREATE TRIGGER structural_evidence_cannot_confirm
+AFTER INSERT ON claim
+WHEN NEW.establishment = 'CONFIRMED'
+  AND NOT EXISTS (SELECT 1 FROM evidence
+                  WHERE claim_id = NEW.claim_id
+                    AND verification_strength IN ('EXACT','REPRODUCIBLE'))
+BEGIN
+  SELECT RAISE(ABORT, 'CONFIRMED requires at least one EXACT/REPRODUCIBLE evidence row');
 END;
 ```
 
@@ -299,3 +337,38 @@ Adding image/audio/video requires: new `modality` values, new `locator_kind`
 values, new adapters. It requires **no change** to `claim`, `evidence`,
 `canonical_entity`, `node`, `edge`, or the retrieval index. If a proposed M2
 change forces one, ADR-0002 has failed and must be revised explicitly.
+
+
+## 11. Deterministic identifiers  **[AMENDED — added by adversarial review]**
+
+Phase 0 never specified ID generation. Unspecified, it becomes `uuid4()`, which
+silently destroys reproducibility. All IDs are content-addressed:
+
+```
+source_id   = sha256(canonical_uri)
+artifact_id = sha256(source_id ‖ rel_path ‖ content_sha256)
+symbol_id   = sha256(artifact_id ‖ qualified_name ‖ byte_start ‖ byte_end ‖ kind)
+region_id   = sha256(document_id ‖ locator_kind ‖ canonical_json(locator))
+evidence_id = sha256(artifact_id ‖ content_sha256 ‖ locator_kind ‖
+                     canonical_json(locator) ‖ quoted_text)
+entity_id   = sha256(entity_type ‖ normal_form)          -- run-independent
+claim_id    = sha256(predicate ‖ subject_id ‖ object_id|object_literal ‖
+                     extractor_id ‖ extractor_version ‖
+                     model_id|"" ‖ prompt_version|"" ‖ schema_version|"" ‖
+                     sorted(evidence_ids))
+run_id      = sha256(software_version ‖ config_hash ‖ started_at)  -- unique by design
+```
+
+`canonical_json` = sorted keys, no whitespace, fixed float formatting.
+
+Model identity lives in the **claim** hash, not only the run. Two runs over
+identical bytes with different models therefore produce **different claim IDs
+that coexist and are diffable** — and a single run may legitimately use two
+models. Putting model identity only on the run would make both impossible.
+
+| Byte-identical across identical runs | May differ |
+|---|---|
+| every ID except `run_id` | `run_id`, timestamps, durations |
+| full node/edge/claim/evidence row set | row insertion order (compare as sets) |
+| FTS5 index contents | SQLite physical page layout |
+| `llm_ledger` cache keys | ledger latency values |

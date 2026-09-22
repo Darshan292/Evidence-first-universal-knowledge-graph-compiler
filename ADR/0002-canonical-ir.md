@@ -38,6 +38,10 @@ fabricates a more precise one**. We verified on 2026-09-22 that `python-docx`
 exposes no page attribute; therefore no DOCX locator carries a page, and no
 amount of downstream convenience justifies inventing one.
 
+> **[AMENDED 2026-09-22]** The review added `csv_cell`, `json_pointer` and
+> `xml_path`, and paired every locator kind with a `verification_strength`
+> (ADR-0006). This validated Rule 2: three new kinds, **zero schema changes**.
+
 ### Rule 2 — Adding a modality adds locator kinds, never columns
 
 M2 introduces `image_box`, `audio_span`, `video_span`. Because the payload is

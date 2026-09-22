@@ -3,6 +3,12 @@
 **Status:** Planning. **Date:** 2026-09-22.
 **Nothing below is implemented.** Phase 0 output is this document set only.
 
+> ⚠ **AMENDED 2026-09-22 by the Phase 0 adversarial review**
+> ([ARCHITECTURE_CHALLENGE.md](ARCHITECTURE_CHALLENGE.md)).
+> **Authorized scope: Steps 1–3 only.** Step 4 (retrieval) is blocked until
+> experiment **X-1** reports (EVALUATION_PLAN §2). Steps 1–3 are unaffected by
+> all three defects found and are the foundation every correction depends on.
+
 ---
 
 ## 1. The smallest vertical slice that proves the architecture
@@ -41,10 +47,15 @@ kgc/
   router.py           # modality detection, hashing, path/archive safety
   ir.py               # IR records + locator constructors (validating)
   store.py            # THE ONLY module containing SQL (ADR-0004)
+  analysis/
+    interface.py      # CodeAnalysis dataclasses + resolution class (ADR-0005)
+    python_backend.py # stdlib ast + symtable -> CodeAnalysis
+    mapper.py         # CodeAnalysis -> IR  (keeps Python semantics out of the IR)
   extract/
-    python_ast.py     # stdlib ast + symtable → CodeSymbol, imports, calls
     pdf.py            # pdfplumber → Region + pdf_box locators
     docx.py           # python-docx → Region + docx_para/docx_cell locators
+    structured.py     # CSV/JSON/XML → csv_cell/json_pointer/xml_path
+                      # XML uses a NON-EVALUATING parser (ADR/challenge §12)
   candidates.py       # rule-based entity/relation candidates (no model)
   resolve.py          # tiered entity resolution
   enrich/
@@ -52,7 +63,8 @@ kgc/
     ollama.py openai.py anthropic.py groq.py
     schemas/          # versioned JSON Schemas
   claims.py           # claim builder + evidence verifier (the trust boundary)
-  retrieve.py         # exact | bm25 | graph expansion | ranking
+  query_prep.py       # stopwords, OR semantics, identifier splitting (D-2)
+  retrieve.py         # exact | bm25 | BOUNDED RANKED expansion | ranking
   ui/                 # static HTML + vendored sigma.js; reads the SQLite file
 eval/
   corpus/  gold/  run_eval.py
@@ -69,7 +81,10 @@ Each step ends with the repository buildable and its tests passing.
 ### Step 1 — Store and IR *(foundation)*
 Schema from DATA_MODEL.md, including the
 `claim_requires_verified_evidence` trigger. Validating locator constructors.
-**Done when:** A-06 passes — a claim with a fabricated quote *cannot be inserted*.
+**Done when:** A-06 and A-23 pass — a claim with a fabricated quote *cannot be
+inserted*, and no evidence row can carry a verification strength its modality
+cannot support. Deterministic IDs (DATA_MODEL §11) land here too: specified late,
+they become `uuid4()` and reproducibility is silently lost.
 
 > Built first on purpose. The central guarantee should exist before there is any
 > code that might want to bypass it.
@@ -78,17 +93,27 @@ Schema from DATA_MODEL.md, including the
 Hashing, modality detection, path/archive safety. `ast` + `symtable` →
 `CodeSymbol` with byte ranges; imports; intra-module call resolution;
 `UNRESOLVED` marking. `parse_status` on failure.
-**Done when:** A-02, A-03 pass.
+**Done when:** A-02, A-03, A-25 pass (every unresolvable reference emits `UNRESOLVED`).
 
 ### Step 3 — Document extraction
 `pdfplumber` → regions with page+bbox; `python-docx` → paragraph/run/table
 locators. Heading hierarchy. Sentence segmentation preserving offsets.
 **Done when:** A-04, A-05 pass (including: no DOCX row carries a page number).
 
-### Step 4 — Graph projection + retrieval
-`node`/`edge` projection; FTS5 index; exact lookup, BM25, recursive-CTE
-expansion; query-class router; evidence ranking.
-**Done when:** A-15 passes per class.
+### Step 3.5 — Experiment X-1  *(BLOCKING GATE)*
+Build the eval corpus and query set; measure Recall@10 per class for
+configurations A / B / C (EVALUATION_PLAN §2). **No retrieval code is written
+until this reports.** The decision rule is fixed in advance so the result cannot
+be rationalised after the fact.
+**Done when:** X-1 has reported and the vector decision is recorded in an ADR.
+
+### Step 4 — Graph projection + retrieval  **[AMENDED]**
+`node`/`edge` projection; FTS5 index **with query preprocessing** (stopword
+removal, OR semantics, identifier splitting — the absence of which caused
+defect D-2); exact lookup; **bounded ranked expansion per ADR-0007** (no
+unbounded traversal exists in the system); query-class router; evidence ranking.
+**Done when:** A-15 and A-17 pass per class, and no expansion API can return an
+unbounded result set.
 
 ### Step 5 — Candidates + entity resolution
 Rule-based candidates; tiered resolution writing `mention_resolution` rows with
@@ -113,7 +138,7 @@ versioned schemas; the data-channel discipline.
 ### Step 8 — Claim builder + enrichment
 Evidence verifier; structural-edge protection; rationale/intent extraction;
 coreference; ambiguity adjudication.
-**Done when:** A-07, A-11 pass, unsupported-claim rate = 0.
+**Done when:** A-07, A-11, A-24 pass; unsupported-claim rate = 0; contradicted claims remain queryable.
 
 ### Step 9 — Conflict, versioning, resumability
 `CONTRADICTS` / `SUPERSEDES`; validity intervals; `work_item` resume; crash test.
@@ -121,7 +146,7 @@ coreference; ambiguity adjudication.
 
 ### Step 10 — Cloud adapters + release gates
 OpenAI, Anthropic, Groq adapters; parity tests; license gate; no-egress test.
-**Done when:** A-18, A-19, A-20 pass. **Milestone 1 complete.**
+**Done when:** A-18 … A-22 pass. **Milestone 1 complete.**
 
 ## 4. Why this order
 

@@ -1,0 +1,736 @@
+{
+  "version": "1.1.0",
+  "authored": "2026-09-22",
+  "provenance": "Authored by reading eval/corpus/ directly, before the abstention gate was implemented. No gate output influenced any entry.",
+  "corpus_root": "eval/corpus",
+  "split_rule": "STRATIFIED. Within each (kind, class) stratum, queries are ordered by sha256('strat-v2:'+id) and dealt round-robin into a fixed 40/30/30 CALIBRATION/VALIDATION/TEST pattern. Fixed before any measurement.",
+  "decision_values": [
+    "ABSTAIN",
+    "EXPOSE",
+    "EXPOSE_CONFLICTED"
+  ],
+  "queries": [
+    {
+      "id": "N-A1",
+      "kind": "negative",
+      "negative_class": "A",
+      "query": "what is the Kafka topic used for order events",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "no broker, no topics anywhere in the corpus",
+      "split": "TEST"
+    },
+    {
+      "id": "N-A2",
+      "kind": "negative",
+      "negative_class": "A",
+      "query": "which GDPR data retention period applies to cardholder names",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "no GDPR, no retention policy in the corpus",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "N-A3",
+      "kind": "negative",
+      "negative_class": "A",
+      "query": "how do I configure the Kubernetes ingress controller",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "no deployment or orchestration material",
+      "split": "VALIDATION"
+    },
+    {
+      "id": "N-A4",
+      "kind": "negative",
+      "negative_class": "A",
+      "query": "what is the SLA for the mobile push notification service",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "no such service",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "N-B1",
+      "kind": "negative",
+      "negative_class": "B",
+      "query": "what does the FraudDetector class do",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "plausible payments entity that does not exist",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "N-B2",
+      "kind": "negative",
+      "negative_class": "B",
+      "query": "where is ChargebackHandler defined",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "plausible symbol, absent",
+      "split": "TEST"
+    },
+    {
+      "id": "N-B3",
+      "kind": "negative",
+      "negative_class": "B",
+      "query": "what is SUBSCRIPTION_RENEWAL_DAYS set to",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "plausible constant, absent",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "N-B4",
+      "kind": "negative",
+      "negative_class": "B",
+      "query": "which module defines the RefundPolicy class",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "refund exists as a method, RefundPolicy does not",
+      "split": "VALIDATION"
+    },
+    {
+      "id": "N-C1",
+      "kind": "negative",
+      "negative_class": "C",
+      "query": "why is the payment gateway deadline 90 seconds",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "shares nearly all vocabulary with ADR-007; 90 is not the value",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "N-C2",
+      "kind": "negative",
+      "negative_class": "C",
+      "query": "what is the payment gateway deadline of 15 seconds",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "same wording as the true source, wrong literal",
+      "split": "TEST"
+    },
+    {
+      "id": "N-C3",
+      "kind": "negative",
+      "negative_class": "C",
+      "query": "which module sets RETRY_LIMIT to 10",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "RETRY_LIMIT is real, 10 is not its value",
+      "split": "VALIDATION"
+    },
+    {
+      "id": "N-C4",
+      "kind": "negative",
+      "negative_class": "C",
+      "query": "the settlement batch size of 1000 applies to which ledger",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "SETTLEMENT_BATCH_SIZE is real, 1000 is not its value",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "N-C5",
+      "kind": "negative",
+      "negative_class": "C",
+      "query": "what is the 99th percentile card network response of 40 seconds",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "ADR-007 says 18 seconds; every other term matches",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "N-C6",
+      "kind": "negative",
+      "negative_class": "C",
+      "query": "confirm PAYMENT_TIMEOUT_SECONDS is defined in gateway.py",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "right symbol, wrong file; gateway imports it, config defines it",
+      "split": "TEST"
+    },
+    {
+      "id": "N-C7",
+      "kind": "negative",
+      "negative_class": "C",
+      "query": "what is the backoff base of 5 seconds in the retry policy",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "BACKOFF_BASE_SECONDS is 2, not 5",
+      "split": "VALIDATION"
+    },
+    {
+      "id": "N-D1",
+      "kind": "negative",
+      "negative_class": "D",
+      "query": "confirm the payment timeout is 45 seconds",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "45 appears nowhere",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "N-D2",
+      "kind": "negative",
+      "negative_class": "D",
+      "query": "the retry limit is 7, which module sets it",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "7 appears nowhere",
+      "split": "VALIDATION"
+    },
+    {
+      "id": "N-D3",
+      "kind": "negative",
+      "negative_class": "D",
+      "query": "what is the EU visa fee of 200 bps",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "fees.csv says 120 for EU visa",
+      "split": "TEST"
+    },
+    {
+      "id": "N-E1",
+      "kind": "negative",
+      "negative_class": "E",
+      "query": "which function in ledger.py calls CardGateway.authorize",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "ledger never calls the gateway",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "N-E2",
+      "kind": "negative",
+      "negative_class": "E",
+      "query": "how does reporting.Processor use PAYMENT_TIMEOUT_SECONDS",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "reporting does not import or use it",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "N-E3",
+      "kind": "negative",
+      "negative_class": "E",
+      "query": "where does config.py import from gateway.py",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "config imports nothing; the dependency runs the other way",
+      "split": "VALIDATION"
+    },
+    {
+      "id": "N-E4",
+      "kind": "negative",
+      "negative_class": "E",
+      "query": "which method of Ledger calls PaymentProcessor.charge",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "the call runs from PaymentProcessor to Ledger, not back",
+      "split": "TEST"
+    },
+    {
+      "id": "N-F1",
+      "kind": "negative",
+      "negative_class": "F",
+      "query": "what is the retry limit of the Ledger class",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "Ledger has no retry behaviour",
+      "split": "VALIDATION"
+    },
+    {
+      "id": "N-F2",
+      "kind": "negative",
+      "negative_class": "F",
+      "query": "what encryption algorithm does CardGateway use",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "CardGateway is real; no encryption is described",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "N-F3",
+      "kind": "negative",
+      "negative_class": "F",
+      "query": "what is the timeout of the reporting Processor",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "Processor is real; it has no timeout",
+      "split": "TEST"
+    },
+    {
+      "id": "N-F4",
+      "kind": "negative",
+      "negative_class": "F",
+      "query": "what is the settlement batch size of CardGateway",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "batch size belongs to the ledger, not the gateway",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "N-G1",
+      "kind": "negative",
+      "negative_class": "G",
+      "query": "confirm the current gateway deadline is 60 seconds",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "EXPOSE_CONFLICTED"
+      ],
+      "rationale": "60 IS in the corpus, in a doc that self-describes as stale and is contradicted",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "N-G2",
+      "kind": "negative",
+      "negative_class": "G",
+      "query": "the runbook says the deadline is 60 seconds, is that the configured value",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "EXPOSE_CONFLICTED"
+      ],
+      "rationale": "directly probes the contradiction",
+      "split": "VALIDATION"
+    },
+    {
+      "id": "N-H1",
+      "kind": "negative",
+      "negative_class": "H",
+      "query": "what is the APAC deadline for EU routes",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "mixes two real routing rows; the combination does not exist",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "N-H2",
+      "kind": "negative",
+      "negative_class": "H",
+      "query": "what is the reporting period of PaymentProcessor",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "period belongs to reporting.Processor, not PaymentProcessor",
+      "split": "VALIDATION"
+    },
+    {
+      "id": "N-H3",
+      "kind": "negative",
+      "negative_class": "H",
+      "query": "what is the fee_bps for APAC visa",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN"
+      ],
+      "rationale": "fees.csv has EU and US only",
+      "split": "TEST"
+    },
+    {
+      "id": "P-01",
+      "kind": "positive",
+      "positive_class": "easy",
+      "query": "PAYMENT_TIMEOUT_SECONDS",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "orderflow/config.py"
+      ],
+      "evidence_must_contain": "PAYMENT_TIMEOUT_SECONDS = 30",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "P-02",
+      "kind": "positive",
+      "positive_class": "easy",
+      "query": "SETTLEMENT_BATCH_SIZE",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "orderflow/config.py"
+      ],
+      "evidence_must_contain": "SETTLEMENT_BATCH_SIZE = 500",
+      "split": "VALIDATION"
+    },
+    {
+      "id": "P-03",
+      "kind": "positive",
+      "positive_class": "easy",
+      "query": "GatewayError",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "orderflow/gateway.py"
+      ],
+      "evidence_must_contain": "class GatewayError",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "P-04",
+      "kind": "positive",
+      "positive_class": "easy",
+      "query": "what is the payment gateway deadline",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "docs/adr-007-payment-timeout.md",
+        "orderflow/config.py"
+      ],
+      "evidence_must_contain": "30 seconds",
+      "split": "TEST"
+    },
+    {
+      "id": "P-05",
+      "kind": "positive",
+      "positive_class": "structural",
+      "query": "what does PaymentProcessor.charge call",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "orderflow/payments.py"
+      ],
+      "evidence_must_contain": "self.gateway.authorize",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "P-06",
+      "kind": "positive",
+      "positive_class": "structural",
+      "query": "which module imports SETTLEMENT_BATCH_SIZE",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "orderflow/ledger.py"
+      ],
+      "evidence_must_contain": "from orderflow.config import SETTLEMENT_BATCH_SIZE",
+      "split": "TEST"
+    },
+    {
+      "id": "P-07",
+      "kind": "positive",
+      "positive_class": "structural",
+      "query": "what does CardGateway.authorize do",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "orderflow/gateway.py"
+      ],
+      "evidence_must_contain": "def authorize",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "P-08",
+      "kind": "positive",
+      "positive_class": "cross_document",
+      "query": "which API endpoint triggers a card authorization",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "docs/api.md",
+        "orderflow/api.py"
+      ],
+      "evidence_must_contain": "post_charge",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "P-09",
+      "kind": "positive",
+      "positive_class": "cross_document",
+      "query": "what is the gateway deadline and why was that value chosen",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "docs/adr-007-payment-timeout.md"
+      ],
+      "evidence_must_contain": "18 seconds",
+      "split": "VALIDATION"
+    },
+    {
+      "id": "P-10",
+      "kind": "positive",
+      "positive_class": "evidence_loc",
+      "query": "what is the 99th percentile card network response time",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "docs/adr-007-payment-timeout.md"
+      ],
+      "evidence_must_contain": "99th percentile response at 18 seconds",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "P-11",
+      "kind": "positive",
+      "positive_class": "evidence_loc",
+      "query": "what is the EU visa fee in basis points",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "data/fees.csv"
+      ],
+      "evidence_must_contain": "120",
+      "split": "TEST"
+    },
+    {
+      "id": "P-12",
+      "kind": "positive",
+      "positive_class": "ambiguous",
+      "query": "Processor",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "orderflow/reporting.py",
+        "orderflow/payments.py"
+      ],
+      "evidence_must_contain": "class Processor",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "P-13",
+      "kind": "positive",
+      "positive_class": "ambiguous",
+      "query": "record",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "orderflow/ledger.py"
+      ],
+      "evidence_must_contain": "def record",
+      "split": "VALIDATION"
+    },
+    {
+      "id": "P-14",
+      "kind": "positive",
+      "positive_class": "paraphrase",
+      "query": "why do shoppers walk away from a slow checkout",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "docs/checkout-abandonment.md"
+      ],
+      "evidence_must_contain": "give up",
+      "split": "VALIDATION"
+    },
+    {
+      "id": "P-15",
+      "kind": "positive",
+      "positive_class": "paraphrase",
+      "query": "at what point do we stop waiting for a stalled purchase",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "orderflow/config.py",
+        "docs/adr-007-payment-timeout.md"
+      ],
+      "evidence_must_contain": "30",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "P-16",
+      "kind": "positive",
+      "positive_class": "conflict",
+      "query": "what is the gateway timeout value",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "orderflow/config.py",
+        "docs/runbook.md"
+      ],
+      "evidence_must_contain": "60 seconds",
+      "split": "CALIBRATION"
+    },
+    {
+      "id": "P-17",
+      "kind": "positive",
+      "positive_class": "easy",
+      "query": "what is the retry limit",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "orderflow/config.py"
+      ],
+      "evidence_must_contain": "RETRY_LIMIT = 3",
+      "split": "TEST"
+    },
+    {
+      "id": "P-18",
+      "kind": "positive",
+      "positive_class": "structural",
+      "query": "what does build_processor return",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "orderflow/payments.py"
+      ],
+      "evidence_must_contain": "return PaymentProcessor",
+      "split": "VALIDATION"
+    },
+    {
+      "id": "P-19",
+      "kind": "positive",
+      "positive_class": "cross_document",
+      "query": "which component talks to the card network",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "docs/architecture.md",
+        "orderflow/gateway.py"
+      ],
+      "evidence_must_contain": "gateway",
+      "split": "TEST"
+    },
+    {
+      "id": "P-20",
+      "kind": "positive",
+      "positive_class": "evidence_loc",
+      "query": "what is the settlement batch size",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "orderflow/config.py"
+      ],
+      "evidence_must_contain": "SETTLEMENT_BATCH_SIZE = 500",
+      "split": "VALIDATION"
+    },
+    {
+      "id": "P-21",
+      "kind": "positive",
+      "positive_class": "easy",
+      "query": "what is BACKOFF_BASE_SECONDS",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "orderflow/config.py"
+      ],
+      "evidence_must_contain": "BACKOFF_BASE_SECONDS = 2",
+      "split": "CALIBRATION"
+    }
+  ],
+  "split_rule_history": [
+    {
+      "version": "1.0.0",
+      "rule": "unstratified sha256('split-v1:'+id) % 100",
+      "replaced_because": "produced degenerate strata: VALIDATION contained zero class-C queries and TEST contained only 2 positives, so neither could measure the key hard-negative class or the availability axis. Replaced BEFORE any gate was implemented or any result observed."
+    }
+  ]
+}

@@ -116,3 +116,26 @@ information the blacklist destroyed.
 **Accepted.** `REPRODUCIBLE` re-verification is a batch operation, not an
 insert-time one — re-running OCR on every insert is not viable. The engine pin is
 recorded so re-verification is possible on demand.
+
+---
+
+## Implementation findings (Gate 1, 2026-09-22)
+
+**Part 4 (write ordering) was correct and necessary.** Evidence is inserted and
+verified before the claim citing it, so the triggers see a complete picture. All
+six invariants are enforced as SQLite triggers rather than Python checks, so they
+hold against any caller that bypasses the store API.
+
+**[MEASURED] A crash-safety defect the ordering did not cover.** The work item
+was claimed (`state='RUNNING'`, `attempts+1`) *inside* the work transaction, so a
+crash rolled both back — meaning `RUNNING` never survived, the attempts counter
+never advanced, and **a file that crashed the process would be retried forever**.
+Found by a failing resume test. The claim now commits in its own transaction
+before the work transaction opens, and `MAX_ATTEMPTS=3` quarantines a repeatedly
+failing item.
+
+**The four axes earned their place.** `test_no_default_query_path_filters_on_
+lifecycle` reads `store.py` and fails if any read method filters on `lifecycle` —
+a source-level guard against defect D-3 recurring. `confidence` is read by no
+code path anywhere; a test sets it to 0.92 on an unverifiable claim and asserts
+the insert is still rejected.

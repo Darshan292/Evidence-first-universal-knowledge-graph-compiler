@@ -122,3 +122,27 @@ community fork, ~10 months old, of a project its corporate sponsor abandoned
 after an acquisition. That is not a criticism of LadybugDB — it is active and
 the fork appears healthy — it is a statement about what belongs on the critical
 path of a system whose premise is durability of evidence.
+
+---
+
+## Implementation findings (Gate 1, 2026-09-22)
+
+**SQLite held.** 40 acceptance tests, invariants enforced as triggers, crash
+recovery verified at 6 code points × 4 corpus positions, all recovering to
+byte-equal row sets.
+
+**[MEASURED] Defect found: a missing index made the invariant audit
+superlinear** — 0.002 s / 0.059 s / **7.5 s** at 10 / 100 / 1000 files. The
+dangling-evidence check scanned `claim_evidence` once per evidence row because
+its primary key `(claim_id, evidence_id)` cannot serve a lookup by
+`evidence_id` alone. Adding `i_ce_evidence` took that query from **2.214 s to
+0.003 s** and the full audit from **7.5 s to 0.056 s**.
+
+**[MEASURED] Storage is 68.8× source size** (0.24 MB → 16.7 MB at 500 files).
+Breakdown by `dbstat`: indexes are **35%** of the file; 64-character hex
+identifiers stored as TEXT account for ~5.06 MB of raw key text, versus ~0.63 MB
+as 16-byte BLOBs. An initial hypothesis that `quoted_text` duplication was the
+cause was **measured and disproved** — `quoted_text` totals only 1.7× the source.
+Changing the identifier representation is Gate 1 condition C-1; it is deferred
+rather than done because it touches every module and Gate 1 forbade premature
+optimisation.

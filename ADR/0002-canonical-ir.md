@@ -97,3 +97,21 @@ job of entity resolution, not of locators.
   bbox and cell information irrecoverably.
 - **Storing parser objects and resolving lazily.** Makes the database unreadable
   without the exact parser version that wrote it, destroying reproducibility.
+
+---
+
+## Implementation findings (Gate 1, 2026-09-22)
+
+**The IR held.** Three locator kinds (`byte_range`, `ast_node`, `json_pointer`,
+plus `xml_path`) were added with **zero schema changes**, which was Rule 2's test.
+
+**One correction.** `reference` began as a table parallel to `claim`, storing
+subject/predicate/object/locator again. That was duplication, not a boundary. It
+is now a **detail table keyed by `claim_id`** holding only `(to_name, resolution,
+reason)` — the resolution quality of a reference-style claim. One fact store.
+
+**Deleted as speculative:** `Modality.DOCUMENT` / `STRUCTURED` (values nothing
+could produce) and `ids.region_id` (no producer until a document adapter exists).
+`LocatorKind` values for unimplemented modalities are **kept**, because
+`Locator.__post_init__` rejects them and a test asserts that rejection — they
+are an enforced contract, not speculation.

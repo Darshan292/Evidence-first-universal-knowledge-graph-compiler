@@ -1,0 +1,91 @@
+{
+  "scales": [
+    {
+      "files": 10,
+      "source_mb": 0.0,
+      "db_mb": 0.48,
+      "cold_index_s": 0.03,
+      "files_per_s": 308.2,
+      "source_kb_per_s": 136.6,
+      "warm_reindex_s": 0.02,
+      "warm_speedup": 1.73,
+      "db_bytes_per_source_byte": 104.66,
+      "symbols": 100,
+      "claims": 160,
+      "evidence": 160,
+      "claims_per_file": 16.0,
+      "verify_s": 0.001,
+      "invariant_violations": 0,
+      "reproducible_across_independent_runs": true,
+      "peak_rss_mb": 20.5
+    },
+    {
+      "files": 100,
+      "source_mb": 0.05,
+      "db_mb": 3.44,
+      "cold_index_s": 0.35,
+      "files_per_s": 287.6,
+      "source_kb_per_s": 131.0,
+      "warm_reindex_s": 0.16,
+      "warm_speedup": 2.18,
+      "db_bytes_per_source_byte": 73.74,
+      "symbols": 1000,
+      "claims": 1600,
+      "evidence": 1600,
+      "claims_per_file": 16.0,
+      "verify_s": 0.006,
+      "invariant_violations": 0,
+      "reproducible_across_independent_runs": true,
+      "peak_rss_mb": 24.5
+    },
+    {
+      "files": 1000,
+      "source_mb": 0.48,
+      "db_mb": 33.21,
+      "cold_index_s": 4.89,
+      "files_per_s": 204.7,
+      "source_kb_per_s": 96.0,
+      "warm_reindex_s": 1.75,
+      "warm_speedup": 2.79,
+      "db_bytes_per_source_byte": 69.12,
+      "symbols": 10000,
+      "claims": 16000,
+      "evidence": 16000,
+      "claims_per_file": 16.0,
+      "verify_s": 0.056,
+      "invariant_violations": 0,
+      "reproducible_across_independent_runs": true,
+      "peak_rss_mb": 48.2
+    }
+  ],
+  "crash_recovery": {
+    "10%": {
+      "recovered_identical": true,
+      "violations": [],
+      "total_s": 0.12
+    },
+    "30%": {
+      "recovered_identical": true,
+      "violations": [],
+      "total_s": 0.12
+    },
+    "50%": {
+      "recovered_identical": true,
+      "violations": [],
+      "total_s": 0.15
+    },
+    "90%": {
+      "recovered_identical": true,
+      "violations": [],
+      "total_s": 0.16
+    }
+  },
+  "self_ingest": {
+    "files": 12,
+    "seconds": 0.18,
+    "symbols": 392,
+    "claims": 986,
+    "db_mb": 2.21,
+    "invariant_violations": 0
+  }
+}

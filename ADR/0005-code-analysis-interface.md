@@ -111,3 +111,32 @@ the alternative was an accidental canonical model.
 **Accepted.** Cross-module Python resolution stays `HEURISTIC`. Python is
 dynamically typed; claiming otherwise would be the fabrication this project exists
 to prevent.
+
+---
+
+## Implementation findings (Gate 1, 2026-09-22)
+
+**Implemented with exactly one backend**, as specified. The `CodeAnalysis` ->
+IR mapper keeps `ast` semantics out of the canonical model.
+
+**[MEASURED] Resolution rates on real code** (the compiler ingesting itself,
+599 references):
+
+| Resolution | Share | Dominant cause |
+|---|---|---|
+| `DETERMINISTIC` | 11.2% | module-scope calls |
+| `HEURISTIC` | 32.7% | imports — statement observed, target in another artifact |
+| `UNRESOLVED` | **56.1%** | 293 unbound names (builtins, methods on locals), 41 computed call targets, 2 attribute accesses |
+
+Rule 1 held under pressure: every unresolvable reference produced an
+`UNRESOLVED` row with its surface name and a reason. None was dropped, and an
+audit asserts no `UNRESOLVED` row carries a resolved target.
+
+**Deleted:** `CodeAnalysis.capability_report()`. The CLI derives the same
+breakdown from persisted rows, which is the real truth rather than an in-memory
+summary of one run.
+
+**Open:** cross-module resolution is not implemented, so **100% of `IMPORTS` are
+`HEURISTIC`**. Gate 1 condition C-2 requires deciding whether to build an import
+resolver or accept this permanently, before retrieval is measured — otherwise
+X-1 would be measuring a graph whose cross-file edges are all unresolved.

@@ -1,0 +1,710 @@
+{
+  "summary": {
+    "R1_bm25": {
+      "zero_overlap": {
+        "n": 10,
+        "recall@10": 0.1,
+        "recall@1": 0.0,
+        "MRR": 0.033,
+        "empty_result_sets": 5
+      },
+      "partial_overlap": {
+        "n": 4,
+        "recall@10": 1.0,
+        "recall@1": 0.0,
+        "MRR": 0.292,
+        "empty_result_sets": 0
+      },
+      "full_overlap": {
+        "n": 3,
+        "recall@10": 1.0,
+        "recall@1": 0.333,
+        "MRR": 0.492,
+        "empty_result_sets": 0
+      }
+    },
+    "R3_lsa": {
+      "zero_overlap": {
+        "n": 10,
+        "recall@10": 0.2,
+        "recall@1": 0.0,
+        "MRR": 0.05,
+        "empty_result_sets": 5
+      },
+      "partial_overlap": {
+        "n": 4,
+        "recall@10": 1.0,
+        "recall@1": 0.0,
+        "MRR": 0.237,
+        "empty_result_sets": 0
+      },
+      "full_overlap": {
+        "n": 3,
+        "recall@10": 1.0,
+        "recall@1": 0.333,
+        "MRR": 0.528,
+        "empty_result_sets": 0
+      }
+    },
+    "R4_bm25+lsa": {
+      "zero_overlap": {
+        "n": 10,
+        "recall@10": 0.3,
+        "recall@1": 0.0,
+        "MRR": 0.067,
+        "empty_result_sets": 5
+      },
+      "partial_overlap": {
+        "n": 4,
+        "recall@10": 1.0,
+        "recall@1": 0.0,
+        "MRR": 0.279,
+        "empty_result_sets": 0
+      },
+      "full_overlap": {
+        "n": 3,
+        "recall@10": 1.0,
+        "recall@1": 0.333,
+        "MRR": 0.511,
+        "empty_result_sets": 0
+      }
+    },
+    "R2_bm25+graph": {
+      "zero_overlap": {
+        "n": 10,
+        "recall@10": 0.1,
+        "recall@1": 0.1,
+        "MRR": 0.1,
+        "empty_result_sets": 5
+      },
+      "partial_overlap": {
+        "n": 4,
+        "recall@10": 1.0,
+        "recall@1": 0.75,
+        "MRR": 0.786,
+        "empty_result_sets": 0
+      },
+      "full_overlap": {
+        "n": 3,
+        "recall@10": 1.0,
+        "recall@1": 0.667,
+        "MRR": 0.714,
+        "empty_result_sets": 0
+      }
+    }
+  },
+  "rows": [
+    {
+      "id": "XR-01",
+      "tier": "zero_overlap",
+      "overlap": 0.0,
+      "R1_bm25": {
+        "rank": null,
+        "n_hits": 2,
+        "top3": [
+          "docs/checkout-abandonment.md",
+          "docs/runbook.md"
+        ]
+      },
+      "R3_lsa": {
+        "rank": 4,
+        "n_hits": 10,
+        "top3": [
+          "docs/checkout-abandonment.md",
+          "docs/runbook.md",
+          "orderflow/reporting.py"
+        ]
+      },
+      "R4_bm25+lsa": {
+        "rank": 4,
+        "n_hits": 10,
+        "top3": [
+          "docs/checkout-abandonment.md",
+          "docs/runbook.md",
+          "orderflow/reporting.py"
+        ]
+      },
+      "R2_bm25+graph": {
+        "rank": null,
+        "n_hits": 2,
+        "top3": [
+          "docs/checkout-abandonment.md",
+          "docs/runbook.md"
+        ]
+      }
+    },
+    {
+      "id": "XR-02",
+      "tier": "zero_overlap",
+      "overlap": 0.0,
+      "R1_bm25": {
+        "rank": null,
+        "n_hits": 2,
+        "top3": [
+          "docs/runbook.md",
+          "docs/checkout-abandonment.md"
+        ]
+      },
+      "R3_lsa": {
+        "rank": 4,
+        "n_hits": 10,
+        "top3": [
+          "docs/runbook.md",
+          "docs/checkout-abandonment.md",
+          "orderflow/reporting.py"
+        ]
+      },
+      "R4_bm25+lsa": {
+        "rank": 4,
+        "n_hits": 10,
+        "top3": [
+          "docs/runbook.md",
+          "docs/checkout-abandonment.md",
+          "orderflow/reporting.py"
+        ]
+      },
+      "R2_bm25+graph": {
+        "rank": null,
+        "n_hits": 2,
+        "top3": [
+          "docs/runbook.md",
+          "docs/checkout-abandonment.md"
+        ]
+      }
+    },
+    {
+      "id": "XR-03",
+      "tier": "zero_overlap",
+      "overlap": 0.0,
+      "R1_bm25": {
+        "rank": null,
+        "n_hits": 0,
+        "top3": []
+      },
+      "R3_lsa": {
+        "rank": null,
+        "n_hits": 0,
+        "top3": []
+      },
+      "R4_bm25+lsa": {
+        "rank": null,
+        "n_hits": 0,
+        "top3": []
+      },
+      "R2_bm25+graph": {
+        "rank": null,
+        "n_hits": 0,
+        "top3": []
+      }
+    },
+    {
+      "id": "XR-04",
+      "tier": "zero_overlap",
+      "overlap": 0.0,
+      "R1_bm25": {
+        "rank": null,
+        "n_hits": 0,
+        "top3": []
+      },
+      "R3_lsa": {
+        "rank": null,
+        "n_hits": 0,
+        "top3": []
+      },
+      "R4_bm25+lsa": {
+        "rank": null,
+        "n_hits": 0,
+        "top3": []
+      },
+      "R2_bm25+graph": {
+        "rank": null,
+        "n_hits": 0,
+        "top3": []
+      }
+    },
+    {
+      "id": "XR-05",
+      "tier": "zero_overlap",
+      "overlap": 0.0,
+      "R1_bm25": {
+        "rank": 3,
+        "n_hits": 10,
+        "top3": [
+          "docs/api.md",
+          "docs/architecture.md",
+          "orderflow/gateway.py"
+        ]
+      },
+      "R3_lsa": {
+        "rank": null,
+        "n_hits": 10,
+        "top3": [
+          "docs/adr-007-payment-timeout.md",
+          "docs/api.md",
+          "docs/api.md"
+        ]
+      },
+      "R4_bm25+lsa": {
+        "rank": 6,
+        "n_hits": 10,
+        "top3": [
+          "docs/api.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/architecture.md"
+        ]
+      },
+      "R2_bm25+graph": {
+        "rank": 1,
+        "n_hits": 10,
+        "top3": [
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "docs/api.md"
+        ]
+      }
+    },
+    {
+      "id": "XR-06",
+      "tier": "zero_overlap",
+      "overlap": 0.0,
+      "R1_bm25": {
+        "rank": null,
+        "n_hits": 0,
+        "top3": []
+      },
+      "R3_lsa": {
+        "rank": null,
+        "n_hits": 0,
+        "top3": []
+      },
+      "R4_bm25+lsa": {
+        "rank": null,
+        "n_hits": 0,
+        "top3": []
+      },
+      "R2_bm25+graph": {
+        "rank": null,
+        "n_hits": 0,
+        "top3": []
+      }
+    },
+    {
+      "id": "XR-07",
+      "tier": "zero_overlap",
+      "overlap": 0.0,
+      "R1_bm25": {
+        "rank": null,
+        "n_hits": 2,
+        "top3": [
+          "docs/architecture.md",
+          "docs/adr-007-payment-timeout.md"
+        ]
+      },
+      "R3_lsa": {
+        "rank": null,
+        "n_hits": 10,
+        "top3": [
+          "docs/architecture.md",
+          "orderflow/config.py",
+          "orderflow/payments.py"
+        ]
+      },
+      "R4_bm25+lsa": {
+        "rank": null,
+        "n_hits": 10,
+        "top3": [
+          "docs/architecture.md",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/config.py"
+        ]
+      },
+      "R2_bm25+graph": {
+        "rank": null,
+        "n_hits": 2,
+        "top3": [
+          "docs/architecture.md",
+          "docs/adr-007-payment-timeout.md"
+        ]
+      }
+    },
+    {
+      "id": "XR-08",
+      "tier": "zero_overlap",
+      "overlap": 0.0,
+      "R1_bm25": {
+        "rank": null,
+        "n_hits": 5,
+        "top3": [
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py"
+        ]
+      },
+      "R3_lsa": {
+        "rank": null,
+        "n_hits": 10,
+        "top3": [
+          "orderflow/gateway.py",
+          "orderflow/payments.py",
+          "orderflow/gateway.py"
+        ]
+      },
+      "R4_bm25+lsa": {
+        "rank": null,
+        "n_hits": 10,
+        "top3": [
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py"
+        ]
+      },
+      "R2_bm25+graph": {
+        "rank": null,
+        "n_hits": 10,
+        "top3": [
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/gateway.py"
+        ]
+      }
+    },
+    {
+      "id": "XR-09",
+      "tier": "zero_overlap",
+      "overlap": 0.0,
+      "R1_bm25": {
+        "rank": null,
+        "n_hits": 0,
+        "top3": []
+      },
+      "R3_lsa": {
+        "rank": null,
+        "n_hits": 0,
+        "top3": []
+      },
+      "R4_bm25+lsa": {
+        "rank": null,
+        "n_hits": 0,
+        "top3": []
+      },
+      "R2_bm25+graph": {
+        "rank": null,
+        "n_hits": 0,
+        "top3": []
+      }
+    },
+    {
+      "id": "XR-10",
+      "tier": "zero_overlap",
+      "overlap": 0.0,
+      "R1_bm25": {
+        "rank": null,
+        "n_hits": 0,
+        "top3": []
+      },
+      "R3_lsa": {
+        "rank": null,
+        "n_hits": 0,
+        "top3": []
+      },
+      "R4_bm25+lsa": {
+        "rank": null,
+        "n_hits": 0,
+        "top3": []
+      },
+      "R2_bm25+graph": {
+        "rank": null,
+        "n_hits": 0,
+        "top3": []
+      }
+    },
+    {
+      "id": "XR-11",
+      "tier": "partial_overlap",
+      "overlap": 1.0,
+      "R1_bm25": {
+        "rank": 3,
+        "n_hits": 10,
+        "top3": [
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/config.py"
+        ]
+      },
+      "R3_lsa": {
+        "rank": 4,
+        "n_hits": 10,
+        "top3": [
+          "docs/adr-007-payment-timeout.md",
+          "docs/checkout-abandonment.md",
+          "docs/api.md"
+        ]
+      },
+      "R4_bm25+lsa": {
+        "rank": 3,
+        "n_hits": 10,
+        "top3": [
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md",
+          "orderflow/config.py"
+        ]
+      },
+      "R2_bm25+graph": {
+        "rank": 1,
+        "n_hits": 10,
+        "top3": [
+          "orderflow/config.py",
+          "docs/checkout-abandonment.md",
+          "docs/adr-007-payment-timeout.md"
+        ]
+      }
+    },
+    {
+      "id": "XR-12",
+      "tier": "partial_overlap",
+      "overlap": 0.333,
+      "R1_bm25": {
+        "rank": 6,
+        "n_hits": 10,
+        "top3": [
+          "data/settings.json",
+          "orderflow/config.py",
+          "orderflow/config.py"
+        ]
+      },
+      "R3_lsa": {
+        "rank": 4,
+        "n_hits": 10,
+        "top3": [
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "data/settings.json"
+        ]
+      },
+      "R4_bm25+lsa": {
+        "rank": 4,
+        "n_hits": 10,
+        "top3": [
+          "data/settings.json",
+          "orderflow/config.py",
+          "orderflow/config.py"
+        ]
+      },
+      "R2_bm25+graph": {
+        "rank": 7,
+        "n_hits": 10,
+        "top3": [
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "orderflow/config.py"
+        ]
+      }
+    },
+    {
+      "id": "XR-13",
+      "tier": "partial_overlap",
+      "overlap": 1.0,
+      "R1_bm25": {
+        "rank": 3,
+        "n_hits": 10,
+        "top3": [
+          "docs/architecture.md",
+          "docs/architecture.md",
+          "orderflow/ledger.py"
+        ]
+      },
+      "R3_lsa": {
+        "rank": 4,
+        "n_hits": 10,
+        "top3": [
+          "docs/architecture.md",
+          "docs/architecture.md",
+          "docs/architecture.md"
+        ]
+      },
+      "R4_bm25+lsa": {
+        "rank": 3,
+        "n_hits": 10,
+        "top3": [
+          "docs/architecture.md",
+          "docs/architecture.md",
+          "orderflow/ledger.py"
+        ]
+      },
+      "R2_bm25+graph": {
+        "rank": 1,
+        "n_hits": 10,
+        "top3": [
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/payments.py"
+        ]
+      }
+    },
+    {
+      "id": "XR-14",
+      "tier": "partial_overlap",
+      "overlap": 1.0,
+      "R1_bm25": {
+        "rank": 3,
+        "n_hits": 10,
+        "top3": [
+          "docs/architecture.md",
+          "docs/architecture.md",
+          "orderflow/gateway.py"
+        ]
+      },
+      "R3_lsa": {
+        "rank": 5,
+        "n_hits": 10,
+        "top3": [
+          "docs/architecture.md",
+          "docs/adr-007-payment-timeout.md",
+          "docs/architecture.md"
+        ]
+      },
+      "R4_bm25+lsa": {
+        "rank": 5,
+        "n_hits": 10,
+        "top3": [
+          "docs/architecture.md",
+          "docs/architecture.md",
+          "docs/adr-007-payment-timeout.md"
+        ]
+      },
+      "R2_bm25+graph": {
+        "rank": 1,
+        "n_hits": 10,
+        "top3": [
+          "orderflow/gateway.py",
+          "orderflow/gateway.py",
+          "orderflow/payments.py"
+        ]
+      }
+    },
+    {
+      "id": "XR-15",
+      "tier": "full_overlap",
+      "overlap": 1.0,
+      "R1_bm25": {
+        "rank": 1,
+        "n_hits": 10,
+        "top3": [
+          "orderflow/config.py",
+          "orderflow/gateway.py",
+          "orderflow/config.py"
+        ]
+      },
+      "R3_lsa": {
+        "rank": 1,
+        "n_hits": 10,
+        "top3": [
+          "orderflow/config.py",
+          "orderflow/gateway.py",
+          "data/settings.json"
+        ]
+      },
+      "R4_bm25+lsa": {
+        "rank": 1,
+        "n_hits": 10,
+        "top3": [
+          "orderflow/config.py",
+          "orderflow/gateway.py",
+          "orderflow/config.py"
+        ]
+      },
+      "R2_bm25+graph": {
+        "rank": 1,
+        "n_hits": 10,
+        "top3": [
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "orderflow/gateway.py"
+        ]
+      }
+    },
+    {
+      "id": "XR-16",
+      "tier": "full_overlap",
+      "overlap": 1.0,
+      "R1_bm25": {
+        "rank": 7,
+        "n_hits": 10,
+        "top3": [
+          "docs/architecture.md",
+          "orderflow/config.py",
+          "data/settings.json"
+        ]
+      },
+      "R3_lsa": {
+        "rank": 4,
+        "n_hits": 10,
+        "top3": [
+          "orderflow/config.py",
+          "docs/architecture.md",
+          "data/settings.json"
+        ]
+      },
+      "R4_bm25+lsa": {
+        "rank": 5,
+        "n_hits": 10,
+        "top3": [
+          "docs/architecture.md",
+          "orderflow/config.py",
+          "data/settings.json"
+        ]
+      },
+      "R2_bm25+graph": {
+        "rank": 7,
+        "n_hits": 10,
+        "top3": [
+          "orderflow/config.py",
+          "orderflow/config.py",
+          "docs/architecture.md"
+        ]
+      }
+    },
+    {
+      "id": "XR-17",
+      "tier": "full_overlap",
+      "overlap": 1.0,
+      "R1_bm25": {
+        "rank": 3,
+        "n_hits": 10,
+        "top3": [
+          "docs/architecture.md",
+          "docs/architecture.md",
+          "orderflow/ledger.py"
+        ]
+      },
+      "R3_lsa": {
+        "rank": 3,
+        "n_hits": 10,
+        "top3": [
+          "docs/architecture.md",
+          "docs/architecture.md",
+          "orderflow/ledger.py"
+        ]
+      },
+      "R4_bm25+lsa": {
+        "rank": 3,
+        "n_hits": 10,
+        "top3": [
+          "docs/architecture.md",
+          "docs/architecture.md",
+          "orderflow/ledger.py"
+        ]
+      },
+      "R2_bm25+graph": {
+        "rank": 1,
+        "n_hits": 10,
+        "top3": [
+          "orderflow/ledger.py",
+          "orderflow/ledger.py",
+          "orderflow/payments.py"
+        ]
+      }
+    }
+  ],
+  "note": "LSA vocabulary is corpus-derived; a zero-overlap query projects to the zero vector and returns nothing. This is structural, not a tuning failure."
+}

@@ -25,6 +25,20 @@ def split_identifier(tok: str) -> list[str]:
     return [p.lower() for p in parts]
 
 
+def stem(tok: str) -> str:
+    """Minimal deterministic suffix stripping.
+
+    S2 compared unstemmed tokens while the FTS5 index used a porter tokenizer,
+    so the query term `imports` never matched the source term `import`. That
+    mismatch alone caused false abstentions on structural queries.
+    """
+    for suf in ("ances", "ement", "ing", "ies", "ers", "ed", "es", "s"):
+        if len(tok) > len(suf) + 2 and tok.endswith(suf):
+            base = tok[: -len(suf)]
+            return base + "y" if suf == "ies" else base
+    return tok
+
+
 def tokenize(text: str, *, split_ids: bool = True) -> list[str]:
     out: list[str] = []
     for m in _TOKEN.findall(text):

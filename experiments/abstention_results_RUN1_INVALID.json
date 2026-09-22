@@ -1,0 +1,498 @@
+{
+  "calibration": {
+    "G0": {
+      "chosen_theta": 50,
+      "sweep": [
+        {
+          "theta": 50,
+          "false_support": 1.0,
+          "false_abstention": 0.0,
+          "class_C": 1.0
+        },
+        {
+          "theta": 60,
+          "false_support": 1.0,
+          "false_abstention": 0.0,
+          "class_C": 1.0
+        },
+        {
+          "theta": 70,
+          "false_support": 1.0,
+          "false_abstention": 0.0,
+          "class_C": 1.0
+        },
+        {
+          "theta": 75,
+          "false_support": 1.0,
+          "false_abstention": 0.0,
+          "class_C": 1.0
+        },
+        {
+          "theta": 80,
+          "false_support": 1.0,
+          "false_abstention": 0.0,
+          "class_C": 1.0
+        },
+        {
+          "theta": 85,
+          "false_support": 1.0,
+          "false_abstention": 0.0,
+          "class_C": 1.0
+        },
+        {
+          "theta": 90,
+          "false_support": 1.0,
+          "false_abstention": 0.0,
+          "class_C": 1.0
+        },
+        {
+          "theta": 95,
+          "false_support": 1.0,
+          "false_abstention": 0.0,
+          "class_C": 1.0
+        }
+      ],
+      "any_theta_met_availability": true
+    },
+    "G1": {
+      "chosen_theta": 60,
+      "sweep": [
+        {
+          "theta": 50,
+          "false_support": 0.286,
+          "false_abstention": 0.7,
+          "class_C": 0.333
+        },
+        {
+          "theta": 60,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.333
+        },
+        {
+          "theta": 70,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.333
+        },
+        {
+          "theta": 75,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.333
+        },
+        {
+          "theta": 80,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.333
+        },
+        {
+          "theta": 85,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.333
+        },
+        {
+          "theta": 90,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.333
+        },
+        {
+          "theta": 95,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.333
+        }
+      ],
+      "any_theta_met_availability": false
+    },
+    "G2": {
+      "chosen_theta": 60,
+      "sweep": [
+        {
+          "theta": 50,
+          "false_support": 0.286,
+          "false_abstention": 0.7,
+          "class_C": 0.0
+        },
+        {
+          "theta": 60,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.0
+        },
+        {
+          "theta": 70,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.0
+        },
+        {
+          "theta": 75,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.0
+        },
+        {
+          "theta": 80,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.0
+        },
+        {
+          "theta": 85,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.0
+        },
+        {
+          "theta": 90,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.0
+        },
+        {
+          "theta": 95,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.0
+        }
+      ],
+      "any_theta_met_availability": false
+    },
+    "G3": {
+      "chosen_theta": 60,
+      "sweep": [
+        {
+          "theta": 50,
+          "false_support": 0.286,
+          "false_abstention": 0.7,
+          "class_C": 0.0
+        },
+        {
+          "theta": 60,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.0
+        },
+        {
+          "theta": 70,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.0
+        },
+        {
+          "theta": 75,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.0
+        },
+        {
+          "theta": 80,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.0
+        },
+        {
+          "theta": 85,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.0
+        },
+        {
+          "theta": 90,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.0
+        },
+        {
+          "theta": 95,
+          "false_support": 0.214,
+          "false_abstention": 0.8,
+          "class_C": 0.0
+        }
+      ],
+      "any_theta_met_availability": false
+    }
+  },
+  "validation": {
+    "G0": {
+      "n_neg": 9,
+      "n_pos": 6,
+      "false_support_rate": 0.889,
+      "false_abstention_rate": 0.0,
+      "acceptance_rate": 1.0,
+      "false_support_by_class": {
+        "A": "0/1",
+        "B": "1/1",
+        "C": "2/2",
+        "D": "1/1",
+        "E": "1/1",
+        "F": "1/1",
+        "G": "1/1",
+        "H": "1/1"
+      },
+      "class_C_false_support": 1.0,
+      "unsupported_exposure": 0,
+      "theta": 50
+    },
+    "G1": {
+      "n_neg": 9,
+      "n_pos": 6,
+      "false_support_rate": 0.222,
+      "false_abstention_rate": 0.833,
+      "acceptance_rate": 0.167,
+      "false_support_by_class": {
+        "A": "0/1",
+        "B": "1/1",
+        "C": "0/2",
+        "D": "0/1",
+        "E": "0/1",
+        "F": "0/1",
+        "G": "1/1",
+        "H": "0/1"
+      },
+      "class_C_false_support": 0.0,
+      "unsupported_exposure": 0,
+      "theta": 60
+    },
+    "G2": {
+      "n_neg": 9,
+      "n_pos": 6,
+      "false_support_rate": 0.222,
+      "false_abstention_rate": 0.833,
+      "acceptance_rate": 0.167,
+      "false_support_by_class": {
+        "A": "0/1",
+        "B": "1/1",
+        "C": "0/2",
+        "D": "0/1",
+        "E": "0/1",
+        "F": "0/1",
+        "G": "1/1",
+        "H": "0/1"
+      },
+      "class_C_false_support": 0.0,
+      "unsupported_exposure": 0,
+      "theta": 60
+    },
+    "G3": {
+      "n_neg": 9,
+      "n_pos": 6,
+      "false_support_rate": 0.222,
+      "false_abstention_rate": 0.833,
+      "acceptance_rate": 0.167,
+      "false_support_by_class": {
+        "A": "0/1",
+        "B": "1/1",
+        "C": "0/2",
+        "D": "0/1",
+        "E": "0/1",
+        "F": "0/1",
+        "G": "1/1",
+        "H": "0/1"
+      },
+      "class_C_false_support": 0.0,
+      "unsupported_exposure": 0,
+      "theta": 60
+    }
+  },
+  "test": {
+    "design": "G1",
+    "theta": 60,
+    "n_neg": 8,
+    "n_pos": 5,
+    "false_support_rate": 0.125,
+    "false_abstention_rate": 1.0,
+    "acceptance_rate": 0.0,
+    "false_support_by_class": {
+      "A": "0/1",
+      "B": "0/1",
+      "C": "0/2",
+      "D": "0/1",
+      "E": "0/1",
+      "F": "0/1",
+      "H": "1/1"
+    },
+    "class_C_false_support": 0.0,
+    "unsupported_exposure": 0,
+    "rows": [
+      {
+        "id": "N-A1",
+        "kind": "negative",
+        "class": "A",
+        "decision": "ABSTAIN",
+        "expected": [
+          "ABSTAIN"
+        ],
+        "correct": true,
+        "reason": "no candidate satisfied S2",
+        "failed_condition": "S2",
+        "evidence": ""
+      },
+      {
+        "id": "N-B2",
+        "kind": "negative",
+        "class": "B",
+        "decision": "ABSTAIN",
+        "expected": [
+          "ABSTAIN"
+        ],
+        "correct": true,
+        "reason": "no candidate satisfied S2",
+        "failed_condition": "S2",
+        "evidence": ""
+      },
+      {
+        "id": "N-C2",
+        "kind": "negative",
+        "class": "C",
+        "decision": "ABSTAIN",
+        "expected": [
+          "ABSTAIN"
+        ],
+        "correct": true,
+        "reason": "no candidate satisfied S2",
+        "failed_condition": "S2",
+        "evidence": ""
+      },
+      {
+        "id": "N-C6",
+        "kind": "negative",
+        "class": "C",
+        "decision": "ABSTAIN",
+        "expected": [
+          "ABSTAIN"
+        ],
+        "correct": true,
+        "reason": "no candidate satisfied S2",
+        "failed_condition": "S2",
+        "evidence": ""
+      },
+      {
+        "id": "N-D3",
+        "kind": "negative",
+        "class": "D",
+        "decision": "ABSTAIN",
+        "expected": [
+          "ABSTAIN"
+        ],
+        "correct": true,
+        "reason": "no candidate satisfied S2",
+        "failed_condition": "S2",
+        "evidence": ""
+      },
+      {
+        "id": "N-E4",
+        "kind": "negative",
+        "class": "E",
+        "decision": "ABSTAIN",
+        "expected": [
+          "ABSTAIN"
+        ],
+        "correct": true,
+        "reason": "no candidate satisfied S2",
+        "failed_condition": "S2",
+        "evidence": ""
+      },
+      {
+        "id": "N-F3",
+        "kind": "negative",
+        "class": "F",
+        "decision": "ABSTAIN",
+        "expected": [
+          "ABSTAIN"
+        ],
+        "correct": true,
+        "reason": "no candidate satisfied S2",
+        "failed_condition": "S2",
+        "evidence": ""
+      },
+      {
+        "id": "N-H3",
+        "kind": "negative",
+        "class": "H",
+        "decision": "EXPOSE",
+        "expected": [
+          "ABSTAIN"
+        ],
+        "correct": false,
+        "reason": "all conditions satisfied",
+        "failed_condition": null,
+        "evidence": "<route region=\"APAC\" processor=\"fallback\" deadline=\"45\"/>"
+      },
+      {
+        "id": "P-04",
+        "kind": "positive",
+        "class": "easy",
+        "decision": "ABSTAIN",
+        "expected": [
+          "EXPOSE",
+          "EXPOSE_CONFLICTED"
+        ],
+        "correct": false,
+        "reason": "no candidate satisfied S2",
+        "failed_condition": "S2",
+        "evidence": ""
+      },
+      {
+        "id": "P-06",
+        "kind": "positive",
+        "class": "structural",
+        "decision": "ABSTAIN",
+        "expected": [
+          "EXPOSE",
+          "EXPOSE_CONFLICTED"
+        ],
+        "correct": false,
+        "reason": "no candidate satisfied S2",
+        "failed_condition": "S2",
+        "evidence": ""
+      },
+      {
+        "id": "P-11",
+        "kind": "positive",
+        "class": "evidence_loc",
+        "decision": "ABSTAIN",
+        "expected": [
+          "EXPOSE",
+          "EXPOSE_CONFLICTED"
+        ],
+        "correct": false,
+        "reason": "no candidate satisfied S2",
+        "failed_condition": "S2",
+        "evidence": ""
+      },
+      {
+        "id": "P-17",
+        "kind": "positive",
+        "class": "easy",
+        "decision": "ABSTAIN",
+        "expected": [
+          "EXPOSE",
+          "EXPOSE_CONFLICTED"
+        ],
+        "correct": false,
+        "reason": "no candidate satisfied S2",
+        "failed_condition": "S2",
+        "evidence": ""
+      },
+      {
+        "id": "P-19",
+        "kind": "positive",
+        "class": "cross_document",
+        "decision": "ABSTAIN",
+        "expected": [
+          "EXPOSE",
+          "EXPOSE_CONFLICTED"
+        ],
+        "correct": false,
+        "reason": "no candidate satisfied S2",
+        "failed_condition": "S2",
+        "evidence": ""
+      }
+    ]
+  }
+}

@@ -1,0 +1,322 @@
+{
+  "version": "X1-RERUN-01",
+  "authored": "2026-09-22",
+  "relationship_to_original": "ADDITIVE. experiments/x1_results.json (the original X-1) is FROZEN and unmodified. This is a separate, versioned experiment.",
+  "method": "Overlap is computed mechanically: a query term matches a source term when their stemmed forms are equal. A zero_overlap query sharing ANY stemmed content term with its gold source text is rejected from that tier at authoring time.",
+  "corpus_root": "eval/corpus",
+  "accepted": [
+    {
+      "id": "XR-01",
+      "tier": "zero_overlap",
+      "query": "how long may an unfinished purchase remain pending before cancellation",
+      "answer_units": [
+        "orderflow/config.py"
+      ],
+      "query_terms": [
+        "cancellation",
+        "may",
+        "pend",
+        "purchase",
+        "remain",
+        "unfinish"
+      ],
+      "shared_with_source": [],
+      "overlap_fraction": 0.0
+    },
+    {
+      "id": "XR-02",
+      "tier": "zero_overlap",
+      "query": "what governs how long an incomplete transaction may linger",
+      "answer_units": [
+        "orderflow/config.py"
+      ],
+      "query_terms": [
+        "govern",
+        "incomplete",
+        "linger",
+        "may",
+        "transaction"
+      ],
+      "shared_with_source": [],
+      "overlap_fraction": 0.0
+    },
+    {
+      "id": "XR-03",
+      "tier": "zero_overlap",
+      "query": "how is the bookkeeping of funds handled",
+      "answer_units": [
+        "orderflow/ledger.py"
+      ],
+      "query_terms": [
+        "bookkeep",
+        "fund",
+        "handl"
+      ],
+      "shared_with_source": [],
+      "overlap_fraction": 0.0
+    },
+    {
+      "id": "XR-04",
+      "tier": "zero_overlap",
+      "query": "where are fund transfers written down permanently",
+      "answer_units": [
+        "orderflow/ledger.py"
+      ],
+      "query_terms": [
+        "down",
+        "fund",
+        "permanently",
+        "transf",
+        "written"
+      ],
+      "shared_with_source": [],
+      "overlap_fraction": 0.0
+    },
+    {
+      "id": "XR-05",
+      "tier": "zero_overlap",
+      "query": "which module contacts the remote authorization provider",
+      "answer_units": [
+        "orderflow/gateway.py"
+      ],
+      "query_terms": [
+        "authorization",
+        "contact",
+        "module",
+        "provider",
+        "remote"
+      ],
+      "shared_with_source": [],
+      "overlap_fraction": 0.0
+    },
+    {
+      "id": "XR-06",
+      "tier": "zero_overlap",
+      "query": "what measurement justified this particular cutoff",
+      "answer_units": [
+        "docs/adr-007-payment-timeout.md"
+      ],
+      "query_terms": [
+        "cutoff",
+        "justifi",
+        "measur",
+        "particular"
+      ],
+      "shared_with_source": [],
+      "overlap_fraction": 0.0
+    },
+    {
+      "id": "XR-07",
+      "tier": "zero_overlap",
+      "query": "why do customers quit midway through buying",
+      "answer_units": [
+        "docs/checkout-abandonment.md"
+      ],
+      "query_terms": [
+        "buy",
+        "custom",
+        "midway",
+        "quit",
+        "through"
+      ],
+      "shared_with_source": [],
+      "overlap_fraction": 0.0
+    },
+    {
+      "id": "XR-08",
+      "tier": "zero_overlap",
+      "query": "how many further attempts are permitted after a problem",
+      "answer_units": [
+        "orderflow/config.py"
+      ],
+      "query_terms": [
+        "after",
+        "attempt",
+        "further",
+        "many",
+        "permitt",
+        "problem"
+      ],
+      "shared_with_source": [],
+      "overlap_fraction": 0.0
+    },
+    {
+      "id": "XR-09",
+      "tier": "zero_overlap",
+      "query": "how many items are grouped for the overnight reconciliation",
+      "answer_units": [
+        "orderflow/config.py"
+      ],
+      "query_terms": [
+        "group",
+        "item",
+        "many",
+        "overnight",
+        "reconciliation"
+      ],
+      "shared_with_source": [],
+      "overlap_fraction": 0.0
+    },
+    {
+      "id": "XR-10",
+      "tier": "zero_overlap",
+      "query": "what reasoning supported the chosen upper bound",
+      "answer_units": [
+        "docs/adr-007-payment-timeout.md"
+      ],
+      "query_terms": [
+        "bound",
+        "chosen",
+        "reason",
+        "support",
+        "upper"
+      ],
+      "shared_with_source": [],
+      "overlap_fraction": 0.0
+    },
+    {
+      "id": "XR-11",
+      "tier": "partial_overlap",
+      "query": "how long do we wait before abandoning a charge",
+      "answer_units": [
+        "orderflow/config.py"
+      ],
+      "query_terms": [
+        "abandon",
+        "charge",
+        "wait"
+      ],
+      "shared_with_source": [
+        "abandon",
+        "charge",
+        "wait"
+      ],
+      "overlap_fraction": 1.0
+    },
+    {
+      "id": "XR-12",
+      "tier": "partial_overlap",
+      "query": "why was thirty seconds chosen",
+      "answer_units": [
+        "docs/adr-007-payment-timeout.md"
+      ],
+      "query_terms": [
+        "chosen",
+        "second",
+        "thirty"
+      ],
+      "shared_with_source": [
+        "second"
+      ],
+      "overlap_fraction": 0.333
+    },
+    {
+      "id": "XR-13",
+      "tier": "partial_overlap",
+      "query": "what records money movements",
+      "answer_units": [
+        "orderflow/ledger.py"
+      ],
+      "query_terms": [
+        "money",
+        "movement",
+        "record"
+      ],
+      "shared_with_source": [
+        "money",
+        "movement",
+        "record"
+      ],
+      "overlap_fraction": 1.0
+    },
+    {
+      "id": "XR-14",
+      "tier": "partial_overlap",
+      "query": "which class talks to the card network",
+      "answer_units": [
+        "orderflow/gateway.py"
+      ],
+      "query_terms": [
+        "card",
+        "clas",
+        "network",
+        "talk"
+      ],
+      "shared_with_source": [
+        "card",
+        "clas",
+        "network",
+        "talk"
+      ],
+      "overlap_fraction": 1.0
+    },
+    {
+      "id": "XR-15",
+      "tier": "full_overlap",
+      "query": "PAYMENT_TIMEOUT_SECONDS",
+      "answer_units": [
+        "orderflow/config.py"
+      ],
+      "query_terms": [
+        "payment",
+        "payment_timeout_second",
+        "second",
+        "timeout"
+      ],
+      "shared_with_source": [
+        "payment",
+        "payment_timeout_second",
+        "second",
+        "timeout"
+      ],
+      "overlap_fraction": 1.0
+    },
+    {
+      "id": "XR-16",
+      "tier": "full_overlap",
+      "query": "payment gateway deadline 30 seconds",
+      "answer_units": [
+        "docs/adr-007-payment-timeout.md"
+      ],
+      "query_terms": [
+        "30",
+        "deadline",
+        "gateway",
+        "payment",
+        "second"
+      ],
+      "shared_with_source": [
+        "30",
+        "deadline",
+        "gateway",
+        "payment",
+        "second"
+      ],
+      "overlap_fraction": 1.0
+    },
+    {
+      "id": "XR-17",
+      "tier": "full_overlap",
+      "query": "append-only record of money movements",
+      "answer_units": [
+        "orderflow/ledger.py"
+      ],
+      "query_terms": [
+        "append",
+        "money",
+        "movement",
+        "only",
+        "record"
+      ],
+      "shared_with_source": [
+        "append",
+        "money",
+        "movement",
+        "only",
+        "record"
+      ],
+      "overlap_fraction": 1.0
+    }
+  ],
+  "rejected_at_authoring": []
+}

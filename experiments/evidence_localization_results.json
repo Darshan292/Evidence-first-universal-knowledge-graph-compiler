@@ -1,0 +1,78 @@
+{
+  "n_queries": 21,
+  "failures": [
+    {
+      "id": "Q2-a",
+      "class": "lexical",
+      "category": "CHUNK_NOT_RETRIEVED",
+      "need": "30 seconds",
+      "gold": [
+        "docs/adr-007-payment-timeout.md",
+        "orderflow/config.py"
+      ],
+      "retrieved_top3": [
+        "docs/adr-007-payment-timeout.md",
+        "docs/runbook.md",
+        "orderflow/gateway.py"
+      ],
+      "chunks_holding_evidence": [
+        "docs/adr-007-payment-timeout.md#3",
+        "docs/adr-007-payment-timeout.md#5"
+      ]
+    },
+    {
+      "id": "Q3-c",
+      "class": "paraphrase",
+      "category": "WRONG_FILE",
+      "need": "ledger",
+      "gold": [
+        "orderflow/ledger.py"
+      ],
+      "retrieved_top3": [],
+      "chunks_holding_evidence": [
+        "orderflow/ledger.py#orderflow.ledger"
+      ]
+    },
+    {
+      "id": "Q5-a",
+      "class": "cross_document",
+      "category": "CHUNK_NOT_RETRIEVED",
+      "need": "18 seconds",
+      "gold": [
+        "docs/adr-007-payment-timeout.md",
+        "orderflow/config.py"
+      ],
+      "retrieved_top3": [
+        "docs/adr-007-payment-timeout.md",
+        "docs/runbook.md",
+        "docs/architecture.md"
+      ],
+      "chunks_holding_evidence": [
+        "docs/adr-007-payment-timeout.md#5"
+      ]
+    },
+    {
+      "id": "Q13-a",
+      "class": "adversarial_misleading_lexical",
+      "category": "CHUNK_NOT_RETRIEVED",
+      "need": "self.deadline = PAYMENT_TIMEOUT_SECONDS",
+      "gold": [
+        "orderflow/gateway.py"
+      ],
+      "retrieved_top3": [
+        "data/routing.xml",
+        "data/routing.xml",
+        "data/routing.xml"
+      ],
+      "chunks_holding_evidence": [
+        "orderflow/gateway.py#orderflow.gateway",
+        "orderflow/gateway.py#orderflow.gateway.CardGateway",
+        "orderflow/gateway.py#orderflow.gateway.CardGateway.__init__"
+      ]
+    }
+  ],
+  "breakdown": {
+    "CHUNK_NOT_RETRIEVED": 3,
+    "WRONG_FILE": 1
+  }
+}

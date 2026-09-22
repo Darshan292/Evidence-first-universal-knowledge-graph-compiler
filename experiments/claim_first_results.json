@@ -1,0 +1,1180 @@
+{
+  "summary": {
+    "corpus": "eval/corpus2 (itsdangerous @ 672971d66a2ef9f85151e53283113f33d642dabd, BSD-3-Clause)",
+    "n": 38,
+    "CALIBRATION": {
+      "chunk_first": {
+        "n_pos": 6,
+        "n_neg": 7,
+        "false_support_rate": 0.571,
+        "false_abstention_rate": 0.5,
+        "doc_recall@10": 0.833,
+        "evidence_correct": 0.833,
+        "evidence_correct_with_localization": 0.833
+      },
+      "claim_first": {
+        "n_pos": 6,
+        "n_neg": 7,
+        "false_support_rate": 0.0,
+        "false_abstention_rate": 0.333,
+        "doc_recall@10": 0.5,
+        "evidence_correct": 0.333,
+        "claim_recall@10": 0.333,
+        "claim_MRR": 0.333,
+        "constraint_parse_rate": 0.667
+      }
+    },
+    "VALIDATION": {
+      "chunk_first": {
+        "n_pos": 8,
+        "n_neg": 6,
+        "false_support_rate": 0.5,
+        "false_abstention_rate": 0.25,
+        "doc_recall@10": 0.875,
+        "evidence_correct": 0.875,
+        "evidence_correct_with_localization": 0.875
+      },
+      "claim_first": {
+        "n_pos": 8,
+        "n_neg": 6,
+        "false_support_rate": 0.0,
+        "false_abstention_rate": 0.625,
+        "doc_recall@10": 0.375,
+        "evidence_correct": 0.25,
+        "claim_recall@10": 0.375,
+        "claim_MRR": 0.375,
+        "constraint_parse_rate": 0.75
+      }
+    },
+    "TEST": {
+      "chunk_first": {
+        "n_pos": 6,
+        "n_neg": 5,
+        "false_support_rate": 0.2,
+        "false_abstention_rate": 0.167,
+        "doc_recall@10": 1.0,
+        "evidence_correct": 1.0,
+        "evidence_correct_with_localization": 1.0
+      },
+      "claim_first": {
+        "n_pos": 6,
+        "n_neg": 5,
+        "false_support_rate": 0.0,
+        "false_abstention_rate": 0.5,
+        "doc_recall@10": 0.5,
+        "evidence_correct": 0.5,
+        "claim_recall@10": 0.333,
+        "claim_MRR": 0.222,
+        "constraint_parse_rate": 0.667
+      }
+    },
+    "ALL": {
+      "chunk_first": {
+        "n_pos": 20,
+        "n_neg": 18,
+        "false_support_rate": 0.444,
+        "false_abstention_rate": 0.3,
+        "doc_recall@10": 0.9,
+        "evidence_correct": 0.9,
+        "evidence_correct_with_localization": 0.9
+      },
+      "claim_first": {
+        "n_pos": 20,
+        "n_neg": 18,
+        "false_support_rate": 0.0,
+        "false_abstention_rate": 0.5,
+        "doc_recall@10": 0.45,
+        "evidence_correct": 0.35,
+        "claim_recall@10": 0.35,
+        "claim_MRR": 0.317,
+        "constraint_parse_rate": 0.7
+      }
+    }
+  },
+  "rows": [
+    {
+      "id": "G2P-01",
+      "kind": "positive",
+      "class": "exact_identifier",
+      "split": "TEST",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "doc_rank": 1,
+        "evidence_ok": true
+      },
+      "chunk_first_localized_evidence_ok": true,
+      "claim_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "parsed": true,
+        "shape": "identifier",
+        "reason": "compiled claim with verified evidence",
+        "claim_rank": 1,
+        "doc_rank": 1,
+        "evidence_ok": true,
+        "n_claims": 2
+      }
+    },
+    {
+      "id": "G2P-02",
+      "kind": "positive",
+      "class": "exact_identifier",
+      "split": "VALIDATION",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "doc_rank": 1,
+        "evidence_ok": true
+      },
+      "chunk_first_localized_evidence_ok": true,
+      "claim_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "parsed": true,
+        "shape": "identifier",
+        "reason": "compiled claim with verified evidence",
+        "claim_rank": 1,
+        "doc_rank": 1,
+        "evidence_ok": true,
+        "n_claims": 1
+      }
+    },
+    {
+      "id": "G2P-03",
+      "kind": "positive",
+      "class": "exact_identifier",
+      "split": "CALIBRATION",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "doc_rank": 1,
+        "evidence_ok": true
+      },
+      "chunk_first_localized_evidence_ok": true,
+      "claim_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "parsed": true,
+        "shape": "identifier",
+        "reason": "compiled claim with verified evidence",
+        "claim_rank": null,
+        "doc_rank": 1,
+        "evidence_ok": true,
+        "n_claims": 1
+      }
+    },
+    {
+      "id": "G2P-04",
+      "kind": "positive",
+      "class": "lexical",
+      "split": "TEST",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "doc_rank": 1,
+        "evidence_ok": true
+      },
+      "chunk_first_localized_evidence_ok": true,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": false,
+        "parsed": true,
+        "shape": "property",
+        "reason": "entity [] is not a compiled symbol",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2P-05",
+      "kind": "positive",
+      "class": "lexical",
+      "split": "VALIDATION",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE_CONFLICTED",
+        "correct": true,
+        "doc_rank": 1,
+        "evidence_ok": true
+      },
+      "chunk_first_localized_evidence_ok": true,
+      "claim_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "parsed": true,
+        "shape": "identifier",
+        "reason": "compiled claim with verified evidence",
+        "claim_rank": 1,
+        "doc_rank": 1,
+        "evidence_ok": true,
+        "n_claims": 10
+      }
+    },
+    {
+      "id": "G2P-06",
+      "kind": "positive",
+      "class": "paraphrase",
+      "split": "CALIBRATION",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "chunk_first": {
+        "decision": "ABSTAIN",
+        "correct": false,
+        "doc_rank": 1,
+        "evidence_ok": true
+      },
+      "chunk_first_localized_evidence_ok": true,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": false,
+        "parsed": false,
+        "shape": "unparsed",
+        "reason": "query does not parse into typed constraints",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2P-07",
+      "kind": "positive",
+      "class": "zero_overlap_paraphrase",
+      "split": "VALIDATION",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "chunk_first": {
+        "decision": "ABSTAIN",
+        "correct": false,
+        "doc_rank": null,
+        "evidence_ok": false
+      },
+      "chunk_first_localized_evidence_ok": false,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": false,
+        "parsed": false,
+        "shape": "unparsed",
+        "reason": "query does not parse into typed constraints",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2P-08",
+      "kind": "positive",
+      "class": "zero_overlap_paraphrase",
+      "split": "CALIBRATION",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "doc_rank": null,
+        "evidence_ok": false
+      },
+      "chunk_first_localized_evidence_ok": false,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": false,
+        "parsed": false,
+        "shape": "unparsed",
+        "reason": "query does not parse into typed constraints",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2P-09",
+      "kind": "positive",
+      "class": "structural_relation",
+      "split": "CALIBRATION",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "doc_rank": 1,
+        "evidence_ok": true
+      },
+      "chunk_first_localized_evidence_ok": true,
+      "claim_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "parsed": true,
+        "shape": "relation",
+        "reason": "compiled claim with verified evidence",
+        "claim_rank": 1,
+        "doc_rank": 1,
+        "evidence_ok": true,
+        "n_claims": 8
+      }
+    },
+    {
+      "id": "G2P-10",
+      "kind": "positive",
+      "class": "structural_relation",
+      "split": "CALIBRATION",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "chunk_first": {
+        "decision": "ABSTAIN",
+        "correct": false,
+        "doc_rank": 2,
+        "evidence_ok": true
+      },
+      "chunk_first_localized_evidence_ok": true,
+      "claim_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "parsed": true,
+        "shape": "relation",
+        "reason": "compiled claim with verified evidence",
+        "claim_rank": 1,
+        "doc_rank": 1,
+        "evidence_ok": false,
+        "n_claims": 1
+      }
+    },
+    {
+      "id": "G2P-11",
+      "kind": "positive",
+      "class": "structural_relation",
+      "split": "VALIDATION",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "chunk_first": {
+        "decision": "ABSTAIN",
+        "correct": false,
+        "doc_rank": 1,
+        "evidence_ok": true
+      },
+      "chunk_first_localized_evidence_ok": true,
+      "claim_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "parsed": true,
+        "shape": "relation",
+        "reason": "compiled claim with verified evidence",
+        "claim_rank": 1,
+        "doc_rank": 1,
+        "evidence_ok": false,
+        "n_claims": 1
+      }
+    },
+    {
+      "id": "G2P-12",
+      "kind": "positive",
+      "class": "cross_file",
+      "split": "VALIDATION",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "doc_rank": 8,
+        "evidence_ok": true
+      },
+      "chunk_first_localized_evidence_ok": true,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": false,
+        "parsed": true,
+        "shape": "relation",
+        "reason": "entity ['serializer.py'] is not a compiled symbol",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2P-13",
+      "kind": "positive",
+      "class": "cross_file",
+      "split": "CALIBRATION",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "chunk_first": {
+        "decision": "ABSTAIN",
+        "correct": false,
+        "doc_rank": 6,
+        "evidence_ok": true
+      },
+      "chunk_first_localized_evidence_ok": true,
+      "claim_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "parsed": true,
+        "shape": "relation",
+        "reason": "compiled claim with verified evidence",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 3
+      }
+    },
+    {
+      "id": "G2P-14",
+      "kind": "positive",
+      "class": "cross_document",
+      "split": "VALIDATION",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "doc_rank": 2,
+        "evidence_ok": true
+      },
+      "chunk_first_localized_evidence_ok": true,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": false,
+        "parsed": true,
+        "shape": "property",
+        "reason": "entity ['URL'] is not a compiled symbol",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2P-15",
+      "kind": "positive",
+      "class": "cross_document",
+      "split": "TEST",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE_CONFLICTED",
+        "correct": true,
+        "doc_rank": 1,
+        "evidence_ok": true
+      },
+      "chunk_first_localized_evidence_ok": true,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": false,
+        "parsed": false,
+        "shape": "unparsed",
+        "reason": "query does not parse into typed constraints",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2P-16",
+      "kind": "positive",
+      "class": "ambiguous_entity",
+      "split": "VALIDATION",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "doc_rank": 5,
+        "evidence_ok": true
+      },
+      "chunk_first_localized_evidence_ok": true,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": false,
+        "parsed": false,
+        "shape": "unparsed",
+        "reason": "query does not parse into typed constraints",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2P-17",
+      "kind": "positive",
+      "class": "ambiguous_entity",
+      "split": "TEST",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "doc_rank": 1,
+        "evidence_ok": true
+      },
+      "chunk_first_localized_evidence_ok": true,
+      "claim_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "parsed": true,
+        "shape": "identifier",
+        "reason": "compiled claim with verified evidence",
+        "claim_rank": null,
+        "doc_rank": 1,
+        "evidence_ok": true,
+        "n_claims": 2
+      }
+    },
+    {
+      "id": "G2P-18",
+      "kind": "positive",
+      "class": "evidence_right",
+      "split": "VALIDATION",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "doc_rank": 1,
+        "evidence_ok": true
+      },
+      "chunk_first_localized_evidence_ok": true,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": false,
+        "parsed": true,
+        "shape": "property",
+        "reason": "no compiled claim provides property 'separator' for ['Signer']",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2P-19",
+      "kind": "positive",
+      "class": "evidence_multi_source",
+      "split": "TEST",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE_CONFLICTED",
+        "correct": true,
+        "doc_rank": 3,
+        "evidence_ok": true
+      },
+      "chunk_first_localized_evidence_ok": true,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": false,
+        "parsed": false,
+        "shape": "unparsed",
+        "reason": "query does not parse into typed constraints",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2P-20",
+      "kind": "positive",
+      "class": "structural_relation",
+      "split": "TEST",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "chunk_first": {
+        "decision": "ABSTAIN",
+        "correct": false,
+        "doc_rank": 1,
+        "evidence_ok": true
+      },
+      "chunk_first_localized_evidence_ok": true,
+      "claim_first": {
+        "decision": "EXPOSE",
+        "correct": true,
+        "parsed": true,
+        "shape": "relation",
+        "reason": "compiled claim with verified evidence",
+        "claim_rank": 3,
+        "doc_rank": 1,
+        "evidence_ok": true,
+        "n_claims": 4
+      }
+    },
+    {
+      "id": "G2N-01",
+      "kind": "negative",
+      "class": "unsupported_entity",
+      "split": "CALIBRATION",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE",
+        "correct": false,
+        "doc_rank": null,
+        "evidence_ok": false
+      },
+      "chunk_first_localized_evidence_ok": false,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "parsed": false,
+        "shape": "unparsed_interrogative",
+        "reason": "query does not parse into typed constraints",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2N-02",
+      "kind": "negative",
+      "class": "unsupported_entity",
+      "split": "VALIDATION",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE",
+        "correct": false,
+        "doc_rank": null,
+        "evidence_ok": false
+      },
+      "chunk_first_localized_evidence_ok": false,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "parsed": false,
+        "shape": "unparsed_interrogative",
+        "reason": "query does not parse into typed constraints",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2N-03",
+      "kind": "negative",
+      "class": "unsupported_entity",
+      "split": "TEST",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "chunk_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "doc_rank": null,
+        "evidence_ok": false
+      },
+      "chunk_first_localized_evidence_ok": false,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "parsed": false,
+        "shape": "unparsed_interrogative",
+        "reason": "query does not parse into typed constraints",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2N-04",
+      "kind": "negative",
+      "class": "unsupported_property",
+      "split": "CALIBRATION",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE",
+        "correct": false,
+        "doc_rank": null,
+        "evidence_ok": false
+      },
+      "chunk_first_localized_evidence_ok": false,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "parsed": true,
+        "shape": "property",
+        "reason": "no compiled claim provides property 'default_salt' for ['BadSignature'",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2N-05",
+      "kind": "negative",
+      "class": "unsupported_property",
+      "split": "CALIBRATION",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "chunk_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "doc_rank": null,
+        "evidence_ok": false
+      },
+      "chunk_first_localized_evidence_ok": false,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "parsed": true,
+        "shape": "property",
+        "reason": "no compiled claim provides property 'timeout' for ['Signer']",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2N-06",
+      "kind": "negative",
+      "class": "unsupported_property",
+      "split": "TEST",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "chunk_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "doc_rank": null,
+        "evidence_ok": false
+      },
+      "chunk_first_localized_evidence_ok": false,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "parsed": false,
+        "shape": "unparsed_interrogative",
+        "reason": "query does not parse into typed constraints",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2N-07",
+      "kind": "negative",
+      "class": "wrong_numeric_value",
+      "split": "CALIBRATION",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "chunk_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "doc_rank": null,
+        "evidence_ok": false
+      },
+      "chunk_first_localized_evidence_ok": false,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "parsed": false,
+        "shape": "unparsed_interrogative",
+        "reason": "query does not parse into typed constraints",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2N-08",
+      "kind": "negative",
+      "class": "wrong_numeric_value",
+      "split": "VALIDATION",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "chunk_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "doc_rank": null,
+        "evidence_ok": false
+      },
+      "chunk_first_localized_evidence_ok": false,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "parsed": false,
+        "shape": "unparsed",
+        "reason": "query does not parse into typed constraints",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2N-09",
+      "kind": "negative",
+      "class": "wrong_relationship",
+      "split": "CALIBRATION",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE_CONFLICTED",
+        "correct": false,
+        "doc_rank": null,
+        "evidence_ok": false
+      },
+      "chunk_first_localized_evidence_ok": false,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "parsed": true,
+        "shape": "relation",
+        "reason": "entity ['encoding.py'] is not a compiled symbol",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2N-10",
+      "kind": "negative",
+      "class": "wrong_relationship",
+      "split": "TEST",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "chunk_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "doc_rank": null,
+        "evidence_ok": false
+      },
+      "chunk_first_localized_evidence_ok": false,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "parsed": true,
+        "shape": "relation",
+        "reason": "no compiled claim provides relation EXTENDS for ['Signer']",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2N-11",
+      "kind": "negative",
+      "class": "wrong_relationship",
+      "split": "VALIDATION",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "chunk_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "doc_rank": null,
+        "evidence_ok": false
+      },
+      "chunk_first_localized_evidence_ok": false,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "parsed": true,
+        "shape": "relation",
+        "reason": "no compiled claim provides relation CALLS for ['BadData']",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2N-12",
+      "kind": "negative",
+      "class": "wrong_file_scope",
+      "split": "TEST",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "chunk_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "doc_rank": null,
+        "evidence_ok": false
+      },
+      "chunk_first_localized_evidence_ok": false,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "parsed": false,
+        "shape": "unparsed_interrogative",
+        "reason": "query does not parse into typed constraints",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2N-13",
+      "kind": "negative",
+      "class": "wrong_file_scope",
+      "split": "CALIBRATION",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "chunk_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "doc_rank": null,
+        "evidence_ok": false
+      },
+      "chunk_first_localized_evidence_ok": false,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "parsed": false,
+        "shape": "unparsed_interrogative",
+        "reason": "query does not parse into typed constraints",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2N-14",
+      "kind": "negative",
+      "class": "stale_statement",
+      "split": "VALIDATION",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE_CONFLICTED",
+        "correct": false,
+        "doc_rank": null,
+        "evidence_ok": false
+      },
+      "chunk_first_localized_evidence_ok": false,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "parsed": false,
+        "shape": "unparsed",
+        "reason": "query does not parse into typed constraints",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2N-15",
+      "kind": "negative",
+      "class": "near_neighbour",
+      "split": "VALIDATION",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE",
+        "correct": false,
+        "doc_rank": null,
+        "evidence_ok": false
+      },
+      "chunk_first_localized_evidence_ok": false,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "parsed": true,
+        "shape": "property",
+        "reason": "no compiled claim provides property 'default_serializer' for ['Signer'",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2N-16",
+      "kind": "negative",
+      "class": "near_neighbour",
+      "split": "CALIBRATION",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE",
+        "correct": false,
+        "doc_rank": null,
+        "evidence_ok": false
+      },
+      "chunk_first_localized_evidence_ok": false,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "parsed": true,
+        "shape": "property",
+        "reason": "no compiled claim provides property 'salt' for ['HMACAlgorithm']",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2N-17",
+      "kind": "negative",
+      "class": "near_neighbour",
+      "split": "TEST",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "chunk_first": {
+        "decision": "EXPOSE",
+        "correct": false,
+        "doc_rank": null,
+        "evidence_ok": false
+      },
+      "chunk_first_localized_evidence_ok": false,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "parsed": true,
+        "shape": "property",
+        "reason": "no compiled claim provides property 'default_digest_method' for ['Seri",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    },
+    {
+      "id": "G2N-18",
+      "kind": "negative",
+      "class": "unsupported_property",
+      "split": "VALIDATION",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "chunk_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "doc_rank": null,
+        "evidence_ok": false
+      },
+      "chunk_first_localized_evidence_ok": false,
+      "claim_first": {
+        "decision": "ABSTAIN",
+        "correct": true,
+        "parsed": true,
+        "shape": "property",
+        "reason": "no compiled claim provides property 'license_expiry_date' for ['itsdan",
+        "claim_rank": null,
+        "doc_rank": null,
+        "evidence_ok": false,
+        "n_claims": 0
+      }
+    }
+  ]
+}

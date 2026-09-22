@@ -48,7 +48,19 @@ what D-B's `ΔR@10 ≥ 0.10` would require against the measured 0.1 baseline.
 | Why this one | small, CPU-only, permissively licensed, widely used as a retrieval baseline |
 
 Record the **exact resolved revision** and the SHA-256 of every downloaded model
-file — `run_neural_experiment.py` does this automatically and fails if it cannot.
+file. `run_neural_experiment.py` **fails hard** if it cannot: the result is written
+with `validity.status = "INVALID"`, `decision.met` is forced to `false`, and the
+process exits non-zero.
+
+> **An unattributable neural result is not admissible** as evidence for the
+> dense-retrieval decision. Set `MODEL_REVISION` to the exact resolved revision
+> and ensure the model cache is reachable via `--model-dir` or
+> `FASTEMBED_CACHE_PATH`.
+
+Hashed file types: `.onnx`, `.onnx_data`, `.json`, `.txt`, `.model`, `.bin`,
+`.safetensors`, `.vocab`, `.merges`, `.spm`, plus `tokenizer.json`,
+`config.json` and `special_tokens_map.json` by name — the files the ONNX runtime
+actually downloads and opens.
 
 If model files are supplied manually instead, place them in `--model-dir` and the
 script will hash them the same way.

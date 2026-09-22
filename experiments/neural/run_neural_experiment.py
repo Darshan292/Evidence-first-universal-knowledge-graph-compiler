@@ -14,12 +14,20 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
 
+# Extensions the ONNX runtime actually downloads and loads. The first version
+# listed only a guessed subset; these are the ones that appear in a real
+# fastembed cache and that the runtime opens at inference time.
+MODEL_FILE_SUFFIXES = {".onnx", ".onnx_data", ".json", ".txt", ".model",
+                       ".bin", ".safetensors", ".vocab", ".merges", ".spm"}
+
+
 def hash_model_files(model_dir: Path):
     files = []
     if not model_dir or not model_dir.exists():
         return files, 0
     for p in sorted(model_dir.rglob("*")):
-        if p.is_file() and p.suffix in (".onnx", ".json", ".txt", ".model", ".bin"):
+        if p.is_file() and (p.suffix in MODEL_FILE_SUFFIXES or p.name in
+                            {"tokenizer.json", "config.json", "special_tokens_map.json"}):
             h = hashlib.sha256()
             with open(p, "rb") as fh:
                 for block in iter(lambda: fh.read(1 << 20), b""):
@@ -111,13 +119,34 @@ def main():
                      "zero_overlap_recall@10": zero, "full_overlap_recall@10": full,
                      "met": bool(zero >= 0.8 and full >= 1.0)},
     }
+    # An unattributable neural result must not enter an architectural decision.
+    # Previously this was a warning and the result still counted; it is now a
+    # hard INVALID.
+    revision = out["model"]["revision"]
+    problems = []
     if not files:
-        out["model"]["WARNING"] = ("model files not found for hashing; set --model-dir "
-                                   "or FASTEMBED_CACHE_PATH. Result is not attributable "
-                                   "to an exact model revision.")
+        problems.append("no model files could be located for hashing "
+                        "(set --model-dir or FASTEMBED_CACHE_PATH)")
+    if revision == "UNRECORDED":
+        problems.append("model revision not recorded (set MODEL_REVISION to the "
+                        "exact resolved revision)")
+    if problems:
+        out["validity"] = {"status": "INVALID", "reasons": problems,
+                           "effect": "This result is NOT admissible as evidence for "
+                                     "the dense-retrieval decision. Re-run with the "
+                                     "model revision and file hashes established."}
+        out["decision"]["met"] = False
+        out["decision"]["note"] = "forced to false: result is INVALID (unattributable)"
+    else:
+        out["validity"] = {"status": "VALID",
+                           "reasons": [], "model_files_hashed": len(files)}
+
     Path(a.out).write_text(json.dumps(out, indent=2))
-    print(json.dumps({"results": results, "decision": out["decision"]}, indent=2))
+    print(json.dumps({"validity": out["validity"], "results": results,
+                      "decision": out["decision"]}, indent=2))
     store.close()
+    if problems:
+        sys.exit(2)          # non-zero: an INVALID run must not look successful
 
 
 if __name__ == "__main__":

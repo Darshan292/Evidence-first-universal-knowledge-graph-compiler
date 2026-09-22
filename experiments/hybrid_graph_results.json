@@ -1,0 +1,692 @@
+{
+  "summary": {
+    "hybrid_S_D": {
+      "false_support_rate": 0.0,
+      "false_abstention_rate": 0.5,
+      "doc_recall@10_when_exposed": 1.0,
+      "evidence_correct": 0.5
+    },
+    "graph_value_by_class": {
+      "structural": {
+        "n": 9,
+        "lex_MRR": 0.755,
+        "lex_graph_MRR": 0.518,
+        "delta": -0.237
+      },
+      "semantic": {
+        "n": 11,
+        "lex_MRR": 0.639,
+        "lex_graph_MRR": 0.652,
+        "delta": 0.013
+      }
+    }
+  },
+  "rows": [
+    {
+      "id": "G2P-01",
+      "class": "exact_identifier",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "TEST",
+      "structural": true,
+      "lex_rank": 1,
+      "lexgraph_rank": 3,
+      "claim_decision": "EXPOSE",
+      "hybrid_decision": "EXPOSE",
+      "hybrid_correct": true,
+      "hybrid_rank": 1,
+      "hybrid_evidence": true
+    },
+    {
+      "id": "G2P-02",
+      "class": "exact_identifier",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "VALIDATION",
+      "structural": true,
+      "lex_rank": 1,
+      "lexgraph_rank": 1,
+      "claim_decision": "EXPOSE",
+      "hybrid_decision": "EXPOSE",
+      "hybrid_correct": true,
+      "hybrid_rank": 1,
+      "hybrid_evidence": true
+    },
+    {
+      "id": "G2P-03",
+      "class": "exact_identifier",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "CALIBRATION",
+      "structural": true,
+      "lex_rank": 1,
+      "lexgraph_rank": 1,
+      "claim_decision": "EXPOSE",
+      "hybrid_decision": "EXPOSE",
+      "hybrid_correct": true,
+      "hybrid_rank": 1,
+      "hybrid_evidence": true
+    },
+    {
+      "id": "G2P-04",
+      "class": "lexical",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "TEST",
+      "structural": false,
+      "lex_rank": 1,
+      "lexgraph_rank": 1,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": false,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2P-05",
+      "class": "lexical",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "VALIDATION",
+      "structural": false,
+      "lex_rank": 1,
+      "lexgraph_rank": 1,
+      "claim_decision": "EXPOSE",
+      "hybrid_decision": "EXPOSE",
+      "hybrid_correct": true,
+      "hybrid_rank": 1,
+      "hybrid_evidence": true
+    },
+    {
+      "id": "G2P-06",
+      "class": "paraphrase",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "CALIBRATION",
+      "structural": false,
+      "lex_rank": 1,
+      "lexgraph_rank": 1,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": false,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2P-07",
+      "class": "zero_overlap_paraphrase",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "VALIDATION",
+      "structural": false,
+      "lex_rank": null,
+      "lexgraph_rank": null,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": false,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2P-08",
+      "class": "zero_overlap_paraphrase",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "CALIBRATION",
+      "structural": false,
+      "lex_rank": null,
+      "lexgraph_rank": null,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": false,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2P-09",
+      "class": "structural_relation",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "CALIBRATION",
+      "structural": true,
+      "lex_rank": 1,
+      "lexgraph_rank": 2,
+      "claim_decision": "EXPOSE",
+      "hybrid_decision": "EXPOSE",
+      "hybrid_correct": true,
+      "hybrid_rank": 1,
+      "hybrid_evidence": true
+    },
+    {
+      "id": "G2P-10",
+      "class": "structural_relation",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "CALIBRATION",
+      "structural": true,
+      "lex_rank": 2,
+      "lexgraph_rank": 1,
+      "claim_decision": "EXPOSE",
+      "hybrid_decision": "EXPOSE",
+      "hybrid_correct": true,
+      "hybrid_rank": 2,
+      "hybrid_evidence": true
+    },
+    {
+      "id": "G2P-11",
+      "class": "structural_relation",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "VALIDATION",
+      "structural": true,
+      "lex_rank": 1,
+      "lexgraph_rank": 3,
+      "claim_decision": "EXPOSE",
+      "hybrid_decision": "EXPOSE",
+      "hybrid_correct": true,
+      "hybrid_rank": 1,
+      "hybrid_evidence": true
+    },
+    {
+      "id": "G2P-12",
+      "class": "cross_file",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "VALIDATION",
+      "structural": true,
+      "lex_rank": 8,
+      "lexgraph_rank": 8,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": false,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2P-13",
+      "class": "cross_file",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "CALIBRATION",
+      "structural": true,
+      "lex_rank": 6,
+      "lexgraph_rank": 6,
+      "claim_decision": "EXPOSE",
+      "hybrid_decision": "EXPOSE",
+      "hybrid_correct": true,
+      "hybrid_rank": 6,
+      "hybrid_evidence": true
+    },
+    {
+      "id": "G2P-14",
+      "class": "cross_document",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "VALIDATION",
+      "structural": false,
+      "lex_rank": 2,
+      "lexgraph_rank": 1,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": false,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2P-15",
+      "class": "cross_document",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "TEST",
+      "structural": false,
+      "lex_rank": 1,
+      "lexgraph_rank": 3,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": false,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2P-16",
+      "class": "ambiguous_entity",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "VALIDATION",
+      "structural": false,
+      "lex_rank": 5,
+      "lexgraph_rank": 1,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": false,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2P-17",
+      "class": "ambiguous_entity",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "TEST",
+      "structural": false,
+      "lex_rank": 1,
+      "lexgraph_rank": 1,
+      "claim_decision": "EXPOSE",
+      "hybrid_decision": "EXPOSE",
+      "hybrid_correct": true,
+      "hybrid_rank": 1,
+      "hybrid_evidence": true
+    },
+    {
+      "id": "G2P-18",
+      "class": "evidence_right",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "VALIDATION",
+      "structural": false,
+      "lex_rank": 1,
+      "lexgraph_rank": 2,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": false,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2P-19",
+      "class": "evidence_multi_source",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "TEST",
+      "structural": false,
+      "lex_rank": 3,
+      "lexgraph_rank": 3,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": false,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2P-20",
+      "class": "structural_relation",
+      "answerable": true,
+      "expected": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "split": "TEST",
+      "structural": true,
+      "lex_rank": 1,
+      "lexgraph_rank": 5,
+      "claim_decision": "EXPOSE",
+      "hybrid_decision": "EXPOSE",
+      "hybrid_correct": true,
+      "hybrid_rank": 1,
+      "hybrid_evidence": true
+    },
+    {
+      "id": "G2N-01",
+      "class": "unsupported_entity",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "split": "CALIBRATION",
+      "structural": false,
+      "lex_rank": null,
+      "lexgraph_rank": null,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": true,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2N-02",
+      "class": "unsupported_entity",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "split": "VALIDATION",
+      "structural": false,
+      "lex_rank": null,
+      "lexgraph_rank": null,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": true,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2N-03",
+      "class": "unsupported_entity",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "split": "TEST",
+      "structural": false,
+      "lex_rank": null,
+      "lexgraph_rank": null,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": true,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2N-04",
+      "class": "unsupported_property",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "split": "CALIBRATION",
+      "structural": false,
+      "lex_rank": null,
+      "lexgraph_rank": null,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": true,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2N-05",
+      "class": "unsupported_property",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "split": "CALIBRATION",
+      "structural": false,
+      "lex_rank": null,
+      "lexgraph_rank": null,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": true,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2N-06",
+      "class": "unsupported_property",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "split": "TEST",
+      "structural": false,
+      "lex_rank": null,
+      "lexgraph_rank": null,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": true,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2N-07",
+      "class": "wrong_numeric_value",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "split": "CALIBRATION",
+      "structural": false,
+      "lex_rank": null,
+      "lexgraph_rank": null,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": true,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2N-08",
+      "class": "wrong_numeric_value",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "split": "VALIDATION",
+      "structural": false,
+      "lex_rank": null,
+      "lexgraph_rank": null,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": true,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2N-09",
+      "class": "wrong_relationship",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "split": "CALIBRATION",
+      "structural": false,
+      "lex_rank": null,
+      "lexgraph_rank": null,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": true,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2N-10",
+      "class": "wrong_relationship",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "split": "TEST",
+      "structural": false,
+      "lex_rank": null,
+      "lexgraph_rank": null,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": true,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2N-11",
+      "class": "wrong_relationship",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "split": "VALIDATION",
+      "structural": false,
+      "lex_rank": null,
+      "lexgraph_rank": null,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": true,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2N-12",
+      "class": "wrong_file_scope",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "split": "TEST",
+      "structural": false,
+      "lex_rank": null,
+      "lexgraph_rank": null,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": true,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2N-13",
+      "class": "wrong_file_scope",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "split": "CALIBRATION",
+      "structural": false,
+      "lex_rank": null,
+      "lexgraph_rank": null,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": true,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2N-14",
+      "class": "stale_statement",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "split": "VALIDATION",
+      "structural": false,
+      "lex_rank": null,
+      "lexgraph_rank": null,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": true,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2N-15",
+      "class": "near_neighbour",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "split": "VALIDATION",
+      "structural": false,
+      "lex_rank": null,
+      "lexgraph_rank": null,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": true,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2N-16",
+      "class": "near_neighbour",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "split": "CALIBRATION",
+      "structural": false,
+      "lex_rank": null,
+      "lexgraph_rank": null,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": true,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2N-17",
+      "class": "near_neighbour",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "split": "TEST",
+      "structural": false,
+      "lex_rank": null,
+      "lexgraph_rank": null,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": true,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    },
+    {
+      "id": "G2N-18",
+      "class": "unsupported_property",
+      "answerable": false,
+      "expected": [
+        "ABSTAIN"
+      ],
+      "split": "VALIDATION",
+      "structural": false,
+      "lex_rank": null,
+      "lexgraph_rank": null,
+      "claim_decision": "ABSTAIN",
+      "hybrid_decision": "ABSTAIN",
+      "hybrid_correct": true,
+      "hybrid_rank": null,
+      "hybrid_evidence": false
+    }
+  ]
+}

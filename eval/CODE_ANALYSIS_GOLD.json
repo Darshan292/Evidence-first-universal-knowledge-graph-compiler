@@ -1,0 +1,70 @@
+{
+  "version": "1.0.0",
+  "authored": "2026-09-22",
+  "provenance": "Authored by reading eval/rescorpus/ directly, independently of any extractor output. Gold states what is TRUE, plus the resolution class a correct deterministic analyser SHOULD be able to reach.",
+  "corpus_root": "eval/rescorpus",
+  "resolution_classes": {
+    "DETERMINISTIC": "a correct static analyser can prove the target",
+    "HEURISTIC": "target is known by name but lives outside analysed code, or requires following a re-export",
+    "UNRESOLVED": "not statically determinable from the corpus"
+  },
+  "import_edges": [
+    {"module":"pkg","imports":"pkg.core.helper","kind":"from_import_reexport"},
+    {"module":"pkg.core","imports":"os","kind":"stdlib"},
+    {"module":"pkg.other","imports":null,"kind":"none"},
+    {"module":"direct_import","imports":"pkg.core","kind":"direct_import"},
+    {"module":"aliased_import","imports":"pkg.core","kind":"aliased_import","alias":"c"},
+    {"module":"aliased_import","imports":"pkg.other.shared_name","kind":"from_import_as","alias":"other_shared"},
+    {"module":"from_import","imports":"pkg.core.helper","kind":"from_import"},
+    {"module":"from_import","imports":"pkg.core.shared_name","kind":"from_import"},
+    {"module":"reexport_import","imports":"pkg.helper","kind":"from_import_of_reexport","true_origin":"pkg.core.helper"},
+    {"module":"shadowed","imports":"pkg.core.helper","kind":"from_import_then_shadowed"},
+    {"module":"third_party","imports":"requests","kind":"third_party_absent"},
+    {"module":"third_party","imports":"nonexistent_pkg.sub.mystery","kind":"third_party_absent"},
+    {"module":"cycle_a","imports":"cycle_b.beta","kind":"from_import_circular"},
+    {"module":"cycle_b","imports":"cycle_a.alpha","kind":"function_local_import_circular"}
+  ],
+  "call_sites": [
+    {"id":"CS-01","in":"direct_import.run","call_text":"pkg.core.helper","true_target":"pkg.core.helper",
+     "should_resolve":"DETERMINISTIC","case":"qualified call via direct import"},
+
+    {"id":"CS-02","in":"aliased_import.run","call_text":"c.helper","true_target":"pkg.core.helper",
+     "should_resolve":"DETERMINISTIC","case":"qualified call through module alias"},
+
+    {"id":"CS-03","in":"aliased_import.run_alias","call_text":"other_shared","true_target":"pkg.other.shared_name",
+     "should_resolve":"DETERMINISTIC","case":"from-import-as binding"},
+
+    {"id":"CS-04","in":"from_import.run","call_text":"helper","true_target":"pkg.core.helper",
+     "should_resolve":"DETERMINISTIC","case":"plain from-import binding"},
+
+    {"id":"CS-05","in":"from_import.run","call_text":"local_helper","true_target":"from_import.local_helper",
+     "should_resolve":"DETERMINISTIC","case":"intra-module local function"},
+
+    {"id":"CS-06","in":"from_import.run","call_text":"shared_name","true_target":"pkg.core.shared_name",
+     "should_resolve":"DETERMINISTIC","case":"same-name symbol exists in pkg.other and must NOT be chosen",
+     "must_not_target":["pkg.other.shared_name"]},
+
+    {"id":"CS-07","in":"reexport_import.run","call_text":"helper","true_target":"pkg.core.helper",
+     "should_resolve":"HEURISTIC","acceptable_targets":["pkg.helper","pkg.core.helper"],
+     "case":"re-export: requires following pkg/__init__ to reach the definition"},
+
+    {"id":"CS-08","in":"shadowed.run","call_text":"helper","true_target":"shadowed.helper",
+     "should_resolve":"DETERMINISTIC","case":"local def shadows the imported name -- the trap",
+     "must_not_target":["pkg.core.helper"]},
+
+    {"id":"CS-09","in":"third_party.run","call_text":"requests.get","true_target":null,
+     "should_resolve":"UNRESOLVED","case":"third-party package absent from corpus"},
+
+    {"id":"CS-10","in":"third_party.run","call_text":"mystery","true_target":null,
+     "should_resolve":"UNRESOLVED","case":"third-party symbol absent from corpus"},
+
+    {"id":"CS-11","in":"cycle_a.alpha","call_text":"beta","true_target":"cycle_b.beta",
+     "should_resolve":"DETERMINISTIC","case":"circular import, side A"},
+
+    {"id":"CS-12","in":"cycle_b.call_alpha","call_text":"alpha","true_target":"cycle_a.alpha",
+     "should_resolve":"DETERMINISTIC","case":"function-local import inside a cycle"},
+
+    {"id":"CS-13","in":"pkg.core.uses_stdlib","call_text":"os.path.join","true_target":null,
+     "should_resolve":"UNRESOLVED","case":"stdlib call -- outside the corpus"}
+  ]
+}

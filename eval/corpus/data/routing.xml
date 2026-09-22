@@ -1,0 +1,5 @@
+<routing>
+  <route region="EU" processor="primary" deadline="30"/>
+  <route region="US" processor="primary" deadline="30"/>
+  <route region="APAC" processor="fallback" deadline="45"/>
+</routing>

@@ -1,0 +1,135 @@
+{
+  "version": "1.0.0",
+  "authored": "2026-09-22",
+  "provenance": "Authored by reading eval/corpus/ directly, BEFORE any retrieval implementation existed. No retrieval output influenced any entry.",
+  "corpus_root": "eval/corpus",
+  "notes": "answer_units are file paths. evidence_must_contain is a substring that the cited evidence span must include, checked verbatim against the source.",
+  "queries": [
+    {"id":"Q1-a","class":"exact_identifier","query":"PAYMENT_TIMEOUT_SECONDS",
+     "answerable":true,"expected":"Defined in orderflow/config.py with value 30.",
+     "answer_units":["orderflow/config.py"],
+     "also_relevant":["orderflow/gateway.py"],
+     "evidence_must_contain":"PAYMENT_TIMEOUT_SECONDS = 30"},
+
+    {"id":"Q1-b","class":"exact_identifier","query":"SETTLEMENT_BATCH_SIZE",
+     "answerable":true,"expected":"Defined in orderflow/config.py with value 500.",
+     "answer_units":["orderflow/config.py"],"also_relevant":["orderflow/ledger.py"],
+     "evidence_must_contain":"SETTLEMENT_BATCH_SIZE = 500"},
+
+    {"id":"Q1-c","class":"exact_identifier","query":"GatewayError",
+     "answerable":true,"expected":"Exception class defined in orderflow/gateway.py.",
+     "answer_units":["orderflow/gateway.py"],"also_relevant":["docs/api.md"],
+     "evidence_must_contain":"class GatewayError"},
+
+    {"id":"Q2-a","class":"lexical","query":"payment gateway deadline",
+     "answerable":true,"expected":"30 seconds, per ADR-007 and config.",
+     "answer_units":["docs/adr-007-payment-timeout.md","orderflow/config.py"],
+     "also_relevant":["docs/architecture.md","docs/runbook.md"],
+     "evidence_must_contain":"30 seconds"},
+
+    {"id":"Q2-b","class":"lexical","query":"append-only ledger money movements",
+     "answerable":true,"expected":"The Ledger class records money movements append-only.",
+     "answer_units":["orderflow/ledger.py"],"also_relevant":["docs/architecture.md"],
+     "evidence_must_contain":"Append-only record of money movements"},
+
+    {"id":"Q3-a","class":"paraphrase","query":"at what point do we stop waiting for a stalled purchase",
+     "answerable":true,"expected":"After 30 seconds; PAYMENT_TIMEOUT_SECONDS in config.py, rationale in ADR-007.",
+     "answer_units":["orderflow/config.py","docs/adr-007-payment-timeout.md"],
+     "also_relevant":["docs/checkout-abandonment.md","orderflow/gateway.py"],
+     "evidence_must_contain":"30"},
+
+    {"id":"Q3-b","class":"paraphrase","query":"why do shoppers walk away from a slow checkout",
+     "answerable":true,"expected":"Shoppers abandon a transaction pending about half a minute; documented in the abandonment study and cited as ADR-007 rationale.",
+     "answer_units":["docs/checkout-abandonment.md"],
+     "also_relevant":["docs/adr-007-payment-timeout.md"],
+     "evidence_must_contain":"give up"},
+
+    {"id":"Q3-c","class":"paraphrase","query":"how is the bookkeeping of funds handled",
+     "answerable":true,"expected":"An append-only ledger records every money movement.",
+     "answer_units":["orderflow/ledger.py"],"also_relevant":["docs/architecture.md"],
+     "evidence_must_contain":"ledger"},
+
+    {"id":"Q4-a","class":"multi_hop","query":"which components ultimately depend on the payment timeout configuration",
+     "answerable":true,"expected":"gateway.CardGateway imports it directly; payments.PaymentProcessor uses CardGateway; api.post_charge builds the processor.",
+     "answer_units":["orderflow/gateway.py","orderflow/payments.py","orderflow/api.py"],
+     "also_relevant":["orderflow/config.py"],
+     "evidence_must_contain":"PAYMENT_TIMEOUT_SECONDS"},
+
+    {"id":"Q4-b","class":"multi_hop","query":"what does post_charge end up calling",
+     "answerable":true,"expected":"post_charge -> build_processor -> PaymentProcessor.charge -> CardGateway.authorize/capture -> Ledger.record.",
+     "answer_units":["orderflow/api.py","orderflow/payments.py","orderflow/gateway.py"],
+     "also_relevant":["orderflow/ledger.py"],
+     "evidence_must_contain":"build_processor"},
+
+    {"id":"Q5-a","class":"cross_document","query":"what is the gateway deadline and why was that value chosen",
+     "answerable":true,"expected":"30 seconds (config.py); chosen because p99 was 18s and shoppers abandon beyond ~30s (ADR-007).",
+     "answer_units":["orderflow/config.py","docs/adr-007-payment-timeout.md"],
+     "also_relevant":["docs/checkout-abandonment.md"],
+     "evidence_must_contain":"18 seconds"},
+
+    {"id":"Q5-b","class":"cross_document","query":"which API endpoint triggers a card authorization",
+     "answerable":true,"expected":"POST /charge maps to post_charge, which authorizes via the gateway.",
+     "answer_units":["docs/api.md","orderflow/api.py"],
+     "also_relevant":["orderflow/payments.py"],
+     "evidence_must_contain":"post_charge"},
+
+    {"id":"Q6-a","class":"entity_ambiguity","query":"Processor",
+     "answerable":true,"expected":"TWO distinct classes: payments.PaymentProcessor and reporting.Processor. They are unrelated and must not be merged.",
+     "answer_units":["orderflow/reporting.py","orderflow/payments.py"],
+     "also_relevant":["docs/architecture.md"],
+     "evidence_must_contain":"class Processor",
+     "must_not_merge":["orderflow.reporting.Processor","orderflow.payments.PaymentProcessor"]},
+
+    {"id":"Q6-b","class":"entity_ambiguity","query":"record",
+     "answerable":true,"expected":"Ledger.record is the method; 'record' also appears as prose in docs. The code symbol is in ledger.py.",
+     "answer_units":["orderflow/ledger.py"],"also_relevant":["docs/architecture.md"],
+     "evidence_must_contain":"def record"},
+
+    {"id":"Q7-a","class":"negative","query":"what is the Kafka topic used for order events",
+     "answerable":false,"expected":"UNSUPPORTED: the corpus contains no Kafka, no message broker and no event topics.",
+     "answer_units":[],"also_relevant":[],"evidence_must_contain":null},
+
+    {"id":"Q7-b","class":"negative","query":"which GDPR data retention period applies to cardholder names",
+     "answerable":false,"expected":"UNSUPPORTED: the corpus says nothing about GDPR or data retention.",
+     "answer_units":[],"also_relevant":[],"evidence_must_contain":null},
+
+    {"id":"Q8-a","class":"conflict","query":"what is the gateway timeout value",
+     "answerable":true,"expected":"CONFLICT: config.py, ADR-007, architecture.md and settings.json all say 30 seconds; runbook.md says 60 seconds and is self-described as last reviewed in 2024. Both positions must be returned; the conflict must not be silently resolved.",
+     "answer_units":["orderflow/config.py","docs/runbook.md"],
+     "also_relevant":["docs/adr-007-payment-timeout.md","docs/architecture.md","data/settings.json"],
+     "evidence_must_contain":"60 seconds",
+     "conflict_pair":["orderflow/config.py","docs/runbook.md"]},
+
+    {"id":"Q9-a","class":"evidence_localization","query":"what is the 99th percentile card network response time",
+     "answerable":true,"expected":"18 seconds under peak traffic, stated in ADR-007 rationale.",
+     "answer_units":["docs/adr-007-payment-timeout.md"],"also_relevant":[],
+     "evidence_must_contain":"99th percentile response at 18 seconds"},
+
+    {"id":"Q9-b","class":"evidence_localization","query":"what is the settlement batch size",
+     "answerable":true,"expected":"500, defined in config.py and used by Ledger.settle.",
+     "answer_units":["orderflow/config.py"],"also_relevant":["orderflow/ledger.py","data/settings.json"],
+     "evidence_must_contain":"SETTLEMENT_BATCH_SIZE = 500"},
+
+    {"id":"Q10-a","class":"structural_code","query":"what does PaymentProcessor.charge call",
+     "answerable":true,"expected":"self.gateway.authorize, self.gateway.capture, self.ledger.record.",
+     "answer_units":["orderflow/payments.py"],"also_relevant":["orderflow/gateway.py","orderflow/ledger.py"],
+     "evidence_must_contain":"self.gateway.authorize"},
+
+    {"id":"Q10-b","class":"structural_code","query":"which module imports SETTLEMENT_BATCH_SIZE",
+     "answerable":true,"expected":"orderflow/ledger.py imports it from orderflow.config.",
+     "answer_units":["orderflow/ledger.py"],"also_relevant":["orderflow/config.py"],
+     "evidence_must_contain":"from orderflow.config import SETTLEMENT_BATCH_SIZE"},
+
+    {"id":"Q13-a","class":"adversarial_misleading_lexical","query":"processor deadline",
+     "answerable":true,"expected":"The deadline belongs to the gateway (CardGateway.deadline), not to reporting.Processor. A retriever matching 'processor' lexically will surface reporting.py, which is wrong.",
+     "answer_units":["orderflow/gateway.py"],"also_relevant":["orderflow/config.py"],
+     "evidence_must_contain":"self.deadline = PAYMENT_TIMEOUT_SECONDS",
+     "distractors":["orderflow/reporting.py"]},
+
+    {"id":"Q13-b","class":"adversarial_structural_not_lexical","query":"what code is affected by changing the abandonment threshold",
+     "answerable":true,"expected":"config.py defines it; gateway.py consumes it; payments.py and api.py depend transitively. 'abandonment threshold' appears in none of those files.",
+     "answer_units":["orderflow/config.py","orderflow/gateway.py"],
+     "also_relevant":["orderflow/payments.py","orderflow/api.py"],
+     "evidence_must_contain":"PAYMENT_TIMEOUT_SECONDS"}
+  ]
+}

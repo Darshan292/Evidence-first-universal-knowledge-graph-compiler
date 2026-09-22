@@ -1,0 +1,11 @@
+{
+  "service": "orderflow",
+  "gateway": {
+    "endpoint": "https://cards.example/api",
+    "timeout_seconds": 30,
+    "retry_limit": 3
+  },
+  "ledger": {
+    "settlement_batch_size": 500
+  }
+}

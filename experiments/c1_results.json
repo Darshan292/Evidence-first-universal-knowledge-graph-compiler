@@ -1,0 +1,50 @@
+[
+  {
+    "repr": "TEXT_hex64",
+    "db_mb": 51.95,
+    "index_mb": 19.75,
+    "index_pct": 38.0,
+    "insert_s": 1.4,
+    "rows_per_s": 82830,
+    "pk_lookup_us": 3.9,
+    "subject_scan_us": 6.1,
+    "audit_ms": 9.5,
+    "db_vs_text": 1.0
+  },
+  {
+    "repr": "TEXT_hex32",
+    "db_mb": 29.9,
+    "index_mb": 10.96,
+    "index_pct": 36.7,
+    "insert_s": 0.55,
+    "rows_per_s": 212481,
+    "pk_lookup_us": 4.2,
+    "subject_scan_us": 6.3,
+    "audit_ms": 9.2,
+    "db_vs_text": 0.576
+  },
+  {
+    "repr": "BLOB_32",
+    "db_mb": 31.06,
+    "index_mb": 10.96,
+    "index_pct": 35.3,
+    "insert_s": 0.77,
+    "rows_per_s": 151034,
+    "pk_lookup_us": 5.7,
+    "subject_scan_us": 6.8,
+    "audit_ms": 10.3,
+    "db_vs_text": 0.598
+  },
+  {
+    "repr": "BLOB_16",
+    "db_mb": 19.81,
+    "index_mb": 6.76,
+    "index_pct": 34.1,
+    "insert_s": 0.57,
+    "rows_per_s": 203621,
+    "pk_lookup_us": 4.2,
+    "subject_scan_us": 6.2,
+    "audit_ms": 10.9,
+    "db_vs_text": 0.381
+  }
+]

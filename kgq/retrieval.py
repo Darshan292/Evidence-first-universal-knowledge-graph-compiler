@@ -29,6 +29,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 IDENT = re.compile(r"[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*")
+FILE_SCOPE = re.compile(
+    r"(?<![\w/])((?:[A-Za-z_][\w.-]*/)*[A-Za-z_][\w.-]*\.(?:py|rst|md|toml|txt))\b")
 STOP = set("""what which how when why where who does do is are can could should the a an of
 for to and or in on at into from by with as if not it this that these those i my our your
 their there here me us them explain tell show give help please about between difference""".split())
@@ -82,15 +84,33 @@ class StructuralFact:
                 "excerpt": self.text}
 
 
+def looks_like_code(token: str) -> bool:
+    """Whether a word in a question is plausibly a code identifier.
+
+    An ALL-CAPS word with no underscore or dot is an acronym in prose -- URL,
+    HTTP, GET, PIN -- not a name the asker is pointing at. Treating one as a
+    subject made "how does MapAdapter.build construct a URL?" resolve `URL` to
+    two symbols and abstain for ambiguity, which is wrong: the asker never named
+    a symbol called URL.
+
+    The trade, stated: a question about a genuinely ALL-CAPS constant with no
+    underscore (`COEP`) will not treat it as a subject. Lexical search still
+    finds it; only subject identity is affected.
+    """
+    if token.lower() in STOP or len(token) < 3:
+        return False
+    if "_" in token or "." in token:
+        return True
+    if token.isupper():
+        return False
+    return any(c.isupper() for c in token)
+
+
 def candidate_identifiers(question: str) -> list[str]:
     """Names in the question that could plausibly be code. Order is stable."""
     out, seen = [], set()
     for t in IDENT.findall(question):
-        if t.lower() in STOP or len(t) < 3:
-            continue
-        if not (any(c.isupper() for c in t) or "_" in t or "." in t):
-            continue
-        if t not in seen:
+        if looks_like_code(t) and t not in seen:
             seen.add(t); out.append(t)
     return out
 
@@ -231,6 +251,60 @@ class Retriever:
             "  JOIN artifact a ON a.artifact_id = s.artifact_id"
             "  LEFT JOIN symbol o ON o.symbol_id = cl.object_id"
             " WHERE s.qualified_name = ? AND cl.predicate = ?", (subject_qname, predicate))]
+
+    # ── identity: deterministic, or refused ─────────────────────────────
+    def resolve_identity(self, question: str, subject_hint: str | None = None) -> dict:
+        """Resolve every named subject to ONE symbol, or report ambiguity.
+
+        The model may decide which word the question is about. It may not decide
+        WHICH `Response` that word means. This is the compiler's own rule --
+        `decide()` abstains when a name resolves to several qualified names --
+        applied before any semantic step.
+
+        Deterministic disambiguators, and nothing else:
+          * the name is fully qualified and matches exactly one symbol;
+          * the question carries a file scope that resolves to one artifact,
+            and exactly one candidate lives in it.
+
+        No fuzzy ranking, no model confidence, no lexical score.
+        """
+        names = list(candidate_identifiers(question))
+        if subject_hint and looks_like_code(subject_hint) and subject_hint not in names:
+            names.insert(0, subject_hint)
+        scope = self.scope_in(question)
+        report = {"scope": scope, "names": [], "ambiguous": []}
+        for name in names:
+            rows = [s for s in self.symbols_named(name, prefer_src=False)
+                    if s["kind"] in ("class", "function", "method")]
+            if not rows:
+                continue
+            distinct = sorted({s["qualified_name"] for s in rows})
+            chosen = None
+            if len(distinct) == 1:
+                chosen = distinct[0]
+            elif name in distinct:                      # fully qualified, exact
+                chosen = name
+            elif scope:
+                here = sorted({s["qualified_name"] for s in rows
+                               if s["rel_path"] == scope})
+                if len(here) == 1:
+                    chosen = here[0]
+            entry = {"name": name, "candidates": distinct, "resolved": chosen}
+            report["names"].append(entry)
+            if chosen is None:
+                report["ambiguous"].append(entry)
+        return report
+
+    def scope_in(self, question: str) -> str | None:
+        """A file path in the question that names exactly one artifact."""
+        from kgc.artifact_identity import resolve_scope
+        paths = [r["rel_path"] for r in self.con.execute(
+            "SELECT DISTINCT rel_path FROM artifact")]
+        for m in FILE_SCOPE.finditer(question):
+            matches, status = resolve_scope(m.group(1), paths)
+            if status == "EXACT":
+                return matches[0]
+        return None
 
     # ── the retrieval entry point ───────────────────────────────────────
     def retrieve(self, question: str, subject_hint: str | None = None, *,

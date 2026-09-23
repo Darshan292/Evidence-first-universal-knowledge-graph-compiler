@@ -26,6 +26,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from kgc.predicates import completeness_scope, may_falsify_by_absence
+from kgq.contract import normalise, sentences
 
 SUPPORTED = "SUPPORTED"
 EXPLICIT_CONTRADICTION = "EXPLICIT_CONTRADICTION"
@@ -204,6 +205,30 @@ class Validator:
             completeness="CLOSED_WORLD")
 
     # ── the gate ────────────────────────────────────────────────────────
+    def check_answer_coverage(self, model_answer) -> list[str]:
+        """Every sentence of `answer` must also be a claim.
+
+        Without this, a model can attach evidence to one statement and smuggle a
+        second, unsupported one into the prose beside it -- reproduced:
+        `answer` said "...It also encrypts every file on disk." while `claims`
+        carried only the supported sentence, and the gate said ACCEPTED.
+
+        The check is string identity after normalisation. It is NOT an entailment
+        test and does not pretend to be one: it only establishes that nothing
+        appears in the answer that was not put forward as a claim.
+        """
+        claim_norms = [normalise(c.text) for c in model_answer.claims]
+        problems = []
+        for s in sentences(model_answer.answer):
+            n = normalise(s)
+            if not n:
+                continue
+            if not any(n == cn or n in cn or cn in n for cn in claim_norms if cn):
+                problems.append(
+                    f"the answer contains a statement that is not among the claims and "
+                    f"therefore has no evidence: {s[:90]!r}")
+        return problems
+
     def validate(self, model_answer, retrieved_ids: set[str]) -> Verdict:
         v = Verdict(ACCEPTED)
         if not model_answer.claims:
@@ -234,6 +259,7 @@ class Validator:
                         f"structural assertion {sc.predicate}({sc.subject}, {sc.object}) is "
                         f"contradicted by the compiled graph: {sc.detail}")
             v.claims.append(cv)
-        if any(not c.ok for c in v.claims):
+        v.problems += self.check_answer_coverage(model_answer)
+        if v.problems or any(not c.ok for c in v.claims):
             v.outcome = REJECTED
         return v

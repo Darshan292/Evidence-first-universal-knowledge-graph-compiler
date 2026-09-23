@@ -16,8 +16,8 @@
  .supported{color:#2da44e} ul{padding-left:1.1rem}
 </style>
 <h1>How does send_from_directory prevent unsafe paths?</h1><p class="verdict answer">ANSWER — PROPOSED</p>
-<section class=""><h2>Answer (PROPOSED — semantic interpretation)</h2><p>send_from_directory does not trust the path it is given. It passes the directory and the untrusted path to safe_join, which returns None when the result would escape the base directory; send_from_directory then raises NotFound rather than opening the file.</p></section>
-<section class=""><h2>Statements and their evidence</h2><ul><li class="ok">send_from_directory joins the untrusted path onto the directory with safe_join and raises NotFound when the join is refused.<div class="dim">evidence 1039eea5bf62 — src/werkzeug/utils.py bytes 18574-20160</div><div class="struct supported">CALLS(werkzeug.utils.send_from_directory, werkzeug.security.safe_join) — SUPPORTED<span class="dim"> DERIVED claim in the compiled graph</span></div></li><li class="ok">safe_join returns None when the untrusted component would escape the base directory, which is the signal the caller acts on.<div class="dim">evidence 7e51d079e4aa — src/werkzeug/security.py bytes 4684-7215</div></li></ul></section>
+<section class=""><h2>Answer (PROPOSED — semantic interpretation)</h2><p>send_from_directory passes the untrusted path to safe_join and raises NotFound when the join is refused. safe_join returns None when the component would escape the base directory.</p></section>
+<section class=""><h2>Statements and their evidence</h2><ul><li class="ok">send_from_directory passes the untrusted path to safe_join and raises NotFound when the join is refused.<div class="dim">evidence 1039eea5bf62 — src/werkzeug/utils.py bytes 18574-20160</div><div class="struct supported">CALLS(werkzeug.utils.send_from_directory, werkzeug.security.safe_join) — SUPPORTED<span class="dim"> DERIVED claim in the compiled graph</span></div></li><li class="ok">safe_join returns None when the component would escape the base directory.<div class="dim">evidence 7e51d079e4aa — src/werkzeug/security.py bytes 4684-7215</div></li></ul></section>
 <section class=""><h2>Evidence retrieved (deterministic)</h2><article><header><code>1039eea5bf62</code> <b>src/werkzeug/utils.py</b>:522 — werkzeug.utils.send_from_directory <span class="dim">(1586B, identifier)</span></header><pre>def send_from_directory(
     directory: os.PathLike[str] | str,
     path: os.PathLike[str] | str,
@@ -361,18 +361,18 @@
   &quot;regenerations&quot;: 0,
   &quot;structural&quot;: &quot;CHECKED&quot;,
   &quot;usage&quot;: {
-    &quot;llm_calls&quot;: 1,
-    &quot;input_tokens&quot;: 4092,
-    &quot;output_tokens&quot;: 217,
-    &quot;cache_hits&quot;: 0,
+    &quot;llm_calls&quot;: 0,
+    &quot;input_tokens&quot;: 6804,
+    &quot;output_tokens&quot;: 282,
+    &quot;cache_hits&quot;: 2,
     &quot;seconds&quot;: 0.0,
     &quot;regenerations&quot;: 0
   },
   &quot;budget&quot;: {
-    &quot;interpretation_attempts&quot;: 0,
+    &quot;interpretation_attempts&quot;: 1,
     &quot;answer_attempts&quot;: 2,
     &quot;max_context_chars&quot;: 24000,
     &quot;max_spans&quot;: 6
   },
-  &quot;latency_seconds&quot;: 0.087
+  &quot;latency_seconds&quot;: 0.098
 }</pre></section>

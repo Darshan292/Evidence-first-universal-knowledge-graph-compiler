@@ -38,9 +38,14 @@ Rules you must follow:
 5. If the evidence does not answer the question, return an empty `claims` list
    and say plainly in `answer` that it cannot be established from this source.
 
+6. `answer` is a PRESENTATION of your claims, not a second channel. Every
+   sentence in `answer` must also appear as a claim `text`. Write `answer` by
+   joining your claim texts in order. A sentence that appears only in `answer`
+   has no evidence attached to it and the whole reply is rejected.
+
 Reply with a single JSON object and nothing else:
 
-{"answer": "<two to five sentences>",
+{"answer": "<your claim texts, joined in order>",
  "claims": [
    {"text": "<one specific assertion>",
     "evidence_ids": ["<id you were given>"],
@@ -113,6 +118,36 @@ class ContractError(ValueError):
 
 
 _JSON = re.compile(r"\{.*\}", re.S)
+_SENTENCE = re.compile(r"(?<=[.!?])\s+")
+
+
+def sentences(text: str) -> list[str]:
+    """Split prose into sentences. Deliberately crude: this feeds a coverage
+    check, not an NLP pipeline, and over-splitting only makes it stricter."""
+    return [s.strip() for s in _SENTENCE.split((text or "").strip()) if s.strip()]
+
+
+def normalise(text: str) -> str:
+    """Lowercase, collapse whitespace, drop punctuation. Enough to see that two
+    strings are the same sentence; not enough to judge that they mean the same
+    thing, which is deliberately not attempted here."""
+    return re.sub(r"[^a-z0-9]+", " ", (text or "").lower()).strip()
+
+
+def compose_answer(claim_texts: list[str]) -> str:
+    """The answer the user sees, built ONLY from validated claim texts.
+
+    Even if the coverage check were bypassed, a sentence that never became a
+    validated claim cannot reach the reader through this function.
+    """
+    out = []
+    for c in claim_texts:
+        c = c.strip()
+        if c and not c.endswith((".", "!", "?")):
+            c += "."
+        if c:
+            out.append(c)
+    return " ".join(out)
 
 
 def parse_json_object(body: str) -> dict:

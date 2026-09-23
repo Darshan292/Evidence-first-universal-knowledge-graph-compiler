@@ -18,7 +18,7 @@ import sys
 from pathlib import Path
 
 from kgq import DEMO_VERSION
-from kgq.answer import ANSWER, Budget, ask
+from kgq.answer import ABSTAIN_AMBIGUOUS, ANSWER, Budget, ask
 from kgq.provider import Provider, ProviderError
 from kgq.validate import EXPLICIT_CONTRADICTION, NOT_ESTABLISHED, SUPPORTED
 
@@ -59,9 +59,22 @@ def render_text(r, colour=True, max_excerpt=14) -> str:
                 a(f"      {s['predicate']}({s['subject']}, {s['object']}) — {icon}")
                 a(_c(f"        {s['detail']}", DIM, colour))
     else:
-        a(_c("ABSTAINED", BOLD, colour) + _c("   no answer was shown", YELLOW, colour))
+        label = ("AMBIGUOUS — REFUSED" if r.status == ABSTAIN_AMBIGUOUS else "ABSTAINED")
+        a(_c(label, BOLD, colour) + _c("   no answer was shown", YELLOW, colour))
         a("")
         a("  " + r.abstain_reason)
+
+    if r.identity.get("names"):
+        a("")
+        a(_c("SUBJECT IDENTITY", BOLD, colour) + _c("  (deterministic — the model never chooses)", DIM, colour))
+        for n in r.identity["names"]:
+            if n["resolved"]:
+                a(f"  {n['name']} -> {n['resolved']}")
+            else:
+                a(_c(f"  {n['name']} -> AMBIGUOUS across {len(n['candidates'])}: "
+                     f"{', '.join(n['candidates'][:4])}", YELLOW, colour))
+        if r.identity.get("scope"):
+            a(_c(f"  scope: {r.identity['scope']}", DIM, colour))
 
     a("")
     a(_c("EVIDENCE RETRIEVED", BOLD, colour) + _c("  (deterministic, no model)", DIM, colour))

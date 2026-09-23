@@ -22,14 +22,15 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 
-from kgq.contract import (ContractError, Intent, answer_messages, interpret_messages,
-                          parse_answer, parse_intent)
+from kgq.contract import (ContractError, Intent, answer_messages, compose_answer,
+                          interpret_messages, parse_answer, parse_intent)
 from kgq.provider import ProviderError, Usage
 from kgq.retrieval import Retriever, candidate_identifiers
 from kgq.validate import ACCEPTED, EXPLICIT_CONTRADICTION, Validator
 
 ANSWER = "ANSWER"
 ABSTAIN = "ABSTAIN"
+ABSTAIN_AMBIGUOUS = "ABSTAIN_AMBIGUOUS"
 PROPOSED = "PROPOSED"          # what a semantic answer always is
 DERIVED = "DERIVED"            # what the structural facts beside it always are
 
@@ -49,7 +50,7 @@ class Budget:
 @dataclass
 class Result:
     question: str
-    status: str                                  # ANSWER | ABSTAIN
+    status: str                                  # ANSWER | ABSTAIN | ABSTAIN_AMBIGUOUS
     answer: str = ""
     abstain_reason: str = ""
     intent: dict = field(default_factory=dict)
@@ -65,6 +66,8 @@ class Result:
     latency_seconds: float = 0.0
     establishment: str = PROPOSED
     structural_status: str = ""
+    identity: dict = field(default_factory=dict)
+    model_prose_unvalidated: str = ""            # recorded, never shown as the answer
 
     def as_dict(self) -> dict:
         return dict(self.__dict__)
@@ -101,6 +104,23 @@ def ask(question: str, *, db_path: str, corpus_root: str, provider=None,
     try:
         intent = interpret(question, provider, budget)
         r.intent = intent.as_dict()
+
+        # IDENTITY FIRST. A model may decide which word the question is about;
+        # it may not decide which `Response` that word means. If the compiled
+        # graph says the name is ambiguous and nothing deterministic narrows it,
+        # we stop here -- before retrieval puts several candidates in front of a
+        # model that would quietly pick one.
+        identity = retriever.resolve_identity(question, subject_hint=intent.subject)
+        r.identity = identity
+        if identity["ambiguous"]:
+            a = identity["ambiguous"][0]
+            r.status = ABSTAIN_AMBIGUOUS
+            r.abstain_reason = (
+                f"{a['name']!r} resolves to {len(a['candidates'])} symbols "
+                f"({', '.join(a['candidates'][:3])}"
+                f"{'...' if len(a['candidates']) > 3 else ''}) and nothing in the question "
+                f"picks one. Name it in full, or add the file it is in.")
+            return _finish(r, provider, t0)
 
         spans, subjects = retriever.retrieve(
             question, subject_hint=intent.subject,
@@ -154,7 +174,12 @@ def ask(question: str, *, db_path: str, corpus_root: str, provider=None,
                                    "CHECKED" if any(c.structural for c in verdict.claims)
                                    else "NOT_APPLICABLE")
             if verdict.outcome == ACCEPTED:
-                r.status, r.answer = ANSWER, candidate.answer
+                # The reader sees text assembled from VALIDATED claims only. The
+                # model's own prose is kept for the record and never rendered as
+                # the answer, so an unvalidated sentence has no path to a user.
+                r.status = ANSWER
+                r.answer = compose_answer([c.text for c in candidate.claims])
+                r.model_prose_unvalidated = candidate.answer
                 return _finish(r, provider, t0)
             reason = verdict.reason()
             if attempt < budget.answer_attempts:

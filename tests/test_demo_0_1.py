@@ -17,8 +17,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from kgc.pipeline import ingest
 from kgc.predicates import may_falsify_by_absence
 from kgc.store import Store
-from kgq.answer import ABSTAIN, ANSWER, Budget, ask
-from kgq.contract import ContractError, answer_messages, parse_answer
+from kgq.answer import ABSTAIN, ABSTAIN_AMBIGUOUS, ANSWER, Budget, ask
+from kgq.contract import (ContractError, answer_messages, compose_answer,
+                          normalise, parse_answer, sentences)
 from kgq.provider import ScriptedProvider
 from kgq.retrieval import Retriever
 from kgq.validate import (ACCEPTED, EXPLICIT_CONTRADICTION, NOT_ESTABLISHED, REJECTED,
@@ -50,6 +51,18 @@ def send_from_directory(directory, path):
 class NotFound(Exception):
     """Raised when the resolved path is missing or unsafe."""
 ''',
+    "alpha/__init__.py": "",
+    "alpha/model.py": '''class Response:
+    """The alpha response."""
+
+    default_status = 200
+''',
+    "beta/__init__.py": "",
+    "beta/model.py": '''class Response:
+    """The beta response, which is a different class entirely."""
+
+    default_status = 500
+''',
     "shapes.py": '''class Base:
     pass
 
@@ -76,7 +89,14 @@ HOSTILE = '''def render(template):
 
 
 def reply(answer, claims):
-    return json.dumps({"answer": answer, "claims": claims})
+    """A contract-conformant reply.
+
+    `answer` is composed from the claim texts, because that is what the contract
+    now requires: the answer field is a presentation of the claims, not a second
+    channel. Tests that deliberately violate that build their own JSON.
+    """
+    composed = " ".join(c["text"].rstrip(".") + "." for c in claims) or answer
+    return json.dumps({"answer": composed, "claims": claims})
 
 
 class _Compiled(unittest.TestCase):
@@ -440,3 +460,134 @@ class TestSourceIsUntrustedData(_Compiled):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# ── FIX 1: the answer field is not a second, unchecked channel ────────────
+
+class TestAnswerFieldIsValidated(_Compiled):
+    """Reproduced defect: a model attached evidence to one statement and
+    smuggled a second, unsupported one into `answer` beside it. ACCEPTED."""
+
+    def cand(self, answer, claim_texts, eid):
+        return parse_answer(json.dumps({
+            "answer": answer,
+            "claims": [{"text": c, "evidence_ids": [eid]} for c in claim_texts]}))
+
+    def test_a_sentence_only_in_the_answer_field_rejects_the_reply(self):
+        span = self.span_for("safe_join")
+        c = self.cand("safe_join rejects traversal. It also encrypts every file on disk.",
+                      ["safe_join rejects traversal."], span.evidence_id)
+        v = self.v.validate(c, {span.evidence_id})
+        self.assertEqual(v.outcome, REJECTED)
+        self.assertIn("not among the claims", v.reason())
+        self.assertIn("encrypts every file", v.reason())
+
+    def test_an_answer_equal_to_the_claim_text_is_accepted(self):
+        span = self.span_for("safe_join")
+        c = self.cand("safe_join rejects traversal.",
+                      ["safe_join rejects traversal."], span.evidence_id)
+        self.assertEqual(self.v.validate(c, {span.evidence_id}).outcome, ACCEPTED)
+
+    def test_several_claims_joined_into_the_answer_are_accepted(self):
+        span = self.span_for("safe_join")
+        c = self.cand("safe_join rejects traversal. It returns None when it does.",
+                      ["safe_join rejects traversal.", "It returns None when it does."],
+                      span.evidence_id)
+        self.assertEqual(self.v.validate(c, {span.evidence_id}).outcome, ACCEPTED)
+
+    def test_punctuation_and_case_differences_do_not_cause_a_false_rejection(self):
+        span = self.span_for("safe_join")
+        c = self.cand("Safe_join rejects traversal!", ["safe_join rejects traversal"],
+                      span.evidence_id)
+        self.assertEqual(self.v.validate(c, {span.evidence_id}).outcome, ACCEPTED)
+
+    def test_the_rendered_answer_is_built_only_from_validated_claims(self):
+        """Belt and braces: even if coverage were bypassed, the smuggled
+        sentence has no path to the reader."""
+        span = self.span_for("safe_join")
+        r = ask(self.QSAFE, db_path=self.db, corpus_root=str(self.root),
+                provider=ScriptedProvider([json.dumps({
+                    "answer": "safe_join rejects traversal.",
+                    "claims": [{"text": "safe_join rejects traversal.",
+                                "evidence_ids": [span.evidence_id]}]})]),
+                budget=Budget(interpretation_attempts=0))
+        self.assertEqual(r.status, ANSWER, r.abstain_reason)
+        self.assertEqual(r.answer, "safe_join rejects traversal.")
+        self.assertNotIn("encrypts", r.answer)
+
+    def test_a_smuggled_sentence_never_reaches_the_rendered_answer(self):
+        span = self.span_for("safe_join")
+        smuggled = json.dumps({
+            "answer": "safe_join rejects traversal. It also encrypts every file on disk.",
+            "claims": [{"text": "safe_join rejects traversal.",
+                        "evidence_ids": [span.evidence_id]}]})
+        r = ask(self.QSAFE, db_path=self.db, corpus_root=str(self.root),
+                provider=ScriptedProvider([smuggled, smuggled]),
+                budget=Budget(interpretation_attempts=0))
+        self.assertEqual(r.status, ABSTAIN)
+        self.assertEqual(r.answer, "")
+        self.assertNotIn("encrypts", r.answer)
+        self.assertNotIn("encrypts", str(r.as_dict().get("answer", "")))
+
+    def test_compose_answer_only_ever_emits_claim_text(self):
+        self.assertEqual(compose_answer(["a claim", "another one."]),
+                         "a claim. another one.")
+        self.assertEqual(compose_answer([]), "")
+
+    @property
+    def QSAFE(self):
+        return "How does safe_join stop an unsafe path?"
+
+
+# ── FIX 2: identity is deterministic, or the system refuses ───────────────
+
+class TestAmbiguityBoundary(_Compiled):
+    def test_a_name_defined_twice_refuses_before_any_model_runs(self):
+        p = ScriptedProvider(["should never be called"])
+        r = ask("What is the default status of Response?",
+                db_path=self.db, corpus_root=str(self.root), provider=p,
+                budget=Budget(interpretation_attempts=0))
+        self.assertEqual(r.status, ABSTAIN_AMBIGUOUS)
+        self.assertEqual(p.usage.calls, 0, "the model was consulted despite ambiguity")
+        self.assertIn("resolves to 2 symbols", r.abstain_reason)
+
+    def test_a_fully_qualified_name_proceeds(self):
+        rr = Retriever(self.db, str(self.root))
+        rep = rr.resolve_identity("What is the default status of alpha.model.Response?")
+        rr.close()
+        self.assertEqual(rep["ambiguous"], [])
+        self.assertEqual(rep["names"][0]["resolved"], "alpha.model.Response")
+
+    def test_a_file_scope_disambiguates(self):
+        rr = Retriever(self.db, str(self.root))
+        rep = rr.resolve_identity("What is the default status of Response in beta/model.py?")
+        rr.close()
+        self.assertEqual(rep["ambiguous"], [], rep)
+        self.assertEqual(rep["names"][0]["resolved"], "beta.model.Response")
+        self.assertEqual(rep["scope"], "beta/model.py")
+
+    def test_an_unambiguous_name_is_unaffected(self):
+        rr = Retriever(self.db, str(self.root))
+        rep = rr.resolve_identity("How does send_from_directory prevent unsafe paths?")
+        rr.close()
+        self.assertEqual(rep["ambiguous"], [])
+        self.assertEqual(rep["names"][0]["resolved"], "serve.send_from_directory")
+
+    def test_an_acronym_in_prose_is_not_treated_as_a_subject(self):
+        """`URL` in 'construct a URL?' is English, not a symbol. Treating it as
+        one made a perfectly clear question abstain for ambiguity."""
+        from kgq.retrieval import candidate_identifiers, looks_like_code
+        self.assertFalse(looks_like_code("URL"))
+        self.assertFalse(looks_like_code("HTTP"))
+        self.assertTrue(looks_like_code("send_from_directory"))
+        self.assertTrue(looks_like_code("MapAdapter"))
+        self.assertTrue(looks_like_code("DEFAULT_TIMEOUT"))
+        self.assertNotIn("URL", candidate_identifiers("How does build construct a URL?"))
+
+    def test_the_model_is_never_asked_to_choose_between_identities(self):
+        """The ambiguity refusal happens before retrieval, so no candidate
+        evidence from either symbol is ever placed in front of a model."""
+        r = ask("What is the default status of Response?",
+                db_path=self.db, corpus_root=str(self.root), provider=None)
+        self.assertEqual(r.status, ABSTAIN_AMBIGUOUS)
+        self.assertEqual(r.evidence, [], "candidate evidence was gathered anyway")

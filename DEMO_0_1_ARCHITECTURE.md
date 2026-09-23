@@ -31,7 +31,11 @@ question
 | `kgq/contract.py` | ~200 | the structured output contract, its parser, and the prompts |
 | `kgq/validate.py` | ~230 | the deterministic gate and the structural check |
 | `kgq/answer.py` | ~180 | the bounded answer loop |
-| `kgq/cli.py` | ~230 | `compile` / `ask`, text + JSON + HTML rendering |
+| `kgq/cli.py` | ~250 | `compile` / `ask`, text + JSON + HTML rendering |
+
+Tests: `tests/test_demo_0_1.py` (48, offline) and
+`tests/test_provider_transport.py` (11, driving the real `Provider` against a
+local OpenAI-compatible HTTP server).
 
 One change in `kgc/`: `PredicateSpec` gained `completeness` and
 `completeness_scope`, because the epistemic rule in §3 needs them.
@@ -121,6 +125,45 @@ every citation failed, or that carries an `EXPLICIT_CONTRADICTION`, rejects the
 cannot prove the cited bytes support the statement. An answer that cites the
 right function and describes it wrongly passes every check. That is stated in
 the code, in this document, and in the output, and it is a J-2 measurement.
+
+## 4b. Identity is resolved before anything semantic happens (0.1.1)
+
+A model may decide which word a question is about. It may not decide which
+`Response` that word means.
+
+`Retriever.resolve_identity` resolves every named subject against the compiled
+graph **before retrieval runs**. If a name maps to more than one definition and
+nothing deterministic narrows it, the answer path returns `ABSTAIN_AMBIGUOUS`
+immediately — so candidate evidence from several symbols never reaches a model
+that would quietly pick one. This is the compiler's own rule, the one `decide()`
+has applied since Gate 2.25, moved in front of the semantic layer.
+
+The only disambiguators are deterministic: a fully qualified name that matches
+exactly one symbol, or a file scope that `kgc.artifact_identity.resolve_scope`
+resolves to exactly one artifact containing exactly one candidate. No fuzzy
+ranking, no model confidence, no lexical score.
+
+`looks_like_code` decides whether a word in a question is a candidate name at
+all. An ALL-CAPS word with no underscore or dot is an acronym in prose — `URL`,
+`HTTP`, `GET` — not a symbol the asker named. Without that rule, *"how does
+MapAdapter.build construct a URL?"* resolved `URL` to two symbols and abstained.
+
+## 4c. The answer field is not a second channel (0.1.1)
+
+The gate checked claim texts and ignored the prose beside them, so a model could
+attach evidence to one statement and smuggle an unsupported one into `answer`.
+Two changes:
+
+* **coverage** — every sentence of `answer` must also appear as a claim,
+  compared by string identity after normalisation. Not an entailment test, and
+  it does not pretend to be: it establishes only that nothing appears in the
+  answer that was not put forward as a claim.
+* **composition** — the answer a reader sees is built from validated claim
+  texts by `compose_answer`. The model's prose is kept as
+  `model_prose_unvalidated` and never rendered in the answer position.
+
+Two independent mechanisms for one property, because the property is that an
+unvalidated sentence cannot reach a user.
 
 ## 5. Rejection, regeneration, abstention
 

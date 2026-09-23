@@ -85,18 +85,17 @@ def well_behaved_reply(spans) -> str:
                     "the base directory, which is the signal the caller acts on.",
             "evidence_ids": [by["safe_join"].evidence_id],
             "quote": "Return ``None`` if the path"})
+    # the contract requires `answer` to be a presentation of the claims, so a
+    # well-behaved model composes it from them rather than writing free prose
     return json.dumps({
-        "answer": "send_from_directory does not trust the path it is given. It passes the "
-                  "directory and the untrusted path to safe_join, which returns None when "
-                  "the result would escape the base directory; send_from_directory then "
-                  "raises NotFound rather than opening the file.",
+        "answer": " ".join(c["text"].rstrip(".") + "." for c in claims),
         "claims": claims})
 
 
 def misbehaving_reply() -> str:
     """A model that invents a citation and a structural edge."""
     return json.dumps({
-        "answer": "It validates the path using a built-in sandbox.",
+        "answer": "It uses a sandbox module.",
         "claims": [{"text": "It uses a sandbox module.",
                     "evidence_ids": ["0" * 32],
                     "structural_dependencies": [
@@ -146,12 +145,15 @@ def main() -> int:
     for qid, q in TARGET:
         res = ask(q, db_path=str(DB), corpus_root=str(CORPUS), provider=None)
         out["targets"].append({
-            "id": qid, "question": q,
+            "id": qid, "question": q, "status": res.status,
             "evidence_retrieved": len(res.evidence),
             "context_chars": sum(e["chars"] for e in res.evidence),
             "how": sorted({e["how"].split(":")[0] for e in res.evidence}),
             "top_symbols": [e["symbol"] for e in res.evidence[:3]],
             "structural_facts": len(res.structural_facts),
+            "ambiguous": [a["name"] for a in res.identity.get("ambiguous", [])],
+            "resolved": [n["resolved"] for n in res.identity.get("names", [])
+                         if n["resolved"]],
             "latency_seconds": res.latency_seconds})
 
     (ROOT / "DEMO_0_1_RESULTS.json").write_text(json.dumps(out, indent=2))
@@ -173,8 +175,13 @@ def main() -> int:
     print(f"   {b['validation_reason'][:140]}")
     print(f"\ndeterministic half on {len(out['targets'])} target questions (no model):")
     for t in out["targets"]:
-        print(f"   {t['id']}  spans={t['evidence_retrieved']}  ctx={t['context_chars']:6d}B  "
-              f"facts={t['structural_facts']:3d}  {t['top_symbols'][0][:44] if t['top_symbols'] else '-'}")
+        if t["ambiguous"]:
+            print(f"   {t['id']}  REFUSED(ambiguous): {', '.join(t['ambiguous'])} "
+                  f"-- needs a qualified name or a file scope")
+        else:
+            print(f"   {t['id']}  spans={t['evidence_retrieved']}  ctx={t['context_chars']:6d}B  "
+                  f"facts={t['structural_facts']:3d}  "
+                  f"{t['top_symbols'][0][:44] if t['top_symbols'] else '-'}")
     return 0
 
 

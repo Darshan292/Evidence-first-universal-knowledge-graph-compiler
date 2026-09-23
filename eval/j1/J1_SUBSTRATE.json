@@ -1,0 +1,30 @@
+{
+  "corpus": "eval/corpus3 (Werkzeug)",
+  "corpus_commit": "6048fa48753c7b61e35cc34537667809dee8fa35",
+  "corpus_files_total": 225,
+  "corpus_content_hash_sha256": "9a7ca7ce517fbd1c09d3379f709172656722350b65cb5a3e88d100599330c90c",
+  "walked_analysable": 140,
+  "artifacts": 225,
+  "parse_status": {
+    "OK": 140,
+    "UNSUPPORTED": 85
+  },
+  "symbols": 6102,
+  "claims": 16244,
+  "predicate_distribution": {
+    "CALLS": 8375,
+    "CONTAINS": 5962,
+    "EXTENDS": 163,
+    "HAS_VALUE": 162,
+    "IMPORTS": 1582
+  },
+  "absent": [],
+  "failed": 0,
+  "extraction_failed": 0,
+  "invariant_violations": [],
+  "compiler_commit": "ed2fdfe6349cfe348149505edb01748bf3dace17",
+  "software_version": "0.1.0-gate1",
+  "schema_version": "1",
+  "backend": "python_ast/1.0.0",
+  "resolver_version": "1.0.0"
+}

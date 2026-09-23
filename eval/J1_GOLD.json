@@ -1,0 +1,889 @@
+{
+  "established_by": "system author (Claude), from the Werkzeug source only, after the query set was frozen and before the evaluation harness was run against it",
+  "information_available_to_the_labeller": "eval/corpus3 source files. Not consulted while labelling: decide() output, the claim database, the query parser, and every previous evaluation result. The independent author's own summary of its intended split was seen before labelling (disclosed in J1_PROTOCOL.md \u00a72); every label below therefore carries file, line and verbatim source text so it can be audited against the corpus.",
+  "labels": {
+    "answerable": "determinable from this corpus's source",
+    "unsupported": "the corpus cannot establish it",
+    "ambiguous": "names something that exists in more than one place here",
+    "out_of_scope": "not about this corpus at all"
+  },
+  "gold": [
+    {
+      "id": "J1-001",
+      "label": "answerable",
+      "required_fact": "default password hashing method and the supported set",
+      "evidence": [
+        {
+          "file": "src/werkzeug/security.py",
+          "line": 79,
+          "text": "def generate_password_hash("
+        },
+        {
+          "file": "src/werkzeug/security.py",
+          "line": 9,
+          "text": "DEFAULT_PBKDF2_ITERATIONS = 1_000_000"
+        }
+      ],
+      "intended_answer": "Default is scrypt; pbkdf2 is the other supported method (plus any hashlib name via pbkdf2:<hash>)."
+    },
+    {
+      "id": "J1-002",
+      "label": "answerable",
+      "required_fact": "ProxyFix per-header trusted-proxy defaults",
+      "evidence": [
+        {
+          "file": "src/werkzeug/middleware/proxy_fix.py",
+          "line": 92,
+          "text": "        x_for: int = 1,"
+        },
+        {
+          "file": "src/werkzeug/middleware/proxy_fix.py",
+          "line": 93,
+          "text": "        x_proto: int = 1,"
+        },
+        {
+          "file": "src/werkzeug/middleware/proxy_fix.py",
+          "line": 94,
+          "text": "        x_host: int = 0,"
+        }
+      ],
+      "intended_answer": "x_for=1, x_proto=1, x_host=0, x_port=0, x_prefix=0."
+    },
+    {
+      "id": "J1-003",
+      "label": "ambiguous",
+      "required_fact": "which utils.py is meant",
+      "evidence": [
+        {
+          "file": "src/werkzeug/utils.py",
+          "line": 1,
+          "text": "from __future__ import annotations"
+        },
+        {
+          "file": "src/werkzeug/sansio/utils.py",
+          "line": 1,
+          "text": "from __future__ import annotations"
+        },
+        {
+          "file": "examples/plnt/utils.py",
+          "line": 1,
+          "text": "import re"
+        }
+      ],
+      "competing_entities": [
+        "src/werkzeug/utils.py",
+        "src/werkzeug/sansio/utils.py",
+        "examples/{coolmagic,couchy,cupoftee,plnt,shorty,simplewiki}/utils.py  (8 files in total)"
+      ]
+    },
+    {
+      "id": "J1-004",
+      "label": "answerable",
+      "required_fact": "which pbkdf2 iteration count actually applies",
+      "evidence": [
+        {
+          "file": "src/werkzeug/security.py",
+          "line": 9,
+          "text": "DEFAULT_PBKDF2_ITERATIONS = 1_000_000"
+        },
+        {
+          "file": "src/werkzeug/security.py",
+          "line": 59,
+          "text": "            iterations = DEFAULT_PBKDF2_ITERATIONS"
+        }
+      ],
+      "intended_answer": "The code applies DEFAULT_PBKDF2_ITERATIONS = 1_000_000. The docstring's 600,000 is stale."
+    },
+    {
+      "id": "J1-005",
+      "label": "answerable",
+      "required_fact": "rule precedence in the routing state machine",
+      "evidence": [
+        {
+          "file": "src/werkzeug/routing/matcher.py",
+          "line": 34,
+          "text": "class StateMachineMatcher:"
+        },
+        {
+          "file": "src/werkzeug/routing/matcher.py",
+          "line": 61,
+          "text": "    def update(self) -> None:"
+        }
+      ],
+      "intended_answer": "StateMachineMatcher walks static transitions first, then dynamic ones sorted by transition weight."
+    },
+    {
+      "id": "J1-006",
+      "label": "answerable",
+      "required_fact": "Response default status and mimetype",
+      "evidence": [
+        {
+          "file": "src/werkzeug/sansio/response.py",
+          "line": 63,
+          "text": "    default_status = 200"
+        },
+        {
+          "file": "src/werkzeug/sansio/response.py",
+          "line": 66,
+          "text": "    default_mimetype: str | None = \"text/plain\""
+        }
+      ],
+      "intended_answer": "default_status = 200, default_mimetype = 'text/plain'."
+    },
+    {
+      "id": "J1-007",
+      "label": "answerable",
+      "required_fact": "difference between the three form limits",
+      "evidence": [
+        {
+          "file": "src/werkzeug/formparser.py",
+          "line": 86,
+          "text": "    :param max_content_length: If the data is larger than this many bytes, raise"
+        },
+        {
+          "file": "src/werkzeug/formparser.py",
+          "line": 90,
+          "text": "    :param max_form_memory_size: If a ``multipart/form-data`` text part is larger"
+        },
+        {
+          "file": "src/werkzeug/formparser.py",
+          "line": 95,
+          "text": "    :param max_form_parts: If more than this number of ``multipart/form-data``"
+        }
+      ],
+      "intended_answer": "Documented per-parameter in formparser."
+    },
+    {
+      "id": "J1-008",
+      "label": "unsupported",
+      "required_fact": "Flask version compatibility",
+      "evidence": [],
+      "why_unsupported": "Flask is not part of this corpus; no file here states a compatible Flask version range."
+    },
+    {
+      "id": "J1-009",
+      "label": "answerable",
+      "required_fact": "how safe_join blocks traversal and what it returns on rejection",
+      "evidence": [
+        {
+          "file": "src/werkzeug/security.py",
+          "line": 143,
+          "text": "def safe_join(directory: str, *untrusted: str) -> str | None:"
+        }
+      ],
+      "intended_answer": "safe_join returns None when a component escapes the base directory."
+    },
+    {
+      "id": "J1-010",
+      "label": "answerable",
+      "required_fact": "which X-Forwarded-For entry ProxyFix selects for x_for=2",
+      "evidence": [
+        {
+          "file": "src/werkzeug/middleware/proxy_fix.py",
+          "line": 105,
+          "text": "    def _get_real_value(self, trusted: int, value: str | None) -> str | None:"
+        },
+        {
+          "file": "src/werkzeug/middleware/proxy_fix.py",
+          "line": 150,
+          "text": "        x_for = self._get_real_value(self.x_for, environ_get(\"HTTP_X_FORWARDED_FOR\"))"
+        }
+      ],
+      "intended_answer": "_get_real_value trusts the rightmost `trusted` values and returns the leftmost of those."
+    },
+    {
+      "id": "J1-011",
+      "label": "answerable",
+      "required_fact": "meaning of part_isolating and when it is auto-disabled",
+      "evidence": [
+        {
+          "file": "src/werkzeug/routing/converters.py",
+          "line": 28,
+          "text": "    part_isolating = True"
+        },
+        {
+          "file": "src/werkzeug/routing/converters.py",
+          "line": 36,
+          "text": "            cls.part_isolating = \"/\" not in cls.regex"
+        }
+      ],
+      "intended_answer": "Defaults True; set False automatically when a subclass defines a regex containing '/'."
+    },
+    {
+      "id": "J1-012",
+      "label": "answerable",
+      "required_fact": "debugger PIN generation and pinning it",
+      "evidence": [
+        {
+          "file": "src/werkzeug/debug/__init__.py",
+          "line": 153,
+          "text": "    pin = os.environ.get(\"WERKZEUG_DEBUG_PIN\")"
+        }
+      ],
+      "intended_answer": "Read from WERKZEUG_DEBUG_PIN when set, otherwise derived per host."
+    },
+    {
+      "id": "J1-013",
+      "label": "ambiguous",
+      "required_fact": "which get_host is meant",
+      "evidence": [
+        {
+          "file": "src/werkzeug/sansio/utils.py",
+          "line": 81,
+          "text": "def get_host("
+        },
+        {
+          "file": "src/werkzeug/wsgi.py",
+          "line": 87,
+          "text": "def get_host("
+        },
+        {
+          "file": "src/werkzeug/routing/map.py",
+          "line": 750,
+          "text": "    def get_host(self, domain_part: str | None) -> str:"
+        }
+      ],
+      "competing_entities": [
+        "sansio/utils.get_host",
+        "wsgi.get_host",
+        "routing.map.Map.get_host"
+      ]
+    },
+    {
+      "id": "J1-014",
+      "label": "answerable",
+      "required_fact": "when an upload spills to disk",
+      "evidence": [
+        {
+          "file": "src/werkzeug/formparser.py",
+          "line": 57,
+          "text": "        return SpooledTemporaryFile(max_size=max_size, mode=\"rb+\")"
+        }
+      ],
+      "intended_answer": "SpooledTemporaryFile(max_size=...) rolls over to disk past the spool size."
+    },
+    {
+      "id": "J1-015",
+      "label": "answerable",
+      "required_fact": "how to write a converter matching slashes",
+      "evidence": [
+        {
+          "file": "src/werkzeug/routing/converters.py",
+          "line": 23,
+          "text": "        ``part_isolating`` defaults to ``False`` if ``regex`` contains a ``/``."
+        },
+        {
+          "file": "src/werkzeug/routing/converters.py",
+          "line": 36,
+          "text": "            cls.part_isolating = \"/\" not in cls.regex"
+        }
+      ],
+      "intended_answer": "Set part_isolating = False (automatic when the class defines a regex containing '/')."
+    },
+    {
+      "id": "J1-016",
+      "label": "unsupported",
+      "required_fact": "release date of 3.2.0",
+      "evidence": [],
+      "why_unsupported": "A release date for the unreleased 3.2.0 is nowhere in the source, CHANGES or metadata."
+    },
+    {
+      "id": "J1-017",
+      "label": "answerable",
+      "required_fact": "Map.strict_slashes vs Rule.strict_slashes",
+      "evidence": [
+        {
+          "file": "src/werkzeug/routing/map.py",
+          "line": 117,
+          "text": "        strict_slashes: bool = True,"
+        },
+        {
+          "file": "src/werkzeug/routing/matcher.py",
+          "line": 113,
+          "text": "                            if rule.strict_slashes:"
+        }
+      ],
+      "intended_answer": "Map sets the default; a Rule may override it, and the matcher consults the rule."
+    },
+    {
+      "id": "J1-018",
+      "label": "answerable",
+      "required_fact": "how the test Client persists cookies",
+      "evidence": [
+        {
+          "file": "src/werkzeug/test.py",
+          "line": 811,
+          "text": "        use_cookies: bool = True,"
+        },
+        {
+          "file": "src/werkzeug/test.py",
+          "line": 830,
+          "text": "            self._cookies: dict[tuple[str, str, str], Cookie] | None = {}"
+        }
+      ],
+      "intended_answer": "use_cookies=True keeps a per-client cookie store keyed by (domain, path, name)."
+    },
+    {
+      "id": "J1-019",
+      "label": "answerable",
+      "required_fact": "LimitedStream behaviour by limit source",
+      "evidence": [
+        {
+          "file": "src/werkzeug/wsgi.py",
+          "line": 441,
+          "text": "class LimitedStream(io.RawIOBase):"
+        },
+        {
+          "file": "src/werkzeug/wsgi.py",
+          "line": 447,
+          "text": "    called. When the limit is a maximum, this raises :exc:`.RequestEntityTooLarge`."
+        }
+      ],
+      "intended_answer": "A Content-Length limit ending early is not an error; a max_content_length limit raises RequestEntityTooLarge."
+    },
+    {
+      "id": "J1-020",
+      "label": "answerable",
+      "required_fact": "automatic HEAD for a GET rule",
+      "evidence": [
+        {
+          "file": "src/werkzeug/routing/rules.py",
+          "line": 496,
+          "text": "            if \"HEAD\" not in methods and \"GET\" in methods:"
+        },
+        {
+          "file": "src/werkzeug/routing/rules.py",
+          "line": 497,
+          "text": "                methods.add(\"HEAD\")"
+        }
+      ],
+      "intended_answer": "Yes: HEAD is added when GET is present and HEAD is not."
+    },
+    {
+      "id": "J1-021",
+      "label": "unsupported",
+      "required_fact": "maintainers' reasoning for scrypt over argon2",
+      "evidence": [],
+      "why_unsupported": "The choice is visible in the code, but the maintainers' reasoning is not recorded anywhere in this checkout."
+    },
+    {
+      "id": "J1-022",
+      "label": "answerable",
+      "required_fact": "max_cookie_size and over-size behaviour",
+      "evidence": [
+        {
+          "file": "src/werkzeug/sansio/response.py",
+          "line": 76,
+          "text": "    max_cookie_size = 4093"
+        },
+        {
+          "file": "src/werkzeug/sansio/response.py",
+          "line": 175,
+          "text": "        :attr:`max_cookie_size`, but the header will still be set."
+        }
+      ],
+      "intended_answer": "4093 bytes; a warning is issued but the header is still set."
+    },
+    {
+      "id": "J1-023",
+      "label": "answerable",
+      "required_fact": "reloader backend selection",
+      "evidence": [
+        {
+          "file": "src/werkzeug/_reloader.py",
+          "line": 120,
+          "text": "def _find_watchdog_paths("
+        },
+        {
+          "file": "src/werkzeug/_reloader.py",
+          "line": 72,
+          "text": "    \"\"\"Find paths for the stat reloader to watch. Returns imported"
+        }
+      ],
+      "intended_answer": "watchdog when importable, otherwise the stat reloader."
+    },
+    {
+      "id": "J1-024",
+      "label": "ambiguous",
+      "required_fact": "which State class is meant",
+      "evidence": [
+        {
+          "file": "src/werkzeug/routing/matcher.py",
+          "line": 22,
+          "text": "class State:"
+        },
+        {
+          "file": "src/werkzeug/sansio/multipart.py",
+          "line": 54,
+          "text": "class State(Enum):"
+        }
+      ],
+      "competing_entities": [
+        "routing/matcher.py State (routing node)",
+        "sansio/multipart.py State (Enum)"
+      ]
+    },
+    {
+      "id": "J1-025",
+      "label": "answerable",
+      "required_fact": "simulating a multipart upload with EnvironBuilder",
+      "evidence": [
+        {
+          "file": "src/werkzeug/test.py",
+          "line": 1320,
+          "text": "        Set the ``default_mimetype`` to None to prevent a mimetype being"
+        }
+      ],
+      "intended_answer": "Pass file-like objects or (stream, filename) tuples in data; the builder sets multipart/form-data."
+    },
+    {
+      "id": "J1-026",
+      "label": "answerable",
+      "required_fact": "why a websocket rule cannot allow POST",
+      "evidence": [
+        {
+          "file": "src/werkzeug/routing/exceptions.py",
+          "line": 175,
+          "text": "        self.websocket_mismatch = websocket_mismatch"
+        },
+        {
+          "file": "src/werkzeug/routing/map.py",
+          "line": 680,
+          "text": "            if e.websocket_mismatch:"
+        }
+      ],
+      "intended_answer": "A websocket handshake is a GET; the matcher reports websocket_mismatch otherwise."
+    },
+    {
+      "id": "J1-027",
+      "label": "answerable",
+      "required_fact": "supported Python versions and runtime dependencies",
+      "evidence": [
+        {
+          "file": "pyproject.toml",
+          "line": 22,
+          "text": "requires-python = \">=3.10\""
+        },
+        {
+          "file": "pyproject.toml",
+          "line": 23,
+          "text": "dependencies = ["
+        }
+      ],
+      "intended_answer": "requires-python >= 3.10; dependencies declared in pyproject."
+    },
+    {
+      "id": "J1-028",
+      "label": "answerable",
+      "required_fact": "env var marking the reloader child",
+      "evidence": [
+        {
+          "file": "src/werkzeug/_reloader.py",
+          "line": 221,
+          "text": "            new_environ[\"WERKZEUG_RUN_MAIN\"] = \"true\""
+        },
+        {
+          "file": "src/werkzeug/serving.py",
+          "line": 963,
+          "text": "    return os.environ.get(\"WERKZEUG_RUN_MAIN\") == \"true\""
+        }
+      ],
+      "intended_answer": "WERKZEUG_RUN_MAIN == 'true'."
+    },
+    {
+      "id": "J1-029",
+      "label": "unsupported",
+      "required_fact": "concurrency limit of ThreadedWSGIServer",
+      "evidence": [
+        {
+          "file": "src/werkzeug/serving.py",
+          "line": 874,
+          "text": "class ThreadedWSGIServer(socketserver.ThreadingMixIn, BaseWSGIServer):"
+        },
+        {
+          "file": "src/werkzeug/serving.py",
+          "line": 714,
+          "text": "    request_queue_size = LISTEN_QUEUE"
+        }
+      ],
+      "why_unsupported": "ThreadedWSGIServer uses ThreadingMixIn with daemon threads and no thread cap. request_queue_size is the listen backlog, not a concurrency limit; the number asked for depends on the OS and the machine, and no file states it."
+    },
+    {
+      "id": "J1-030",
+      "label": "answerable",
+      "required_fact": "what LintMiddleware warns about and whether it raises",
+      "evidence": [
+        {
+          "file": "src/werkzeug/middleware/lint.py",
+          "line": 34,
+          "text": "    \"\"\"Warning class for WSGI warnings.\"\"\""
+        },
+        {
+          "file": "src/werkzeug/middleware/lint.py",
+          "line": 87,
+          "text": "            raise TypeError(\"Too many arguments passed to 'wsgi.input.readline()'.\")"
+        }
+      ],
+      "intended_answer": "It warns via WSGIWarning/HTTPWarning, and raises TypeError for too many readline arguments."
+    },
+    {
+      "id": "J1-031",
+      "label": "answerable",
+      "required_fact": "send_file mimetype, ETag and conditional",
+      "evidence": [
+        {
+          "file": "src/werkzeug/utils.py",
+          "line": 303,
+          "text": "def send_file("
+        }
+      ],
+      "intended_answer": "Guesses the mimetype, builds an ETag from name/mtime/size, conditional enables range and 304 handling."
+    },
+    {
+      "id": "J1-032",
+      "label": "ambiguous",
+      "required_fact": "which update() is meant",
+      "evidence": [
+        {
+          "file": "src/werkzeug/routing/map.py",
+          "line": 401,
+          "text": "    def update(self) -> None:"
+        },
+        {
+          "file": "src/werkzeug/routing/matcher.py",
+          "line": 61,
+          "text": "    def update(self) -> None:"
+        },
+        {
+          "file": "src/werkzeug/datastructures/structures.py",
+          "line": 462,
+          "text": "    def update(  # type: ignore[override]"
+        }
+      ],
+      "competing_entities": [
+        "Map.update",
+        "StateMachineMatcher.update",
+        "Headers.update",
+        "HeaderSet.update",
+        "MultiDict.update",
+        "CombinedMultiDict.update",
+        "and the Immutable* overrides (9 definitions)"
+      ]
+    },
+    {
+      "id": "J1-033",
+      "label": "answerable",
+      "required_fact": "failed PIN attempts allowed",
+      "evidence": [
+        {
+          "file": "src/werkzeug/debug/__init__.py",
+          "line": 447,
+          "text": "        if self._failed_pin_auth.value >= 10:"
+        }
+      ],
+      "intended_answer": "Ten: the debugger stops accepting once the counter reaches 10."
+    },
+    {
+      "id": "J1-034",
+      "label": "answerable",
+      "required_fact": "OrderedMultiDict replacement and why it went",
+      "evidence": [
+        {
+          "file": "CHANGES.rst",
+          "line": 9,
+          "text": "    -   ``OrderedMultiDict`` and ``ImmutableOrderedMultiDict are removed."
+        },
+        {
+          "file": "CHANGES.rst",
+          "line": 323,
+          "text": "-   ``OrderedMultiDict`` and ``ImmutableOrderedMultiDict`` are deprecated."
+        }
+      ],
+      "intended_answer": "Removed; plain dict/MultiDict preserve insertion order."
+    },
+    {
+      "id": "J1-035",
+      "label": "unsupported",
+      "required_fact": "nginx configuration for a specific deployment",
+      "evidence": [],
+      "why_unsupported": "Depends on a specific nginx deployment that is not in this repository."
+    },
+    {
+      "id": "J1-036",
+      "label": "answerable",
+      "required_fact": "default status of redirect and append_slash_redirect",
+      "evidence": [
+        {
+          "file": "src/werkzeug/utils.py",
+          "line": 210,
+          "text": "    location: str, code: int = 303, Response: type[Response] | None = None"
+        },
+        {
+          "file": "src/werkzeug/utils.py",
+          "line": 266,
+          "text": "def append_slash_redirect(environ: WSGIEnvironment, code: int = 308) -> Response:"
+        }
+      ],
+      "intended_answer": "redirect defaults to 303; append_slash_redirect defaults to 308."
+    },
+    {
+      "id": "J1-037",
+      "label": "answerable",
+      "required_fact": "how LocalProxy resolves and what happens when unbound",
+      "evidence": [
+        {
+          "file": "src/werkzeug/local.py",
+          "line": 1,
+          "text": "from __future__ import annotations"
+        }
+      ],
+      "intended_answer": "_get_current_object resolves the bound object; unbound access raises RuntimeError."
+    },
+    {
+      "id": "J1-038",
+      "label": "answerable",
+      "required_fact": "ProxyMiddleware chunk_size and timeout defaults",
+      "evidence": [
+        {
+          "file": "src/werkzeug/middleware/http_proxy.py",
+          "line": 86,
+          "text": "        chunk_size: int = 2 << 13,"
+        },
+        {
+          "file": "src/werkzeug/middleware/http_proxy.py",
+          "line": 87,
+          "text": "        timeout: int = 10,"
+        }
+      ],
+      "intended_answer": "chunk_size = 2 << 13 (16384), timeout = 10 seconds."
+    },
+    {
+      "id": "J1-039",
+      "label": "answerable",
+      "required_fact": "what replaces the deprecated UserAgent",
+      "evidence": [
+        {
+          "file": "src/werkzeug/sansio/request.py",
+          "line": 596,
+          "text": "            The built-in parser was removed. Set ``user_agent_class`` to a ``UserAgent``"
+        },
+        {
+          "file": "src/werkzeug/user_agent.py",
+          "line": 7,
+          "text": "class _UserAgent(str):"
+        }
+      ],
+      "intended_answer": "The built-in parser was removed; Request.user_agent is a plain string, and a custom user_agent_class may be set."
+    },
+    {
+      "id": "J1-040",
+      "label": "answerable",
+      "required_fact": "Request.trusted_hosts and the exception raised",
+      "evidence": [
+        {
+          "file": "src/werkzeug/sansio/utils.py",
+          "line": 25,
+          "text": "def host_is_trusted("
+        },
+        {
+          "file": "src/werkzeug/routing/map.py",
+          "line": 305,
+          "text": "            :attr:`~.Request.trusted_hosts`."
+        }
+      ],
+      "intended_answer": "Host validation against trusted_hosts; a mismatch raises SecurityError."
+    },
+    {
+      "id": "J1-041",
+      "label": "out_of_scope",
+      "required_fact": "routes in the asker's own admin service",
+      "evidence": []
+    },
+    {
+      "id": "J1-042",
+      "label": "answerable",
+      "required_fact": "relationship between the three parser classes",
+      "evidence": [
+        {
+          "file": "src/werkzeug/formparser.py",
+          "line": 163,
+          "text": "    :param max_form_parts: If more than this number of ``multipart/form-data``"
+        },
+        {
+          "file": "src/werkzeug/sansio/multipart.py",
+          "line": 54,
+          "text": "class State(Enum):"
+        }
+      ],
+      "intended_answer": "FormDataParser dispatches by content type to MultiPartParser, which drives MultipartDecoder."
+    },
+    {
+      "id": "J1-043",
+      "label": "answerable",
+      "required_fact": "SharedDataMiddleware default cache timeout",
+      "evidence": [
+        {
+          "file": "src/werkzeug/middleware/shared_data.py",
+          "line": 112,
+          "text": "        cache_timeout: int = 60 * 60 * 12,"
+        }
+      ],
+      "intended_answer": "60 * 60 * 12 seconds (12 hours)."
+    },
+    {
+      "id": "J1-044",
+      "label": "answerable",
+      "required_fact": "Accept.best_match vs Accept.best",
+      "evidence": [
+        {
+          "file": "src/werkzeug/datastructures/accept.py",
+          "line": 201,
+          "text": "    def best_match(self, within: cabc.Iterable[str]) -> str | None: ..."
+        },
+        {
+          "file": "src/werkzeug/datastructures/accept.py",
+          "line": 237,
+          "text": "    def best(self) -> str | None:"
+        }
+      ],
+      "intended_answer": "best_match picks the best of a caller-supplied set; best is the highest-ranked item in the header itself."
+    },
+    {
+      "id": "J1-045",
+      "label": "unsupported",
+      "required_fact": "whether Gunicorn sets X-Forwarded-Proto",
+      "evidence": [],
+      "why_unsupported": "Gunicorn's behaviour is external to this corpus."
+    },
+    {
+      "id": "J1-046",
+      "label": "answerable",
+      "required_fact": "why filterwarnings is error and what it means for deprecated APIs",
+      "evidence": [
+        {
+          "file": "pyproject.toml",
+          "line": 95,
+          "text": "filterwarnings = ["
+        }
+      ],
+      "intended_answer": "pytest turns warnings into errors, so tests touching deprecated APIs must expect them."
+    },
+    {
+      "id": "J1-047",
+      "label": "answerable",
+      "required_fact": "send_from_directory vs send_file safety",
+      "evidence": [
+        {
+          "file": "src/werkzeug/utils.py",
+          "line": 522,
+          "text": "def send_from_directory("
+        },
+        {
+          "file": "src/werkzeug/security.py",
+          "line": 143,
+          "text": "def safe_join(directory: str, *untrusted: str) -> str | None:"
+        }
+      ],
+      "intended_answer": "send_from_directory joins through safe_join first, so an untrusted path cannot escape the directory."
+    },
+    {
+      "id": "J1-048",
+      "label": "answerable",
+      "required_fact": "what the Database class does",
+      "evidence": [
+        {
+          "file": "examples/cupoftee/db.py",
+          "line": 10,
+          "text": "class Database:"
+        }
+      ],
+      "intended_answer": "The cupoftee example's small SQLite wrapper. Only one Database class exists in the corpus."
+    },
+    {
+      "id": "J1-049",
+      "label": "answerable",
+      "required_fact": "how run_simple wires reloader, debugger and server",
+      "evidence": [
+        {
+          "file": "src/werkzeug/serving.py",
+          "line": 966,
+          "text": "def run_simple("
+        }
+      ],
+      "intended_answer": "run_simple optionally wraps the app in DebuggedApplication and runs under run_with_reloader."
+    },
+    {
+      "id": "J1-050",
+      "label": "out_of_scope",
+      "required_fact": "WERKZEUG_DEBUG_PIN on the asker's staging environment",
+      "evidence": []
+    },
+    {
+      "id": "J1-051",
+      "label": "answerable",
+      "required_fact": "why form/files/args are immutable and what replaced parameter_storage_class",
+      "evidence": [
+        {
+          "file": "src/werkzeug/sansio/request.py",
+          "line": 69,
+          "text": "    parameter_storage_class: None = None"
+        },
+        {
+          "file": "src/werkzeug/sansio/request.py",
+          "line": 175,
+          "text": "                \"Setting 'Request.parameter_storage_class' is deprecated and will be\""
+        }
+      ],
+      "intended_answer": "parameter_storage_class is deprecated; the properties return ImmutableMultiDict."
+    },
+    {
+      "id": "J1-052",
+      "label": "answerable",
+      "required_fact": "which status codes have exception classes and how to register one",
+      "evidence": [
+        {
+          "file": "src/werkzeug/exceptions.py",
+          "line": 841,
+          "text": "default_exceptions: dict[int, type[HTTPException]] = {}"
+        },
+        {
+          "file": "src/werkzeug/exceptions.py",
+          "line": 855,
+          "text": "        default_exceptions[obj.code] = obj"
+        }
+      ],
+      "intended_answer": "default_exceptions is populated by the registration helper; Aborter maps codes to classes."
+    },
+    {
+      "id": "J1-053",
+      "label": "answerable",
+      "required_fact": "linter, rule set and whether examples are linted",
+      "evidence": [
+        {
+          "file": "pyproject.toml",
+          "line": 134,
+          "text": "extend-exclude = [\"examples/\"]"
+        },
+        {
+          "file": "pyproject.toml",
+          "line": 141,
+          "text": "select = ["
+        }
+      ],
+      "intended_answer": "ruff, select = B/E/F/I/UP/W, and examples/ is excluded from linting."
+    },
+    {
+      "id": "J1-054",
+      "label": "answerable",
+      "required_fact": "how MapAdapter.build works and missing-argument behaviour",
+      "evidence": [
+        {
+          "file": "src/werkzeug/routing/map.py",
+          "line": 882,
+          "text": "    def build("
+        }
+      ],
+      "intended_answer": "MapAdapter.build finds a matching rule and raises BuildError when arguments are missing."
+    }
+  ]
+}

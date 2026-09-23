@@ -1,0 +1,26 @@
+{
+  "corpus": "corpus3 (werkzeug)",
+  "total_claims": 14291,
+  "definition_claims": {
+    "population": 2197,
+    "sample_size": 400,
+    "independently_confirmed": 400,
+    "deterministic_precision": 1.0,
+    "false_deterministic_rate": 0.0,
+    "disagreements": []
+  },
+  "evidence_spans": {
+    "sample_size": 400,
+    "byte_exact": 400,
+    "evidence_correctness": 1.0,
+    "mismatches": []
+  },
+  "extends_claims": {
+    "population": 154,
+    "sample_size": 150,
+    "independently_confirmed": 150,
+    "precision": 1.0,
+    "disagreements": []
+  },
+  "claims_without_verifiable_evidence": 0
+}

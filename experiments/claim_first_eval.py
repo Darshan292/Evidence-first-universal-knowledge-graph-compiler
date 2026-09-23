@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from experiments.retrieval.chunker import build as build_chunks
-from experiments.retrieval.claimfirst import ABSTAIN, ClaimIndex, decide, retrieve_claims
+from experiments.retrieval.claimfirst import ABSTAIN, ClaimIndex, decide
 from experiments.retrieval.constraints import extract
 from experiments.retrieval.retrievers import Index
 from experiments.retrieval.support import SupportGate
@@ -71,7 +71,9 @@ def main():
         rec["chunk_first_localized_evidence_ok"] = bool(loc)
 
         # ---- claim-first ----
-        outcome, reason, claim_hits, cons = decide(cindex, q["query"])
+        _d = decide(cindex, q["query"])
+        outcome, reason, claim_hits, cons = (_d.outcome, _d.reason, _d.hits,
+                                             _d.constraints)
         c_paths = [h.rel_path for h in claim_hits]
         claim_rank = None
         tgt = q.get("claim_target") or {}
@@ -88,7 +90,8 @@ def main():
         rec["claim_first"] = {
             "decision": outcome,
             "correct": outcome in q["expected_decision"],
-            "parsed": cons.parsed, "shape": cons.shape, "reason": reason[:70],
+            "parsed": cons.parsed if cons else False,
+            "shape": cons.shape if cons else "n/a", "reason": reason[:70],
             "claim_rank": claim_rank,
             "doc_rank": next((i + 1 for i, p in enumerate(c_paths) if p in gold_units), None),
             "evidence_ok": bool(need) and any(

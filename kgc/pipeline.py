@@ -20,6 +20,7 @@ from kgc.analysis import python_backend
 from kgc.analysis.mapper import map_analysis
 from kgc.analysis.resolver import (RESOLVER_VERSION, ModuleIndex,
                                    collect_reexports, resolve)
+from kgc.artifact_identity import canonical_path
 from kgc.ids import artifact_id as mk_artifact_id
 from kgc.ids import config_hash, content_sha256, run_id as mk_run_id, source_id as mk_source_id
 from kgc.ir import Artifact, Diagnostic, Modality, ParseStatus
@@ -87,7 +88,7 @@ def ingest(store: Store, root: Path, *, resume: bool = True,
     store.begin()
     todo = []
     for path in walk_corpus(root):
-        rel = str(path.relative_to(root))
+        rel = canonical_path(path.relative_to(root))
         rep.seen += 1
         if path.suffix not in ANALYSED_SUFFIXES:
             lang = detect_language(path) or "unknown"
@@ -283,7 +284,7 @@ def _module_name(rel: str, root: Path | None = None) -> str:
     0 edges on a real repository where the correct naming yields many.
     """
     p = rel[:-3] if rel.endswith(".py") else rel
-    parts = [x for x in p.replace("\\", "/").split("/") if x]
+    parts = [x for x in canonical_path(p).split("/") if x]   # one normalizer
     if parts and parts[-1] == "__init__":
         parts = parts[:-1]
     if root is not None and len(parts) > 1:

@@ -14,7 +14,8 @@ from dataclasses import dataclass, field
 
 from experiments.retrieval.constraints import ParseStatus, QueryConstraints, extract
 from kgc.claim_value import DIFFERENT, SAME, UNRESOLVED, compare
-from kgc.predicates import CANONICAL, allows
+from kgc.artifact_identity import canonical_path, resolve_scope
+from kgc.predicates import CANONICAL, allows, may_contradict
 
 ABSTAIN = "ABSTAIN"
 ABSTAIN_AMBIGUOUS = "ABSTAIN_AMBIGUOUS"
@@ -87,9 +88,17 @@ class ClaimIndex:
     def __init__(self, store):
         self.store = store
 
+    def artifact_paths(self) -> list[str]:
+        return [r["rel_path"] for r in self.store.con.execute(
+            "SELECT DISTINCT rel_path FROM artifact")]
+
     def find_symbols(self, name: str, scope: str | None = None) -> list[dict]:
         """ALL symbols matching the name. Never truncated: truncation would let
-        candidate ordering decide semantic identity."""
+        candidate ordering decide semantic identity.
+
+        `scope`, when given, must be a CANONICAL artifact path and is matched
+        exactly -- not by suffix.
+        """
         bare = name.split(".")[-1].rstrip("(),.?")
         rows = self.store.con.execute(
             "SELECT s.symbol_id, s.qualified_name, s.name, s.kind, s.parent_id, a.rel_path"
@@ -103,9 +112,8 @@ class ClaimIndex:
             (bare, name, f"*.{name}")).fetchall()
         out = [dict(r) for r in rows]
         if scope:
-            scoped = [r for r in out if r["rel_path"].endswith(scope)]
-            if scoped:
-                return scoped
+            want = canonical_path(scope)
+            return [r for r in out if canonical_path(r["rel_path"]) == want]
         return out
 
     def direct_children(self, symbol_id: str) -> list[dict]:
@@ -162,13 +170,27 @@ def decide(index: ClaimIndex, query: str) -> Decision:
                         f"query names several entities {c.subjects} with no disambiguator",
                         "INV-10_ambiguity", constraints=c)
 
+    # (1b) scope resolution — one canonical identity, or abstain
+    scope_path = None
+    if c.source_scope:
+        matches, status = resolve_scope(c.source_scope, index.artifact_paths())
+        if status == "AMBIGUOUS":
+            return Decision(ABSTAIN_AMBIGUOUS,
+                            f"scope {c.source_scope!r} matches {len(matches)} artifacts "
+                            f"({matches[:3]}); a basename is not an identity",
+                            "INV-10_ambiguity", constraints=c)
+        if status == "UNKNOWN":
+            return Decision(ABSTAIN, f"scope {c.source_scope!r} names no artifact in the corpus",
+                            "INV-4_scope", constraints=c)
+        scope_path = matches[0]
+
     # (2) subject resolution — ambiguity abstains, never picks
-    syms = index.find_symbols(c.subject, c.source_scope)
+    syms = index.find_symbols(c.subject, scope_path)
     if not syms:
         return Decision(ABSTAIN, f"subject {c.subject!r} is not a compiled symbol",
                         "INV-1_subject", constraints=c)
     distinct = {s["qualified_name"] for s in syms}
-    if len(distinct) > 1 and not c.source_scope:
+    if len(distinct) > 1:
         return Decision(ABSTAIN_AMBIGUOUS,
                         f"subject {c.subject!r} resolves to {len(distinct)} symbols "
                         f"({sorted(distinct)[:3]}...) and no scope disambiguates",
@@ -204,13 +226,13 @@ def decide(index: ClaimIndex, query: str) -> Decision:
             return Decision(ABSTAIN, f"no {c.predicate} claim from {c.subject!r} to {c.obj!r}",
                             "INV-3_object", constraints=c)
 
-    # (5) scope constraint
-    if c.source_scope:
-        scoped = [h for h in hits if h.rel_path.endswith(c.source_scope)]
+    # (5) scope constraint — applied to EVIDENCE identity, exactly
+    if scope_path:
+        scoped = [h for h in hits if canonical_path(h.rel_path) == scope_path]
         if not scoped:
             return Decision(ABSTAIN,
                             f"claim exists but its evidence is in "
-                            f"{sorted({h.rel_path for h in hits})[:2]}, not {c.source_scope}",
+                            f"{sorted({h.rel_path for h in hits})[:2]}, not {scope_path}",
                             "INV-4_scope", constraints=c)
         hits = scoped
 
@@ -260,11 +282,19 @@ def decide(index: ClaimIndex, query: str) -> Decision:
 
 
 def _conflict(hits: list[ClaimHit]) -> dict:
-    """Compare normalized claim values. Different wording is not contradiction."""
+    """Compare normalized claim values, but only where the PREDICATE SPEC says a
+    differing value can mean contradiction.
+
+    Cardinality lives in kgc/predicates.py, not here: `f()` calling both `a()`
+    and `b()` is two facts. Grouping by predicate alone made every multi-valued
+    relationship self-contradictory.
+    """
     by_pred: dict[str, list[ClaimHit]] = {}
     for h in hits:
         by_pred.setdefault(h.predicate, []).append(h)
     for pred, group in by_pred.items():
+        if not may_contradict(pred):
+            continue                       # MULTI_VALUED: more objects is more facts
         vals = [h.value() for h in group]
         for i in range(len(vals)):
             for j in range(i + 1, len(vals)):

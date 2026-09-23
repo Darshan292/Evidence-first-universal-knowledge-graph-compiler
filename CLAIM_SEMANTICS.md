@@ -11,29 +11,54 @@ what either meant. A predicate must have **one** semantic meaning.
 Only predicates the measured corpora require are defined. The vocabulary is not
 padded for features that do not exist.
 
-## 2. The vocabulary
+## 2. The vocabulary — full predicate audit
 
-| Predicate | Meaning | Subject | Object | Structural | Deterministic today | Establishment allowed |
-|---|---|---|---|---|---|---|
-| `CONTAINS` | subject lexically encloses object | symbol | symbol | yes | yes | DERIVED, CONFIRMED |
-| `DEFINES` | artifact introduces symbol | artifact | symbol | yes | yes | DERIVED, CONFIRMED |
-| `CALLS` | subject has a call site targeting object | symbol | symbol\|literal | yes | yes | DERIVED, CONFIRMED |
-| `IMPORTS` | subject module binds a name from object | symbol | symbol\|literal | yes | yes | DERIVED, CONFIRMED |
-| `EXTENDS` | subject class derives from object class | symbol | symbol\|literal | yes | yes | DERIVED, CONFIRMED |
-| `READS` | subject reads object's value | symbol | symbol | yes | yes | DERIVED, CONFIRMED |
-| `WRITES` | subject assigns object's value | symbol | symbol | yes | yes | DERIVED, CONFIRMED |
-| `HAS_DEFAULT` | subject's default value is object | symbol | literal | yes | yes | DERIVED, CONFIRMED |
-| `HAS_VALUE` | subject's literal value is object | symbol | literal | yes | yes | DERIVED, CONFIRMED |
-| `HAS_TYPE` | subject's declared type is object | symbol | symbol\|literal | yes | **no** | DERIVED, CONFIRMED |
-| `HAS_PURPOSE` | subject's documented purpose is object | symbol | literal | **no** | no | DERIVED, CONFIRMED, PROPOSED, DISPUTED |
+Every field of the specification, in one place. This is the ONLY predicate table in the documentation; an earlier table omitting cardinality was removed rather than kept in parallel. `_conflict()` reads
+`cardinality` from here; it contains no predicate names of its own.
 
-`HAS_PURPOSE` is the only non-structural predicate, and the only one a model may
-ever propose. Everything else is parser-derivable and a model-only assertion of
-it is rejected by the claim builder.
+| Predicate | Subject | Object | Kind | Deterministic | Cardinality | Conflict semantics | Establishment allowed | Emitted today |
+|---|---|---|---|---|---|---|---|---|
+| `CONTAINS` | symbol | symbol | structural | yes | **MULTI_VALUED** | never contradicts | DERIVED, CONFIRMED | yes |
+| `DEFINES` | artifact | symbol | structural | yes | **MULTI_VALUED** | never contradicts | DERIVED, CONFIRMED | **no** |
+| `CALLS` | symbol | symbol|literal | structural | yes | **MULTI_VALUED** | never contradicts | DERIVED, CONFIRMED | yes |
+| `IMPORTS` | symbol | symbol|literal | structural | yes | **MULTI_VALUED** | never contradicts | DERIVED, CONFIRMED | yes |
+| `EXTENDS` | symbol | symbol|literal | structural | yes | **MULTI_VALUED** | never contradicts | DERIVED, CONFIRMED | yes |
+| `READS` | symbol | symbol | structural | yes | **MULTI_VALUED** | never contradicts | DERIVED, CONFIRMED | **no** |
+| `WRITES` | symbol | symbol | structural | yes | **MULTI_VALUED** | never contradicts | DERIVED, CONFIRMED | **no** |
+| `HAS_DEFAULT` | symbol | literal | structural | yes | **FUNCTIONAL** | can contradict | DERIVED, CONFIRMED | **no** |
+| `HAS_VALUE` | symbol | literal | structural | yes | **FUNCTIONAL** | can contradict | DERIVED, CONFIRMED | **no** |
+| `HAS_TYPE` | symbol | symbol|literal | structural | no | **FUNCTIONAL** | can contradict | DERIVED, CONFIRMED | **no** |
+| `HAS_PURPOSE` | symbol | literal | semantic | no | **FUNCTIONAL** | can contradict | DERIVED, CONFIRMED, PROPOSED, DISPUTED | **no** |
 
-`HAS_TYPE` is declared but **not deterministically derivable today** — Python is
-dynamically typed. It is listed so the boundary is explicit, not to imply
-coverage.
+### Cardinality rulings
+
+**`EXTENDS` is `MULTI_VALUED`.** Python permits multiple inheritance, so
+`class C(A, B)` emits two EXTENDS facts. The Gate 2.5 instruction's example list
+did not mention EXTENDS; had it defaulted to functional, multiple inheritance
+would have been reported as a contradiction — reproducing the very defect the
+gate corrects.
+
+**`HAS_PURPOSE` is `FUNCTIONAL`** despite being the one semantic predicate: a
+symbol has one documented purpose, so two sources asserting different purposes
+is a genuine dispute.
+
+**`DEFINES`, `READS`, `WRITES` are `MULTI_VALUED`** — an artifact defines many
+symbols; a function reads and writes many values.
+
+**Unknown predicates default to `MULTI_VALUED`.** Inventing a contradiction is
+worse than missing one: a false CONTRADICTS presents two correct facts as a
+dispute.
+
+### Seven of eleven predicates are not emitted
+
+`DEFINES`, `READS`, `WRITES`, `HAS_DEFAULT`, `HAS_VALUE`, `HAS_TYPE` and
+`HAS_PURPOSE` are declared but **no adapter produces them**. The vocabulary
+currently promises capability the compiler does not have. This is recorded in
+the spec itself (`emitted_by_compiler`) so the gap is visible rather than
+implied, and it is the substance of condition J-3.
+
+Consequence for testing: functional conflict cannot be produced by ingestion, so
+those tests insert claims directly and say so.
 
 ## 3. Property-word mapping
 

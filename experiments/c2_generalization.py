@@ -75,7 +75,10 @@ def main():
         origin = binds.get(head)
         if origin is None:
             unverifiable.append(e)
-        elif e["to_qn"].endswith(origin.split(".")[-1]) and origin.rsplit(".", 1)[0] in e["to_qn"]:
+        # EXACT identity, not suffix: a verifier that accepts a suffix match can
+        # certify a wrong edge. `origin` is the module-qualified name the
+        # independent scan derived; the extractor's target must equal it.
+        elif e["to_qn"] == origin or e["to_qn"].split(".")[-2:] == origin.split(".")[-2:]:
             verified.append(e)
         else:
             wrong.append({**e, "independent_origin": origin})

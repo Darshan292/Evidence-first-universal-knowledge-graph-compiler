@@ -26,7 +26,11 @@ class ParseStatus(str, Enum):
 IDENT = re.compile(r"\b(?:[A-Za-z_][A-Za-z0-9_]*\.)*[A-Za-z_][A-Za-z0-9_]*\b")
 NUM = re.compile(r"\b\d+(?:\.\d+)?\b")
 QUOTED = re.compile(r"'([^']+)'|\"([^\"]+)\"")
-FILE_SCOPE = re.compile(r"\b([A-Za-z_][A-Za-z0-9_]*\.(?:py|rst|md|toml|txt|html))\b")
+# Must capture a DIRECTORY-QUALIFIED path, not just a basename: the scope
+# `src/utils.py` is a different identity from `tests/utils.py`, and a regex that
+# can only see `utils.py` makes an exact scope inexpressible.
+FILE_SCOPE = re.compile(
+    r"(?<![\w/])((?:[A-Za-z_][\w.-]*/)*[A-Za-z_][\w.-]*\.(?:py|rst|md|toml|txt|html))\b")
 INTERROGATIVE = re.compile(r"\b(what|which|why|how|where|when|does|do|is|are|can)\b", re.I)
 
 RELATION_PATTERNS = [
@@ -86,7 +90,8 @@ def extract(query: str) -> QueryConstraints:
     idents = [i for i in IDENT.findall(query)
               if i.lower() not in STOP_ENTITY
               and (any(ch.isupper() for ch in i) or "_" in i or "." in i)
-              and not FILE_SCOPE.fullmatch(i)]
+              and not FILE_SCOPE.fullmatch(i)
+              and not (c.source_scope and i in c.source_scope)]
 
     for pat, pred, arity in RELATION_PATTERNS:
         mm = pat.search(query)

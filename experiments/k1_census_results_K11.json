@@ -1,0 +1,53 @@
+[
+  {
+    "corpus": "eval/corpus2",
+    "artifacts": 24,
+    "class_body_assignments": 8,
+    "supported": 0,
+    "refused": 8,
+    "refusal_reasons": {
+      "annotated assignment": 8
+    },
+    "has_value_claims": 0,
+    "evidence_verified": 0,
+    "evidence_verification_rate": null,
+    "diagnostics_recorded": 8,
+    "establishment": [],
+    "subjects_with_several_values": [],
+    "out_of_scope_module_level_or_nested": 6,
+    "out_of_scope_function_body": 96,
+    "invariant_violations": [],
+    "artifacts_lost_before_claims": [],
+    "supported_minus_emitted": 0
+  },
+  {
+    "corpus": "eval/corpus3",
+    "artifacts": 225,
+    "class_body_assignments": 530,
+    "supported": 162,
+    "refused": 368,
+    "refusal_reasons": {
+      "Subscript target is not a plain name": 2,
+      "annotated assignment": 141,
+      "chained assignment to several targets": 1,
+      "value is a Attribute": 9,
+      "value is a Call": 184,
+      "value is a Dict": 2,
+      "value is a Name": 18,
+      "value is a Tuple": 11
+    },
+    "has_value_claims": 162,
+    "evidence_verified": 162,
+    "evidence_verification_rate": 1.0,
+    "diagnostics_recorded": 368,
+    "establishment": [
+      "DERIVED"
+    ],
+    "subjects_with_several_values": [],
+    "out_of_scope_module_level_or_nested": 226,
+    "out_of_scope_function_body": 3838,
+    "invariant_violations": [],
+    "artifacts_lost_before_claims": [],
+    "supported_minus_emitted": 0
+  }
+]

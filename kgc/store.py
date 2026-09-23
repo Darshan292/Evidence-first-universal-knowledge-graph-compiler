@@ -324,27 +324,100 @@ class Store:
             "UPDATE artifact SET parse_status='FAILED', parse_error=? WHERE artifact_id=?",
             (parse_error, artifact_id))
 
-    def purge_artifact_graph(self, artifact_id: str) -> None:
+    def update_artifact_status(self, artifact_id: str, parse_status: str,
+                               parse_error: str | None) -> None:
+        """Set an artifact's status from the analyser's ACTUAL result.
+
+        The counterpart to `mark_artifact_failed`. `add_artifact` is
+        INSERT OR IGNORE, so a row that failed extraction in an earlier run kept
+        `FAILED` forever even after a clean re-ingestion rebuilt its graph --
+        producing exactly the state `check_invariants` calls a partial graph:
+        claims under a FAILED artifact.
+
+        Identity and provenance are untouched: same `artifact_id`, same
+        `first_seen_run`, same row. Only the outcome of the latest processing is
+        rewritten, because that is what the column means.
+        """
+        self.con.execute(
+            "UPDATE artifact SET parse_status=?, parse_error=? WHERE artifact_id=?",
+            (parse_status, parse_error, artifact_id))
+
+    def purge_artifact_graph(self, artifact_id: str) -> list[tuple[str, str, int]]:
         """Remove every graph row belonging to one artifact, keeping the artifact.
 
-        Used only when extraction failed after an earlier stage already committed
-        symbols, so a FAILED artifact never carries a partial graph. Foreign keys
-        are deferred to COMMIT because symbol.parent_id is self-referential and a
-        bulk delete cannot order parents after children.
+        Used when extraction failed, so a FAILED artifact never carries a graph
+        -- including one an earlier successful run built from the same bytes.
+
+        Claims in OTHER artifacts that POINT AT these symbols go too. Leaving
+        them behind dangles their `object_id` at a row that no longer exists,
+        which `check_invariants` reports and which no reader could resolve. They
+        are rebuilt on the next successful ingestion, because every identifier
+        is content-addressed. Returns [(artifact_id, rel_path, edges_dropped)]
+        for those artifacts so the caller can record the loss rather than let it
+        be silent.
+
+        Foreign keys are deferred to COMMIT because symbol.parent_id is
+        self-referential and a bulk delete cannot order parents after children.
         """
         self.con.execute("PRAGMA defer_foreign_keys=1")
-        self.con.execute(
-            "DELETE FROM claim_evidence WHERE evidence_id IN"
-            " (SELECT evidence_id FROM evidence WHERE artifact_id=?)", (artifact_id,))
-        self.con.execute(
-            "DELETE FROM reference WHERE claim_id IN"
-            " (SELECT cl.claim_id FROM claim cl JOIN symbol s ON s.symbol_id=cl.subject_id"
-            "   WHERE s.artifact_id=?)", (artifact_id,))
-        self.con.execute(
-            "DELETE FROM claim WHERE subject_id IN"
-            " (SELECT symbol_id FROM symbol WHERE artifact_id=?)", (artifact_id,))
+        syms = [r["symbol_id"] for r in self.con.execute(
+            "SELECT symbol_id FROM symbol WHERE artifact_id=?", (artifact_id,))]
+        own = [r["claim_id"] for r in self.con.execute(
+            "SELECT cl.claim_id FROM claim cl JOIN symbol s ON s.symbol_id=cl.subject_id"
+            " WHERE s.artifact_id=?", (artifact_id,))]
+        inbound = [dict(r) for r in self.con.execute(
+            "SELECT cl.claim_id, a.artifact_id AS owner, a.rel_path"
+            "  FROM claim cl JOIN symbol o ON o.symbol_id=cl.object_id"
+            "  JOIN symbol s ON s.symbol_id=cl.subject_id"
+            "  JOIN artifact a ON a.artifact_id=s.artifact_id"
+            " WHERE o.artifact_id=? AND s.artifact_id!=?", (artifact_id, artifact_id))]
+
+        self._delete_claims(own + [r["claim_id"] for r in inbound])
         self.con.execute("DELETE FROM evidence WHERE artifact_id=?", (artifact_id,))
-        self.con.execute("DELETE FROM symbol WHERE artifact_id=?", (artifact_id,))
+        for sid in syms:
+            self.con.execute("DELETE FROM symbol WHERE symbol_id=?", (sid,))
+
+        losses: dict[tuple[str, str], int] = {}
+        for r in inbound:
+            losses[(r["owner"], r["rel_path"])] = losses.get((r["owner"], r["rel_path"]), 0) + 1
+        return sorted((aid, rel, n) for (aid, rel), n in losses.items())
+
+    def purge_artifact_claims(self, artifact_id: str) -> int:
+        """Drop the claims an artifact is the SUBJECT of, keeping its symbols.
+
+        The resolve stage REPLACES an artifact's claims rather than adding to
+        them. `add_claim` is INSERT OR IGNORE and `claim_id` covers the resolved
+        object, so an edge that resolved differently in an earlier run used to
+        survive beside its replacement: after one failure-and-recovery cycle on
+        werkzeug the graph carried 156 stale UNRESOLVED duplicates of edges that
+        now resolve, and no invariant could see them -- an unresolved claim is
+        perfectly legal. The graph must be a function of the current source, not
+        of the database's failure history.
+        """
+        own = [r["claim_id"] for r in self.con.execute(
+            "SELECT cl.claim_id FROM claim cl JOIN symbol s ON s.symbol_id = cl.subject_id"
+            " WHERE s.artifact_id=?", (artifact_id,))]
+        self._delete_claims(own)
+        return len(own)
+
+    def _delete_claims(self, claim_ids: list[str]) -> None:
+        """Delete claims with their reference rows, links and orphaned evidence."""
+        if not claim_ids:
+            return
+        cited = [r["evidence_id"] for r in self.con.execute(
+            "SELECT DISTINCT evidence_id FROM claim_evidence WHERE claim_id IN"
+            f" ({','.join('?' * len(claim_ids))})", claim_ids)]
+        for cid in claim_ids:
+            self.con.execute("DELETE FROM claim_evidence WHERE claim_id=?", (cid,))
+            self.con.execute("DELETE FROM reference WHERE claim_id=?", (cid,))
+            self.con.execute("DELETE FROM claim_relation WHERE from_claim=? OR to_claim=?",
+                             (cid, cid))
+            self.con.execute("DELETE FROM claim WHERE claim_id=?", (cid,))
+        # evidence left cited by nothing would trip the dangling-evidence audit
+        for eid in cited:
+            if self.con.execute("SELECT 1 FROM claim_evidence WHERE evidence_id=?",
+                                (eid,)).fetchone() is None:
+                self.con.execute("DELETE FROM evidence WHERE evidence_id=?", (eid,))
 
     def add_symbol(self, s: Symbol):
         self.con.execute(
@@ -402,8 +475,21 @@ class Store:
             "UPDATE work_item SET state='RUNNING', attempts=attempts+1 WHERE item_id=?", (item_id,))
 
     def finish_work(self, item_id, state, error=None):
-        self.con.execute("UPDATE work_item SET state=?, error=? WHERE item_id=?",
-                         (state, error, item_id))
+        """A completed item clears its attempt counter.
+
+        `attempts` exists to quarantine an item that repeatedly kills the
+        process. It is keyed by content, so without this reset it accumulated
+        across the lifetime of a database: the FOURTH ingestion of an unchanged
+        corpus hit MAX_ATTEMPTS and silently skipped every file, reporting them
+        as failures. A run that finishes is evidence the item is not poisonous.
+        """
+        if state == "DONE":
+            self.con.execute(
+                "UPDATE work_item SET state=?, error=?, attempts=0 WHERE item_id=?",
+                (state, error, item_id))
+        else:
+            self.con.execute("UPDATE work_item SET state=?, error=? WHERE item_id=?",
+                             (state, error, item_id))
 
     def requeue_running(self, run_id) -> int:
         cur = self.con.execute(

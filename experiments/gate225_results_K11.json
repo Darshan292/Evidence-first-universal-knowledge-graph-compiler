@@ -2,19 +2,19 @@
   "summary": {
     "corpus": "eval/corpus3 (werkzeug @ 6048fa48753c7b61e35cc34537667809dee8fa35, BSD-3-Clause)",
     "artifacts": 225,
-    "ingest_seconds": 5.7,
+    "ingest_seconds": 9.5,
     "db_counts": {
       "artifact": 225,
       "symbol": 6102,
-      "reference": 10120,
-      "evidence": 16066,
-      "claim": 16244,
+      "reference": 10403,
+      "evidence": 16349,
+      "claim": 16527,
       "claim_relation": 0,
-      "diagnostic": 5166,
+      "diagnostic": 4913,
       "work_item": 280
     },
-    "query_latency_ms_p50": 2.37,
-    "query_latency_ms_p95": 21.38,
+    "query_latency_ms_p50": 2.5,
+    "query_latency_ms_p95": 25.38,
     "CALIBRATION": {
       "safety": {
         "n_unsupported": 18,
@@ -81,7 +81,7 @@
         "claim_MRR": 0.84,
         "evidence_recall@1": 0.381,
         "evidence_recall@10": 0.762,
-        "evidence_MRR": 0.494
+        "evidence_MRR": 0.486
       },
       "ambiguity": {
         "n": 3,
@@ -119,8 +119,8 @@
         "claim_recall@10": 0.857,
         "claim_MRR": 0.797,
         "evidence_recall@1": 0.333,
-        "evidence_recall@10": 0.619,
-        "evidence_MRR": 0.385
+        "evidence_recall@10": 0.571,
+        "evidence_MRR": 0.382
       },
       "ambiguity": {
         "n": 2,
@@ -158,8 +158,8 @@
         "claim_recall@10": 0.823,
         "claim_MRR": 0.798,
         "evidence_recall@1": 0.355,
-        "evidence_recall@10": 0.661,
-        "evidence_MRR": 0.434
+        "evidence_recall@10": 0.645,
+        "evidence_MRR": 0.43
       },
       "ambiguity": {
         "n": 8,
@@ -461,9 +461,9 @@
       "failed_invariant": null,
       "parse_status": "PARSED",
       "claim_rank": 1,
-      "evidence_rank": 8,
+      "evidence_rank": 15,
       "exposed": true,
-      "n_hits": 8,
+      "n_hits": 15,
       "all_trusted": true,
       "all_verified": true
     },
@@ -493,9 +493,9 @@
       "failed_invariant": null,
       "parse_status": "PARSED",
       "claim_rank": 1,
-      "evidence_rank": 2,
+      "evidence_rank": 3,
       "exposed": true,
-      "n_hits": 2,
+      "n_hits": 3,
       "all_trusted": true,
       "all_verified": true
     },

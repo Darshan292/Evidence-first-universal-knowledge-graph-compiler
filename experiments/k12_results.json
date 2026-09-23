@@ -1,0 +1,123 @@
+[
+  {
+    "corpus": "eval/corpus",
+    "walked_analysable": 7,
+    "parse_status": {
+      "OK": 7,
+      "UNSUPPORTED": 8
+    },
+    "absent": [],
+    "failed": 0,
+    "extraction_failures": 0,
+    "counts": {
+      "artifact": 15,
+      "symbol": 39,
+      "reference": 34,
+      "evidence": 63,
+      "claim": 66,
+      "claim_relation": 0,
+      "diagnostic": 21,
+      "work_item": 14
+    },
+    "claims_by_predicate": {
+      "CALLS": 22,
+      "CONTAINS": 32,
+      "EXTENDS": 1,
+      "IMPORTS": 11
+    },
+    "calls_before_k12": 22,
+    "decorator_calls_removed": 0,
+    "calls_after_k12": 22,
+    "arithmetic_holds": true,
+    "decorator_call_sites_in_source": 0,
+    "diagnostics_by_code": {
+      "UNRESOLVED_REFERENCE": 13,
+      "UNSUPPORTED_LANGUAGE": 8
+    },
+    "invariant_violations": [],
+    "deterministic": true,
+    "differing_tables": []
+  },
+  {
+    "corpus": "eval/corpus2",
+    "walked_analysable": 8,
+    "parse_status": {
+      "OK": 8,
+      "UNSUPPORTED": 16
+    },
+    "absent": [],
+    "failed": 0,
+    "extraction_failures": 0,
+    "counts": {
+      "artifact": 24,
+      "symbol": 172,
+      "reference": 250,
+      "evidence": 414,
+      "claim": 414,
+      "claim_relation": 0,
+      "diagnostic": 104,
+      "work_item": 16
+    },
+    "claims_by_predicate": {
+      "CALLS": 163,
+      "CONTAINS": 164,
+      "EXTENDS": 11,
+      "IMPORTS": 76
+    },
+    "calls_before_k12": 163,
+    "decorator_calls_removed": 0,
+    "calls_after_k12": 163,
+    "arithmetic_holds": true,
+    "decorator_call_sites_in_source": 0,
+    "diagnostics_by_code": {
+      "UNRESOLVED_REFERENCE": 80,
+      "UNSUPPORTED_CLASS_LITERAL": 8,
+      "UNSUPPORTED_LANGUAGE": 16
+    },
+    "invariant_violations": [],
+    "deterministic": true,
+    "differing_tables": []
+  },
+  {
+    "corpus": "eval/corpus3",
+    "walked_analysable": 140,
+    "parse_status": {
+      "OK": 140,
+      "UNSUPPORTED": 85
+    },
+    "absent": [],
+    "failed": 0,
+    "extraction_failures": 0,
+    "counts": {
+      "artifact": 225,
+      "symbol": 6102,
+      "reference": 10120,
+      "evidence": 16066,
+      "claim": 16244,
+      "claim_relation": 0,
+      "diagnostic": 5166,
+      "work_item": 280
+    },
+    "claims_by_predicate": {
+      "CALLS": 8375,
+      "CONTAINS": 5962,
+      "EXTENDS": 163,
+      "HAS_VALUE": 162,
+      "IMPORTS": 1582
+    },
+    "calls_before_k12": 8658,
+    "decorator_calls_removed": 283,
+    "calls_after_k12": 8375,
+    "arithmetic_holds": true,
+    "decorator_call_sites_in_source": 283,
+    "diagnostics_by_code": {
+      "UNRESOLVED_REFERENCE": 4430,
+      "UNSUPPORTED_CLASS_LITERAL": 368,
+      "UNSUPPORTED_DECORATOR_CALL": 283,
+      "UNSUPPORTED_LANGUAGE": 85
+    },
+    "invariant_violations": [],
+    "deterministic": true,
+    "differing_tables": []
+  }
+]

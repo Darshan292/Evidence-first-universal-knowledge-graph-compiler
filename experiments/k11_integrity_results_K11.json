@@ -82,11 +82,11 @@
     "counts": {
       "artifact": 225,
       "symbol": 6102,
-      "reference": 10120,
-      "evidence": 16066,
-      "claim": 16244,
+      "reference": 10403,
+      "evidence": 16349,
+      "claim": 16527,
       "claim_relation": 0,
-      "diagnostic": 5166,
+      "diagnostic": 4913,
       "work_item": 280
     },
     "invariant_violations": [],
@@ -97,7 +97,7 @@
       "parent_links_violating_containment": 0,
       "non_module_symbols_without_a_parent": 0,
       "claims_with_evidence_inside_the_subject": 16244,
-      "claims_outside_but_subject_name_unique": 0,
+      "claims_outside_but_subject_name_unique": 283,
       "claims_outside_AND_subject_ambiguous": 0
     },
     "failed_artifacts": [],

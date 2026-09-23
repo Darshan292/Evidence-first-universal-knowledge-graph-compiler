@@ -27,6 +27,18 @@ diagnostic -- no arithmetic, no constant folding, no data-flow, no guessing.
 
 The extractor identifies the literal and records its SOURCE text. Whether two
 values mean the same thing is kgc/claim_value.py's decision, not this module's.
+
+CALLS policy (K-1.2). `CALLS` means the subject executes a call from its own
+executable context. A decorator expression is evaluated while the `def` is being
+*built*, not by the resulting function, so
+
+    @app.route("/")
+    def f(): ...
+
+is NOT `f CALLS app.route`. Those call sites are skipped and recorded as
+UNSUPPORTED_DECORATOR_CALL. The relationship is real and the evidence was
+correct; only the predicate was wrong, and no predicate for it exists yet.
+Calls in the function BODY are unaffected.
 """
 from __future__ import annotations
 
@@ -234,8 +246,17 @@ def analyze(artifact_id: str, data: bytes, module_name: str = "module") -> CodeA
     # Calls are collected after the full scope is known: a call may precede
     # the definition it targets.
     enclosing = _build_enclosing_map(tree, module_name)
+    decorator_sites = _decorator_call_sites(tree)
     for node in ast.walk(tree):
         if isinstance(node, ast.Call):
+            if id(node) in decorator_sites:
+                owner = enclosing.get(id(node), module_name)
+                an.diagnostics.append(Diagnostic(
+                    artifact_id, "INFO", "UNSUPPORTED_DECORATOR_CALL",
+                    f"decorator expression {_dotted(node.func) or '<computed>'!r} on "
+                    f"{owner} is evaluated when the definition is built, not called by "
+                    f"it; no CALLS claim emitted", node.lineno))
+                continue
             name = _dotted(node.func)
             if not name:
                 an.references.append(RawReference(
@@ -272,6 +293,23 @@ def _dotted(node: ast.AST) -> str | None:
         base = _dotted(node.value)
         return f"{base}.{node.attr}" if base else None
     return None
+
+
+def _decorator_call_sites(tree: ast.AST) -> set[int]:
+    """Every Call node that lives inside a decorator expression.
+
+    The whole decorator expression is excluded, not just its outermost call:
+    `@deco(make_key())` evaluates both while building the definition. A bare
+    `@property` is not a Call and was never emitted, so it needs no exclusion.
+    """
+    out: set[int] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            for decorator in node.decorator_list:
+                for sub in ast.walk(decorator):
+                    if isinstance(sub, ast.Call):
+                        out.add(id(sub))
+    return out
 
 
 def _build_enclosing_map(tree: ast.AST, module_name: str) -> dict[int, str]:

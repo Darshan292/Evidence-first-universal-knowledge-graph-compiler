@@ -207,13 +207,20 @@ def ingest(store: Store, root: Path, *, resume: bool = True,
                 for d in (*an.diagnostics, *map_diags):
                     store.add_diagnostic(d, run)
                 store.enqueue(_resolve_item(item), run, STAGE_RESOLVE, rel, sha)
+                # Extraction succeeded, so the artifact carries the analyser's
+                # real status -- clearing any EXTRACTION_FAILED left by a
+                # previous run. A later resolution failure may set it back.
+                store.update_artifact_status(aid, an.parse_status.value, an.parse_error)
                 store.release("extraction")
             except CrashPoint:
                 raise                              # a crash is not a recorded failure
             except Exception as exc:
                 store.rollback_to("extraction")    # graph discarded, artifact kept
                 store.release("extraction")
-                _record_extraction_failure(store, aid, rel, exc, run)
+                # The rollback only undoes THIS run. A previous run may have
+                # built a complete graph for this artifact, and a FAILED
+                # artifact must never carry one -- whoever built it.
+                _purge_and_record(store, aid, rel, exc, run)
                 store.finish_work(item, "FAILED", f"extraction failed: {exc}")
                 store.commit()
                 rep.failed += 1
@@ -295,6 +302,10 @@ def _resolve_stage(store: Store, root: Path, src: str, run: str,
             store.claim_work(ritem)
             store.savepoint("resolution")
             try:
+                # REPLACE this artifact's claims, never append to them: an edge
+                # that resolved differently in an earlier run must not survive
+                # beside its replacement.
+                store.purge_artifact_claims(aid)
                 _sym, claims, refs, map_diags = map_analysis(
                     an, artifact_id=aid, data=data, run_id=run,
                     resolved_refs=resolved,
@@ -308,16 +319,26 @@ def _resolve_stage(store: Store, root: Path, src: str, run: str,
                     store.add_diagnostic(d, run)
                 if fail_resolution_at and fail_resolution_at == rel:
                     raise ExtractionFailure("injected resolution failure")
+                # Resolution succeeded too: the artifact is whatever the parser
+                # said it was, never a stale failure from an earlier run.
+                store.update_artifact_status(aid, an.parse_status.value, an.parse_error)
                 store.release("resolution")
             except Exception as exc:
                 store.rollback_to("resolution")
                 store.release("resolution")
                 # Symbols were committed by stage 1. A FAILED artifact must not
                 # keep half a graph, so they go too -- the artifact row stays.
-                store.purge_artifact_graph(aid)
-                _record_extraction_failure(store, aid, rel, exc, run)
+                _purge_and_record(store, aid, rel, exc, run)
                 store.finish_work(ritem, "FAILED", f"resolution failed: {exc}")
                 store.commit()
+                # The corpus symbol table just lost this artifact's symbols. A
+                # later artifact resolving against the stale index would point a
+                # fresh claim straight at a deleted row.
+                index = ModuleIndex.from_store(store)
+                # Stage 1 counted it as parsed; it is not. Keep the tally honest
+                # so seen == parsed + failed + skipped + unsupported + unchanged.
+                rep.parsed -= 1
+                rep.failed += 1
                 rep.extraction_failed += 1
                 continue
             rep.claims += len(claims)
@@ -335,6 +356,20 @@ def _record_extraction_failure(store: Store, aid: str, rel: str, exc: Exception,
     store.add_diagnostic(Diagnostic(
         aid, "ERROR", "EXTRACTION_FAILED",
         f"{rel}: graph extraction failed and was rolled back ({reason})"), run)
+
+
+def _purge_and_record(store: Store, aid: str, rel: str, exc: Exception, run: str):
+    """Discard this artifact's graph, then record the failure on the artifact.
+
+    Purging can also drop edges other artifacts had into this one. That loss is
+    recorded against each of THOSE artifacts -- it is their graph that changed.
+    """
+    for other_aid, other_rel, dropped in store.purge_artifact_graph(aid):
+        store.add_diagnostic(Diagnostic(
+            other_aid, "WARNING", "INBOUND_EDGES_DROPPED",
+            f"{other_rel}: {dropped} edge(s) into {rel} were removed because that "
+            f"artifact's extraction failed; they return when it succeeds"), run)
+    _record_extraction_failure(store, aid, rel, exc, run)
 
 
 def _verify_artifact_coverage(store: Store, root: Path) -> list[str]:

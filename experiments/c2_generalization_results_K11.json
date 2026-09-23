@@ -1,0 +1,31 @@
+{
+  "corpus": {
+    "repository": "https://github.com/pallets/itsdangerous",
+    "commit_sha": "672971d66a2ef9f85151e53283113f33d642dabd",
+    "license": "BSD-3-Clause (Copyright 2011 Pallets)",
+    "files": 23,
+    "corpus_hash": "1737e6c505bbf91e7a77bea344d4155948d173c64b1d79bc0bdc4e3b9422ee41"
+  },
+  "resolution": {
+    "DETERMINISTIC": 46,
+    "HEURISTIC": 29,
+    "UNRESOLVED": 175,
+    "deterministic_rate": 0.184,
+    "unresolved_rate": 0.7
+  },
+  "cross_file_edges": {
+    "total": 38,
+    "independently_verified": 38,
+    "contradicted_by_independent_scan": 0,
+    "not_independently_checkable": 0,
+    "deterministic_precision": 1.0
+  },
+  "false_deterministic_edges": [],
+  "unresolved_reasons": {
+    "not bound in any statically known scope": 97,
+    "import target '__future__.annotations' is not in the analyse": 7,
+    "import target 'typing' is not in the analysed corpus": 7,
+    "module 'typing' is not in the analysed corpus": 7,
+    "import target 'collections.abc' is not in the analysed corpu": 3
+  }
+}

@@ -1,0 +1,371 @@
+{
+  "queries_sha256": "fac1e7ec10f34498b75d6563be3cd827f7f208f7db4abd5fef1375014a1e2083",
+  "gold_sha256": "883f4bb535e405b7bb4651c9d4eb80b3bb22360e586f3a255d63300b949f6360",
+  "n_queries": 54,
+  "gold_distribution": {
+    "answerable": 42,
+    "ambiguous": 4,
+    "unsupported": 6,
+    "out_of_scope": 2
+  },
+  "A_parse_availability": {
+    "parse_status_all": {
+      "PARTIAL": 44,
+      "PARSED": 9,
+      "AMBIGUOUS": 1
+    },
+    "parse_status_answerable": {
+      "PARTIAL": 33,
+      "PARSED": 8,
+      "AMBIGUOUS": 1
+    },
+    "full_parse_rate": 0.1667,
+    "full_parse_rate_answerable": 0.1905,
+    "parser_caused_abstention": 0.7857,
+    "parser_blocked_ids": [
+      "J1-001",
+      "J1-002",
+      "J1-004",
+      "J1-005",
+      "J1-009",
+      "J1-010",
+      "J1-011",
+      "J1-012",
+      "J1-014",
+      "J1-015",
+      "J1-018",
+      "J1-019",
+      "J1-020",
+      "J1-022",
+      "J1-023",
+      "J1-025",
+      "J1-026",
+      "J1-027",
+      "J1-030",
+      "J1-031",
+      "J1-033",
+      "J1-034",
+      "J1-036",
+      "J1-037",
+      "J1-040",
+      "J1-046",
+      "J1-047",
+      "J1-048",
+      "J1-049",
+      "J1-051",
+      "J1-052",
+      "J1-053",
+      "J1-054"
+    ],
+    "hand_written_baseline": 0.5,
+    "template_derived_non_baseline": 0.984
+  },
+  "B_safety": {
+    "n_must_not_answer": 12,
+    "false_support": 0.0,
+    "false_support_ids": [],
+    "unsafe_exposure": 0.0,
+    "incorrect_resolution_on_ambiguous": 0.0,
+    "by_label": {
+      "ambiguous": {
+        "n": 4,
+        "exposed": 0,
+        "false_support": 0.0,
+        "ids": []
+      },
+      "out_of_scope": {
+        "n": 2,
+        "exposed": 0,
+        "false_support": 0.0,
+        "ids": []
+      },
+      "unsupported": {
+        "n": 6,
+        "exposed": 0,
+        "false_support": 0.0,
+        "ids": []
+      }
+    },
+    "abstained_correctly": 1.0
+  },
+  "C_utility": {
+    "n_answerable": 42,
+    "exposure_rate": 0.0,
+    "exposed_ids": [],
+    "answer_correctness": null,
+    "answer_correct_ids": [],
+    "claim_correctness": null,
+    "useful_end_to_end": 0.0,
+    "decisions_on_answerable": {
+      "ABSTAIN": 40,
+      "ABSTAIN_AMBIGUOUS": 2
+    }
+  },
+  "D_evidence_fidelity": {
+    "exposed_queries_checked": 0,
+    "evidence_records_checked": 0,
+    "evidence_localized": null,
+    "evidence_exact": null,
+    "evidence_failures": [],
+    "evidence_sufficient": null,
+    "evidence_sufficient_ids": []
+  },
+  "failure_causes": {
+    "CLAIM_VOCABULARY_GAP": 33,
+    "PARSER_GAP": 9
+  },
+  "failures": {
+    "J1-001": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "function PARAMETER default; HAS_DEFAULT is declared but never emitted"
+    },
+    "J1-002": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "five parameter defaults on ProxyFix.__init__; not class-body literals"
+    },
+    "J1-004": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "module-level constant (HAS_VALUE covers class bodies only) plus a docstring contradiction"
+    },
+    "J1-005": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "algorithmic precedence; no predicate expresses ordering or weight"
+    },
+    "J1-006": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "PARSER_GAP",
+      "note": "default_status=200 IS present as HAS_VALUE; default_mimetype is an AnnAssign, excluded in K-1"
+    },
+    "J1-007": {
+      "label": "answerable",
+      "decision": "ABSTAIN_AMBIGUOUS",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "distinction lives in docstrings; HAS_PURPOSE is declared but never emitted"
+    },
+    "J1-009": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "behavioural: what the function does and returns"
+    },
+    "J1-010": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "behavioural: index arithmetic inside _get_real_value"
+    },
+    "J1-011": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "PARSER_GAP",
+      "note": "part_isolating=True/False present as HAS_VALUE; the auto-disable rule is behavioural"
+    },
+    "J1-012": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "behavioural plus an environment variable read"
+    },
+    "J1-014": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "behavioural: SpooledTemporaryFile rollover"
+    },
+    "J1-015": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "PARSER_GAP",
+      "note": "the attribute value exists; the instruction to set it does not"
+    },
+    "J1-017": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "two parameter defaults and their interaction"
+    },
+    "J1-018": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "behavioural: cookie persistence across requests"
+    },
+    "J1-019": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "behavioural: two different limit semantics"
+    },
+    "J1-020": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "behavioural: a branch that mutates the methods set"
+    },
+    "J1-022": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "PARSER_GAP",
+      "note": "max_cookie_size=4093 IS present as HAS_VALUE; the over-size behaviour is docstring-only"
+    },
+    "J1-023": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "behavioural: import-time backend selection"
+    },
+    "J1-025": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "instructional: how to use an API"
+    },
+    "J1-026": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "behavioural: a validation branch"
+    },
+    "J1-027": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "pyproject.toml is not an analysed artifact; only .py is compiled"
+    },
+    "J1-028": {
+      "label": "answerable",
+      "decision": "ABSTAIN_AMBIGUOUS",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "string literal inside a function body; subject resolved but ambiguous"
+    },
+    "J1-030": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "behavioural: warning categories and a raise"
+    },
+    "J1-031": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "behavioural: mimetype/ETag derivation"
+    },
+    "J1-033": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "literal inside a comparison in a method body"
+    },
+    "J1-034": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "CHANGES.rst is not an analysed artifact"
+    },
+    "J1-036": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "two parameter defaults"
+    },
+    "J1-037": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "behavioural: proxy resolution and the unbound error"
+    },
+    "J1-038": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "parameter defaults; the IR DID identify subject+property and found no claim"
+    },
+    "J1-039": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "deprecation guidance in a docstring/versionchanged note"
+    },
+    "J1-040": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "behavioural plus an exception raise"
+    },
+    "J1-042": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "PARSER_GAP",
+      "note": "CONTAINS/CALLS show the classes and some calls; the relationship narrative does not exist"
+    },
+    "J1-043": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "parameter default"
+    },
+    "J1-044": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "semantic distinction between two methods; docstring-only"
+    },
+    "J1-046": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "pyproject.toml is not an analysed artifact"
+    },
+    "J1-047": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "PARSER_GAP",
+      "note": "send_from_directory CALLS safe_join IS present; the safety argument is not"
+    },
+    "J1-048": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "PARSER_GAP",
+      "note": "CONTAINS gives the class and its methods; what it 'does' is docstring-level"
+    },
+    "J1-049": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "PARSER_GAP",
+      "note": "CALLS from run_simple to make_server etc. are present; the wiring narrative is not"
+    },
+    "J1-051": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "deprecation semantics and rationale"
+    },
+    "J1-052": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "PARSER_GAP",
+      "note": "31 EXTENDS claims name HTTPException, but all 163 EXTENDS are UNRESOLVED (literal only)"
+    },
+    "J1-053": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "pyproject.toml is not an analysed artifact"
+    },
+    "J1-054": {
+      "label": "answerable",
+      "decision": "ABSTAIN",
+      "root_cause": "CLAIM_VOCABULARY_GAP",
+      "note": "behavioural: URL construction and the missing-argument error"
+    }
+  }
+}

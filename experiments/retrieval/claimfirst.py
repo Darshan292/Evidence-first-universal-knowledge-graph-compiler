@@ -15,26 +15,16 @@ from dataclasses import dataclass, field
 from experiments.retrieval.constraints import ParseStatus, QueryConstraints, extract
 from kgc.claim_value import DIFFERENT, SAME, UNRESOLVED, compare
 from kgc.artifact_identity import canonical_path, resolve_scope
-from kgc.predicates import CANONICAL, allows, may_contradict
+from kgc.predicates import is_trusted, may_contradict
 
 ABSTAIN = "ABSTAIN"
 ABSTAIN_AMBIGUOUS = "ABSTAIN_AMBIGUOUS"
 EXPOSE = "EXPOSE"
 EXPOSE_CONFLICTED = "EXPOSE_CONFLICTED"
 
-# The establishment rule lives in the predicate spec (kgc/predicates.py) so a
-# predicate cannot be trusted at a level its own definition forbids. Duplicating
-# the set here meant the vocabulary and the gate could drift apart.
-TRUSTED_ESTABLISHMENT = frozenset({"DERIVED", "CONFIRMED"})
-
-
-def _trusted(hit) -> bool:
-    """Trusted iff the establishment is trusted AND the predicate permits it."""
-    if hit.establishment not in TRUSTED_ESTABLISHMENT:
-        return False
-    if hit.predicate in CANONICAL:
-        return allows(hit.predicate, hit.establishment)
-    return True                      # non-canonical predicates keep the base rule
+# This module holds NO establishment policy of its own. `is_trusted` in
+# kgc/predicates.py is the single authority, so editing a predicate's definition
+# changes the trust decision here with no second set to keep in step.
 PRESENTABLE_LIFECYCLE = frozenset({"ACTIVE", "VERIFIED"})
 VERIFIABLE_STRENGTH = frozenset({"EXACT", "REPRODUCIBLE"})
 
@@ -237,8 +227,8 @@ def decide(index: ClaimIndex, query: str) -> Decision:
         hits = scoped
 
     # (6) ESTABLISHMENT — the boundary Gate 2 described but did not enforce
-    trusted = [h for h in hits if _trusted(h)]
-    untrusted = [h for h in hits if not _trusted(h)]
+    trusted = [h for h in hits if is_trusted(h.predicate, h.establishment)]
+    untrusted = [h for h in hits if not is_trusted(h.predicate, h.establishment)]
     if not trusted:
         levels = sorted({h.establishment for h in untrusted})
         return Decision(ABSTAIN,

@@ -12,6 +12,21 @@ Resolution policy (never guesses):
                  definition is in another artifact we have not analysed
   UNRESOLVED     everything else: dynamic dispatch, attribute calls on values,
                  builtins, star-imports
+
+HAS_VALUE policy (K-1). The one functional predicate this backend emits, and
+deliberately the smallest thing that can be emitted without evaluating anything:
+
+    class Config:
+        TIMEOUT = 30          -> HAS_VALUE, object_literal "30"
+
+Every condition must hold: the assignment is a direct child of a ClassDef body,
+it is an `ast.Assign` with exactly one `ast.Name` target, and its value is a bare
+`ast.Constant` of a type the value normalizer can compare. `10 + 20`,
+`get_timeout()`, `OTHER`, `A = B = 10` and `A, B = (1, 2)` are all rejected with a
+diagnostic -- no arithmetic, no constant folding, no data-flow, no guessing.
+
+The extractor identifies the literal and records its SOURCE text. Whether two
+values mean the same thing is kgc/claim_value.py's decision, not this module's.
 """
 from __future__ import annotations
 
@@ -45,6 +60,36 @@ def _byte_locator(offs: list[int], node: ast.AST, data: bytes) -> Locator:
         "line_start": ls, "line_end": le, "col_start": cs, "col_end": ce})
 
 
+# Literal types the value normalizer can compare without ambiguity. `bytes` is
+# deliberately absent: kgc/claim_value.py strips the `b` prefix, so b"30" and
+# "30" would compare SAME when they are different values. Excluding it is not
+# tidiness -- including it would manufacture a false agreement.
+_REPRESENTABLE = (bool, int, float, str, type(None))
+
+
+def _class_literal(node: ast.AST) -> tuple:
+    """Classify one class-body statement.
+
+    Returns `(target_name_node, constant_node)` when every condition in the
+    module docstring holds, and `(None, reason)` otherwise. The reason is always
+    recorded by the caller -- a refusal is never silently dropped.
+    """
+    if isinstance(node, ast.AnnAssign):
+        return None, "annotated assignment"
+    if not isinstance(node, ast.Assign):
+        return None, f"{type(node).__name__} statement"
+    if len(node.targets) != 1:
+        return None, "chained assignment to several targets"
+    target = node.targets[0]
+    if not isinstance(target, ast.Name):
+        return None, f"{type(target).__name__} target is not a plain name"
+    if not isinstance(node.value, ast.Constant):
+        return None, f"value is a {type(node.value).__name__}, not a bare literal"
+    if type(node.value.value) not in _REPRESENTABLE:
+        return None, f"literal type {type(node.value.value).__name__!r} is not safely comparable"
+    return target, node.value
+
+
 def analyze(artifact_id: str, data: bytes, module_name: str = "module") -> CodeAnalysis:
     an = CodeAnalysis(backend_id=BACKEND_ID, backend_version=BACKEND_VERSION,
                       language="python", parse_status=ParseStatus.OK)
@@ -73,7 +118,12 @@ def analyze(artifact_id: str, data: bytes, module_name: str = "module") -> CodeA
     module_scope: dict[str, str] = {}   # local name -> qualified name
     imported: dict[str, str] = {}       # local name -> dotted origin
 
-    def walk(node: ast.AST, parent_q: str, is_class: bool) -> None:
+    def walk(node: ast.AST, parent_q: str, is_class: bool,
+             class_body: bool = False) -> None:
+        """`class_body` is True only while iterating a ClassDef's OWN children.
+        `is_class` stays True inside a nested `if`/`try`, which is why a second
+        flag is needed: `TIMEOUT = 30` under `if sys.version_info:` is not a
+        direct class-body assignment and must not be extracted as one."""
         for child in ast.iter_child_nodes(node):
             if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 q = f"{parent_q}.{child.name}"
@@ -82,7 +132,7 @@ def analyze(artifact_id: str, data: bytes, module_name: str = "module") -> CodeA
                     _byte_locator(offs, child, data), ast.get_docstring(child)))
                 if parent_q == module_name:
                     module_scope[child.name] = q
-                walk(child, q, False)
+                walk(child, q, False, False)
 
             elif isinstance(child, ast.ClassDef):
                 q = f"{parent_q}.{child.name}"
@@ -98,7 +148,7 @@ def analyze(artifact_id: str, data: bytes, module_name: str = "module") -> CodeA
                         an.references.append(RawReference(
                             q, "EXTENDS", bname, tq, res,
                             _byte_locator(offs, base, data), why))
-                walk(child, q, True)
+                walk(child, q, True, True)
 
             elif isinstance(child, ast.Import):
                 for alias in child.names:
@@ -149,12 +199,35 @@ def analyze(artifact_id: str, data: bytes, module_name: str = "module") -> CodeA
                                                     _byte_locator(offs, child, data)))
                         if parent_q == module_name:
                             module_scope[t.id] = q
-                walk(child, parent_q, is_class)
+                if class_body:
+                    _class_value(child, parent_q)
+                walk(child, parent_q, is_class, False)
 
             else:
-                walk(child, parent_q, is_class)
+                walk(child, parent_q, is_class, False)
 
-    walk(tree, module_name, False)
+    def _class_value(node: ast.AST, class_q: str) -> None:
+        """Emit HAS_VALUE, or record why not. Never both, never neither."""
+        target, value_or_reason = _class_literal(node)
+        if target is None:
+            an.diagnostics.append(Diagnostic(
+                artifact_id, "INFO", "UNSUPPORTED_CLASS_LITERAL",
+                f"class-body assignment in {class_q} not extracted as a value: "
+                f"{value_or_reason}", getattr(node, "lineno", None)))
+            return
+        vloc = _byte_locator(offs, value_or_reason, data)
+        an.references.append(RawReference(
+            f"{class_q}.{target.id}", "HAS_VALUE",
+            # SOURCE text of the literal, verbatim. Normalization is not this
+            # module's job -- see the policy note in the module docstring.
+            data[vloc.payload["byte_start"]:vloc.payload["byte_end"]].decode("utf-8"),
+            None, Resolution.DETERMINISTIC,
+            # the evidence locator is the ASSIGNMENT, not just its right-hand
+            # side: `TIMEOUT = 30` is what a reader must see to check the claim.
+            _byte_locator(offs, node, data),
+            "direct class-body assignment of a bare literal"))
+
+    walk(tree, module_name, False, False)
     an.bindings = dict(imported)
     an.module_defs = set(module_scope)
 

@@ -26,7 +26,7 @@ Every field of the specification, in one place. This is the ONLY predicate table
 | `READS` | symbol | symbol | structural | yes | **MULTI_VALUED** | never contradicts | DERIVED, CONFIRMED | **no** |
 | `WRITES` | symbol | symbol | structural | yes | **MULTI_VALUED** | never contradicts | DERIVED, CONFIRMED | **no** |
 | `HAS_DEFAULT` | symbol | literal | structural | yes | **FUNCTIONAL** | can contradict | DERIVED, CONFIRMED | **no** |
-| `HAS_VALUE` | symbol | literal | structural | yes | **FUNCTIONAL** | can contradict | DERIVED, CONFIRMED | **no** |
+| `HAS_VALUE` | symbol | literal | structural | yes | **FUNCTIONAL** | can contradict | DERIVED, CONFIRMED | yes, direct class-body literals only (K-1) |
 | `HAS_TYPE` | symbol | symbol|literal | structural | no | **FUNCTIONAL** | can contradict | DERIVED, CONFIRMED | **no** |
 | `HAS_PURPOSE` | symbol | literal | semantic | no | **FUNCTIONAL** | can contradict | DERIVED, CONFIRMED, PROPOSED, DISPUTED | **no** |
 
@@ -49,16 +49,24 @@ symbols; a function reads and writes many values.
 worse than missing one: a false CONTRADICTS presents two correct facts as a
 dispute.
 
-### Seven of eleven predicates are not emitted
+### Six of eleven predicates are not emitted
 
-`DEFINES`, `READS`, `WRITES`, `HAS_DEFAULT`, `HAS_VALUE`, `HAS_TYPE` and
-`HAS_PURPOSE` are declared but **no adapter produces them**. The vocabulary
-currently promises capability the compiler does not have. This is recorded in
-the spec itself (`emitted_by_compiler`) so the gap is visible rather than
-implied, and it is the substance of condition J-3.
+`DEFINES`, `READS`, `WRITES`, `HAS_DEFAULT`, `HAS_TYPE` and `HAS_PURPOSE` are
+declared but **no adapter produces them**. The vocabulary still promises
+capability the compiler does not have. This is recorded in the spec itself
+(`emitted_by_compiler`) so the gap is visible rather than implied, and it is the
+substance of condition J-3.
 
-Consequence for testing: functional conflict cannot be produced by ingestion, so
-those tests insert claims directly and say so.
+`HAS_VALUE` left that list in K-1, but only for one shape: an assignment that is
+a direct child of a class body, with exactly one plain-name target and a bare
+literal on the right. Nothing is evaluated — `TIMEOUT = 10 + 20` is refused with
+a diagnostic, not folded to 30 — and module-level constants, annotated
+assignments and anything inside a function are all out of scope. Measured
+coverage and the exact refusal counts are in K1_REPORT.md §3.
+
+Consequence for testing: functional conflict is now demonstrated end to end on
+compiled `HAS_VALUE` claims. The remaining functional predicates are still
+vocabulary-only, so tests that need them insert claims directly and say so.
 
 ## 3. Property-word mapping
 

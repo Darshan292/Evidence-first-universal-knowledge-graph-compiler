@@ -15,8 +15,18 @@ from pathlib import Path
 from kgc import SCHEMA_VERSION
 from kgc.ids import canonical_json, diagnostic_id
 from kgc.ir import Artifact, Claim, Diagnostic, Evidence, Symbol
+from kgc.predicates import LITERAL_OBJECT, STRUCTURAL
 
-STRUCTURAL_SQL_LIST = "'CONTAINS','DEFINES','IMPORTS','CALLS','REFERENCES','EXTENDS','IMPLEMENTS','READS','WRITES'"
+# Both lists are DERIVED from the predicate spec, not retyped. The hand-written
+# version had drifted: it omitted HAS_VALUE, HAS_DEFAULT and HAS_TYPE, so the
+# "a model may never establish a structural fact" trigger stopped covering them
+# the moment the compiler began emitting one. REFERENCES and IMPLEMENTS are not
+# in the vocabulary but have always been guarded here, and still are.
+_LEGACY_STRUCTURAL = {"REFERENCES", "IMPLEMENTS"}
+STRUCTURAL_SQL_LIST = ",".join(f"'{p}'" for p in sorted(STRUCTURAL | _LEGACY_STRUCTURAL))
+# A predicate whose object is a value must carry that value and must not pretend
+# to point at a symbol.
+LITERAL_OBJECT_SQL_LIST = ",".join(f"'{p}'" for p in sorted(LITERAL_OBJECT))
 
 SCHEMA = f"""
 PRAGMA journal_mode=WAL;
@@ -220,6 +230,15 @@ CREATE TRIGGER IF NOT EXISTS derived_claim_has_no_model
 AFTER INSERT ON claim
 WHEN NEW.establishment = 'DERIVED' AND NEW.model_id IS NOT NULL
 BEGIN SELECT RAISE(ABORT, 'INVARIANT: DERIVED claim must not have model_id'); END;
+
+-- A literal-valued predicate carries its value, not a symbol reference. Without
+-- this, a HAS_VALUE claim could be written with a null object_literal and look
+-- like a fact while asserting nothing.
+CREATE TRIGGER IF NOT EXISTS literal_claim_carries_its_value
+AFTER INSERT ON claim
+WHEN NEW.predicate IN ({LITERAL_OBJECT_SQL_LIST})
+ AND (NEW.object_literal IS NULL OR NEW.object_literal = '' OR NEW.object_id IS NOT NULL)
+BEGIN SELECT RAISE(ABORT, 'INVARIANT: literal-valued claim needs object_literal and no object_id'); END;
 
 CREATE TRIGGER IF NOT EXISTS rejected_claim_needs_reason
 AFTER INSERT ON claim
@@ -428,6 +447,11 @@ class Store:
                       " ('FAILED','PARTIAL','UNSUPPORTED','SKIPPED')"
                       " AND (parse_error IS NULL OR parse_error='')").fetchone()["n"]
         if n: v.append(f"{n} failed artifact(s) with no recorded reason")
+
+        n = c.execute(f"SELECT count(*) n FROM claim WHERE predicate IN ({LITERAL_OBJECT_SQL_LIST})"
+                      " AND (object_literal IS NULL OR object_literal='' OR object_id IS NOT NULL)"
+                      ).fetchone()["n"]
+        if n: v.append(f"{n} literal-valued claim(s) without a value, or pointing at a symbol")
 
         n = c.execute("SELECT count(*) n FROM processing_run WHERE status='RUNNING'").fetchone()["n"]
         if n: v.append(f"{n} run(s) still marked RUNNING (interrupted or in progress)")

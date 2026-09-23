@@ -11,6 +11,7 @@ from kgc.analysis.interface import CodeAnalysis
 from kgc.evidence import make_evidence, verify
 from kgc.ids import claim_id, symbol_id
 from kgc.ir import (Claim, Establishment, Evidence, Lifecycle, Resolution, Symbol)
+from kgc.predicates import LITERAL_OBJECT
 
 
 def map_analysis(an: CodeAnalysis, *, artifact_id: str, data: bytes, run_id: str,
@@ -78,6 +79,10 @@ def map_analysis(an: CodeAnalysis, *, artifact_id: str, data: bytes, run_id: str
             Resolution.DETERMINISTIC, Resolution.HEURISTIC) else None
         cid = emit(rr.predicate, subject_qn, object_qn,
                    None if object_qn else rr.to_name, rr.locator, quoted)
-        if cid:
+        # The `reference` table records how well a target SYMBOL was resolved. A
+        # literal-valued claim has no target symbol, so it gets no row: writing
+        # one would assert DETERMINISTIC resolution with a null object_id, which
+        # check_invariants correctly reports as an unsupported assertion.
+        if cid and rr.predicate not in LITERAL_OBJECT:
             refs.append((cid, rr.to_name, rr.resolution.value, rr.reason))
     return symbols, claims, refs

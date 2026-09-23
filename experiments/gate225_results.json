@@ -8,13 +8,13 @@
       "symbol": 5303,
       "reference": 9121,
       "evidence": 14275,
-      "claim": 14291,
+      "claim": 14449,
       "claim_relation": 0,
-      "diagnostic": 3982,
+      "diagnostic": 4216,
       "work_item": 273
     },
-    "query_latency_ms_p50": 2.12,
-    "query_latency_ms_p95": 22.53,
+    "query_latency_ms_p50": 2.33,
+    "query_latency_ms_p95": 21.22,
     "CALIBRATION": {
       "safety": {
         "n_unsupported": 18,
@@ -575,7 +575,7 @@
       "claim_rank": 1,
       "evidence_rank": 1,
       "exposed": true,
-      "n_hits": 1,
+      "n_hits": 2,
       "all_trusted": true,
       "all_verified": true
     },
@@ -591,7 +591,7 @@
       "claim_rank": 1,
       "evidence_rank": 1,
       "exposed": true,
-      "n_hits": 1,
+      "n_hits": 2,
       "all_trusted": true,
       "all_verified": true
     },
@@ -607,7 +607,7 @@
       "claim_rank": 1,
       "evidence_rank": 1,
       "exposed": true,
-      "n_hits": 1,
+      "n_hits": 2,
       "all_trusted": true,
       "all_verified": true
     },
@@ -623,7 +623,7 @@
       "claim_rank": 1,
       "evidence_rank": 1,
       "exposed": true,
-      "n_hits": 1,
+      "n_hits": 2,
       "all_trusted": true,
       "all_verified": true
     },
@@ -655,7 +655,7 @@
       "claim_rank": 1,
       "evidence_rank": 1,
       "exposed": true,
-      "n_hits": 1,
+      "n_hits": 2,
       "all_trusted": true,
       "all_verified": true
     },
@@ -671,7 +671,7 @@
       "claim_rank": 1,
       "evidence_rank": 1,
       "exposed": true,
-      "n_hits": 1,
+      "n_hits": 2,
       "all_trusted": true,
       "all_verified": true
     },
@@ -687,7 +687,7 @@
       "claim_rank": 1,
       "evidence_rank": 1,
       "exposed": true,
-      "n_hits": 1,
+      "n_hits": 2,
       "all_trusted": true,
       "all_verified": true
     },
@@ -703,7 +703,7 @@
       "claim_rank": 1,
       "evidence_rank": 1,
       "exposed": true,
-      "n_hits": 1,
+      "n_hits": 2,
       "all_trusted": true,
       "all_verified": true
     },
@@ -719,7 +719,7 @@
       "claim_rank": 1,
       "evidence_rank": 1,
       "exposed": true,
-      "n_hits": 1,
+      "n_hits": 2,
       "all_trusted": true,
       "all_verified": true
     },
@@ -728,14 +728,14 @@
       "class": "property_lookup",
       "scope": "IN_SCOPE_ANSWERABLE",
       "split": "TEST",
-      "decision": "EXPOSE",
+      "decision": "EXPOSE_CONFLICTED",
       "correct": true,
       "failed_invariant": null,
       "parse_status": "PARSED",
       "claim_rank": 1,
       "evidence_rank": 1,
       "exposed": true,
-      "n_hits": 3,
+      "n_hits": 6,
       "all_trusted": true,
       "all_verified": true
     },
@@ -783,7 +783,7 @@
       "claim_rank": 1,
       "evidence_rank": 1,
       "exposed": true,
-      "n_hits": 1,
+      "n_hits": 2,
       "all_trusted": true,
       "all_verified": true
     },
@@ -799,7 +799,7 @@
       "claim_rank": 1,
       "evidence_rank": 1,
       "exposed": true,
-      "n_hits": 1,
+      "n_hits": 2,
       "all_trusted": true,
       "all_verified": true
     },
@@ -815,7 +815,7 @@
       "claim_rank": 1,
       "evidence_rank": 1,
       "exposed": true,
-      "n_hits": 1,
+      "n_hits": 2,
       "all_trusted": true,
       "all_verified": true
     },

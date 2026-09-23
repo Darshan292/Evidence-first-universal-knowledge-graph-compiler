@@ -20,6 +20,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from kgc.ir import Resolution
+from kgc.predicates import LITERAL_OBJECT
 
 RESOLVER_VERSION = "1.0.0"
 
@@ -67,6 +68,12 @@ def resolve(analysis, module_name: str, index: ModuleIndex, reexports: dict[str,
     """
     out = []
     for ref in analysis.references:
+        if ref.predicate in LITERAL_OBJECT:
+            # A literal has no cross-module target. Routing it through the import
+            # resolver asked whether `30` is a module in the corpus and demoted a
+            # fully determined fact to UNRESOLVED with a nonsense reason.
+            out.append(ref)
+            continue
         if ref.predicate != "CALLS":
             out.append(_resolve_import(ref, index, analysis))
             continue

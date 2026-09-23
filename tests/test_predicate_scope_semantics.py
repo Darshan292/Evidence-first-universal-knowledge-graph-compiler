@@ -46,6 +46,9 @@ class Service(BaseOne, BaseTwo):
         helper_b()
         return 1
 ''',
+    # K-1: a functional conflict the COMPILER produces, so the functional branch
+    # is no longer exercised only by rows a test inserted.
+    "src/retry.py": "class Retry:\n    COUNT = 3\n    COUNT = 5\n",
     "src/alpha.py": "def helper_a():\n    return 'a'\n",
     "src/beta.py": "def helper_b():\n    return 'b'\n",
     # same basename, three different identities
@@ -77,9 +80,10 @@ class Base(unittest.TestCase):
                   establishment="DERIVED", strength="EXACT"):
         """Insert a claim directly.
 
-        NOTE: the compiler emits no FUNCTIONAL predicates today (only CALLS,
-        CONTAINS, IMPORTS, EXTENDS), so functional conflict cannot be produced
-        by ingestion. These claims are inserted to exercise the decision path.
+        Since K-1 the compiler emits one FUNCTIONAL predicate, HAS_VALUE, and
+        the end-to-end conflict tests use it. Injection remains only for the
+        predicates that are still vocabulary-only -- HAS_DEFAULT, HAS_TYPE,
+        HAS_PURPOSE -- which no adapter produces.
         """
         run = self.store.con.execute("SELECT run_id FROM processing_run LIMIT 1").fetchone()[0]
         art = self.store.con.execute(
@@ -150,20 +154,22 @@ class TestFunctionalConflicts(Base):
             self.assertEqual(cardinality(pred), FUNCTIONAL, pred)
             self.assertTrue(may_contradict(pred), pred)
 
+    def test_two_different_compiled_values_conflict(self):
+        """The demonstration that matters: both claims came from the compiler."""
+        d = decide(self.index, "Retry's COUNT")
+        self.assertEqual(d.outcome, EXPOSE_CONFLICTED, d.reason)
+        self.assertEqual(d.conflict["predicate"], "HAS_VALUE")
+        self.assertEqual(sorted(d.conflict["values"]), ["3", "5"])
+        self.assertEqual({h.establishment for h in d.hits
+                          if h.predicate == "HAS_VALUE"}, {"DERIVED"})
+
     def test_two_different_has_default_values_conflict(self):
+        """HAS_DEFAULT is still vocabulary-only, so these rows are injected."""
         self.add_claim("c-hd-30", "HAS_DEFAULT", "30 seconds")
         self.add_claim("c-hd-60", "HAS_DEFAULT", "60 seconds")
-        d = decide(self.index, "what is the default of Service")
-        if d.outcome in (ABSTAIN, ABSTAIN_AMBIGUOUS):
-            hits = self.index.claims_from(
-                self.store.con.execute(
-                    "SELECT symbol_id FROM symbol WHERE name='Service'").fetchone()[0],
-                "HAS_DEFAULT")
-            from experiments.retrieval.claimfirst import _conflict
-            self.assertEqual(_conflict(hits)["state"], "CONTRADICTS",
-                             "differing functional values were not a conflict")
-        else:
-            self.assertEqual(d.outcome, EXPOSE_CONFLICTED)
+        d = decide(self.index, "Service")
+        self.assertEqual(d.outcome, EXPOSE_CONFLICTED, d.reason)
+        self.assertEqual(d.conflict["predicate"], "HAS_DEFAULT")
 
     def test_identical_functional_values_are_consistent(self):
         self.assertEqual(compare("30 seconds", "30 seconds"), SAME)

@@ -1,0 +1,116 @@
+[
+  {
+    "corpus": "eval/corpus",
+    "walked_analysable": 7,
+    "OK": 7,
+    "FAILED": 0,
+    "SKIPPED": 0,
+    "UNSUPPORTED": 8,
+    "absent": [],
+    "report_absent": [],
+    "extraction_failures": 0,
+    "counts": {
+      "artifact": 15,
+      "symbol": 39,
+      "reference": 34,
+      "evidence": 63,
+      "claim": 66,
+      "claim_relation": 0,
+      "diagnostic": 21,
+      "work_item": 14
+    },
+    "invariant_violations": [],
+    "identity": {
+      "symbols": 39,
+      "duplicate_qualified_names": 0,
+      "symbols_sharing_a_qualified_name": 0,
+      "parent_links_violating_containment": 0,
+      "non_module_symbols_without_a_parent": 0,
+      "claims_with_evidence_inside_the_subject": 66,
+      "claims_outside_but_subject_name_unique": 0,
+      "claims_outside_AND_subject_ambiguous": 0
+    },
+    "failed_artifacts": [],
+    "deterministic": true,
+    "differing_tables": []
+  },
+  {
+    "corpus": "eval/corpus2",
+    "walked_analysable": 8,
+    "OK": 8,
+    "FAILED": 0,
+    "SKIPPED": 0,
+    "UNSUPPORTED": 16,
+    "absent": [],
+    "report_absent": [],
+    "extraction_failures": 0,
+    "counts": {
+      "artifact": 24,
+      "symbol": 172,
+      "reference": 250,
+      "evidence": 414,
+      "claim": 414,
+      "claim_relation": 0,
+      "diagnostic": 104,
+      "work_item": 16
+    },
+    "invariant_violations": [],
+    "identity": {
+      "symbols": 172,
+      "duplicate_qualified_names": 20,
+      "symbols_sharing_a_qualified_name": 45,
+      "parent_links_violating_containment": 0,
+      "non_module_symbols_without_a_parent": 0,
+      "claims_with_evidence_inside_the_subject": 414,
+      "claims_outside_but_subject_name_unique": 0,
+      "claims_outside_AND_subject_ambiguous": 0
+    },
+    "failed_artifacts": [],
+    "deterministic": true,
+    "differing_tables": []
+  },
+  {
+    "corpus": "eval/corpus3",
+    "walked_analysable": 140,
+    "OK": 140,
+    "FAILED": 0,
+    "SKIPPED": 0,
+    "UNSUPPORTED": 85,
+    "absent": [],
+    "report_absent": [],
+    "extraction_failures": 0,
+    "counts": {
+      "artifact": 225,
+      "symbol": 6102,
+      "reference": 10403,
+      "evidence": 16349,
+      "claim": 16527,
+      "claim_relation": 0,
+      "diagnostic": 4913,
+      "work_item": 280
+    },
+    "invariant_violations": [],
+    "identity": {
+      "symbols": 6102,
+      "duplicate_qualified_names": 493,
+      "symbols_sharing_a_qualified_name": 1302,
+      "parent_links_violating_containment": 0,
+      "non_module_symbols_without_a_parent": 0,
+      "claims_with_evidence_inside_the_subject": 16244,
+      "claims_outside_but_subject_name_unique": 283,
+      "claims_outside_AND_subject_ambiguous": 0
+    },
+    "failed_artifacts": [],
+    "previously_lost": {
+      "src/werkzeug/local.py": "OK",
+      "src/werkzeug/test.py": "OK",
+      "src/werkzeug/testapp.py": "OK",
+      "src/werkzeug/debug/__init__.py": "OK",
+      "tests/test_test.py": "OK",
+      "tests/test_utils.py": "OK",
+      "tests/middleware/test_proxy_fix.py": "OK"
+    },
+    "deterministic": true,
+    "differing_tables": []
+  }
+]

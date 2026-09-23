@@ -33,6 +33,12 @@ def main(argv=None) -> int:
         if a.cmd == "ingest":
             rep = ingest(store, Path(a.root), resume=not a.no_resume)
             print(json.dumps(rep.as_dict(), indent=2))
+            if rep.absent:
+                # A walked, analysable file with no artifact row is the failure
+                # K-1.1 exists to prevent. It must not exit 0.
+                for rel in rep.absent:
+                    print(f"COVERAGE: {rel} was analysed but has no artifact row", file=sys.stderr)
+                return 1
             return 0
 
         if a.cmd == "stats":

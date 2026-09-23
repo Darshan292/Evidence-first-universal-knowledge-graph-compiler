@@ -33,19 +33,30 @@ class ModuleIndex:
     `symbol_ids`: qualified name -> symbol_id, so a claim can reference a symbol
     in ANOTHER artifact. Without this the mapper can only link within one file,
     which produced DETERMINISTIC references carrying a null target.
+
+    A qualified name that names MORE THAN ONE symbol maps to None rather than to
+    one of them (K-1.1). `setdefault` over an unordered scan used to keep an
+    arbitrary occurrence -- measured: 2 cross-artifact CALLS edges on werkzeug
+    pointed at a nested function that exists twice. A caller distinguishes the
+    two cases by membership: absent means "not in the corpus", present-and-None
+    means "several candidates, and choosing would be a guess".
     """
     modules: dict[str, dict[str, str]]
-    symbol_ids: dict[str, str]
+    symbol_ids: dict[str, str | None]
 
     @classmethod
     def from_store(cls, store) -> "ModuleIndex":
         mods: dict[str, dict[str, str]] = {}
-        ids: dict[str, str] = {}
+        ids: dict[str, str | None] = {}
         rows = store.con.execute(
             "SELECT s.symbol_id, s.qualified_name, s.kind, p.qualified_name AS parent_qn"
-            "  FROM symbol s LEFT JOIN symbol p ON p.symbol_id = s.parent_id")
+            "  FROM symbol s LEFT JOIN symbol p ON p.symbol_id = s.parent_id"
+            " ORDER BY s.symbol_id")          # explicit: an unordered scan is not a choice
         for r in rows:
-            ids.setdefault(r["qualified_name"], r["symbol_id"])
+            if r["qualified_name"] in ids:
+                ids[r["qualified_name"]] = None      # several symbols share this name
+            else:
+                ids[r["qualified_name"]] = r["symbol_id"]
             if r["kind"] == "module":
                 mods.setdefault(r["qualified_name"], {})
             elif r["parent_qn"]:

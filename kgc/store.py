@@ -272,6 +272,18 @@ class Store:
         except sqlite3.OperationalError:
             pass
 
+    # Nested boundary inside the artifact transaction. It lets graph writes be
+    # discarded while the artifact row they belong to survives, so a parseable
+    # file that fails during extraction is still a recorded fact.
+    def savepoint(self, name: str):
+        self.con.execute(f"SAVEPOINT {name}")
+
+    def release(self, name: str):
+        self.con.execute(f"RELEASE {name}")
+
+    def rollback_to(self, name: str):
+        self.con.execute(f"ROLLBACK TO {name}")
+
     def close(self):
         self.con.close()
 
@@ -300,6 +312,39 @@ class Store:
             (a.artifact_id, a.source_id, a.rel_path, a.sha256, a.size_bytes, a.media_type,
              a.modality.value, a.parse_status.value, a.parse_error, a.parser_id,
              a.parser_version, run_id))
+
+    def mark_artifact_failed(self, artifact_id: str, parse_error: str):
+        """Record on the artifact itself that its graph could not be built.
+
+        The artifact row is the durable evidence of the failure. Deleting it --
+        which a plain transaction rollback does -- leaves no trace that the file
+        was ever seen.
+        """
+        self.con.execute(
+            "UPDATE artifact SET parse_status='FAILED', parse_error=? WHERE artifact_id=?",
+            (parse_error, artifact_id))
+
+    def purge_artifact_graph(self, artifact_id: str) -> None:
+        """Remove every graph row belonging to one artifact, keeping the artifact.
+
+        Used only when extraction failed after an earlier stage already committed
+        symbols, so a FAILED artifact never carries a partial graph. Foreign keys
+        are deferred to COMMIT because symbol.parent_id is self-referential and a
+        bulk delete cannot order parents after children.
+        """
+        self.con.execute("PRAGMA defer_foreign_keys=1")
+        self.con.execute(
+            "DELETE FROM claim_evidence WHERE evidence_id IN"
+            " (SELECT evidence_id FROM evidence WHERE artifact_id=?)", (artifact_id,))
+        self.con.execute(
+            "DELETE FROM reference WHERE claim_id IN"
+            " (SELECT cl.claim_id FROM claim cl JOIN symbol s ON s.symbol_id=cl.subject_id"
+            "   WHERE s.artifact_id=?)", (artifact_id,))
+        self.con.execute(
+            "DELETE FROM claim WHERE subject_id IN"
+            " (SELECT symbol_id FROM symbol WHERE artifact_id=?)", (artifact_id,))
+        self.con.execute("DELETE FROM evidence WHERE artifact_id=?", (artifact_id,))
+        self.con.execute("DELETE FROM symbol WHERE artifact_id=?", (artifact_id,))
 
     def add_symbol(self, s: Symbol):
         self.con.execute(
@@ -452,6 +497,34 @@ class Store:
                       " AND (object_literal IS NULL OR object_literal='' OR object_id IS NOT NULL)"
                       ).fetchone()["n"]
         if n: v.append(f"{n} literal-valued claim(s) without a value, or pointing at a symbol")
+
+        n = c.execute("SELECT count(*) n FROM artifact WHERE parse_status='FAILED'"
+                      " AND NOT EXISTS (SELECT 1 FROM diagnostic d"
+                      "                 WHERE d.artifact_id=artifact.artifact_id)").fetchone()["n"]
+        if n: v.append(f"{n} FAILED artifact(s) with no diagnostic explaining the failure")
+
+        n = c.execute("SELECT count(*) n FROM claim cl JOIN symbol s ON s.symbol_id=cl.subject_id"
+                      " JOIN artifact a ON a.artifact_id=s.artifact_id"
+                      " WHERE a.parse_status='FAILED'").fetchone()["n"]
+        if n: v.append(f"{n} claim(s) belonging to a FAILED artifact (partial graph)")
+
+        n = c.execute("SELECT count(*) n FROM claim cl WHERE NOT EXISTS"
+                      " (SELECT 1 FROM symbol s WHERE s.symbol_id=cl.subject_id)").fetchone()["n"]
+        if n: v.append(f"{n} claim(s) whose subject symbol does not exist")
+
+        n = c.execute("SELECT count(*) n FROM claim cl WHERE cl.object_id IS NOT NULL"
+                      " AND NOT EXISTS (SELECT 1 FROM symbol s WHERE s.symbol_id=cl.object_id)"
+                      ).fetchone()["n"]
+        if n: v.append(f"{n} claim(s) whose object symbol does not exist")
+
+        # Occurrence identity: a parent must be the occurrence that CONTAINS the
+        # child in source, not merely a symbol sharing its qualified name.
+        n = c.execute("""SELECT count(*) n FROM symbol c JOIN symbol p ON p.symbol_id=c.parent_id
+                         WHERE p.artifact_id != c.artifact_id
+                            OR json_extract(p.locator,'$.byte_start') > json_extract(c.locator,'$.byte_start')
+                            OR json_extract(p.locator,'$.byte_end')   < json_extract(c.locator,'$.byte_end')
+                      """).fetchone()["n"]
+        if n: v.append(f"{n} symbol(s) whose parent does not contain them in source")
 
         n = c.execute("SELECT count(*) n FROM processing_run WHERE status='RUNNING'").fetchone()["n"]
         if n: v.append(f"{n} run(s) still marked RUNNING (interrupted or in progress)")

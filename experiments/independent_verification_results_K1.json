@@ -1,8 +1,8 @@
 {
   "corpus": "corpus3 (werkzeug)",
-  "total_claims": 16527,
+  "total_claims": 14449,
   "definition_claims": {
-    "population": 2473,
+    "population": 2197,
     "sample_size": 400,
     "independently_confirmed": 400,
     "deterministic_precision": 1.0,
@@ -16,7 +16,7 @@
     "mismatches": []
   },
   "extends_claims": {
-    "population": 163,
+    "population": 154,
     "sample_size": 150,
     "independently_confirmed": 150,
     "precision": 1.0,

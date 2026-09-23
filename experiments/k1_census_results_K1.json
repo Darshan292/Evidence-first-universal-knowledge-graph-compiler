@@ -36,10 +36,10 @@
       "value is a Name": 18,
       "value is a Tuple": 11
     },
-    "has_value_claims": 162,
-    "evidence_verified": 162,
+    "has_value_claims": 158,
+    "evidence_verified": 158,
     "evidence_verification_rate": 1.0,
-    "diagnostics_recorded": 368,
+    "diagnostics_recorded": 234,
     "establishment": [
       "DERIVED"
     ],
@@ -47,7 +47,15 @@
     "out_of_scope_module_level_or_nested": 226,
     "out_of_scope_function_body": 3838,
     "invariant_violations": [],
-    "artifacts_lost_before_claims": [],
-    "supported_minus_emitted": 0
+    "artifacts_lost_before_claims": [
+      "src/werkzeug/local.py",
+      "src/werkzeug/test.py",
+      "src/werkzeug/testapp.py",
+      "src/werkzeug/debug/__init__.py",
+      "tests/test_test.py",
+      "tests/test_utils.py",
+      "tests/middleware/test_proxy_fix.py"
+    ],
+    "supported_minus_emitted": 4
   }
 ]

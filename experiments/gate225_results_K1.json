@@ -2,19 +2,19 @@
   "summary": {
     "corpus": "eval/corpus3 (werkzeug @ 6048fa48753c7b61e35cc34537667809dee8fa35, BSD-3-Clause)",
     "artifacts": 225,
-    "ingest_seconds": 9.5,
+    "ingest_seconds": 8.4,
     "db_counts": {
-      "artifact": 225,
-      "symbol": 6102,
-      "reference": 10403,
-      "evidence": 16349,
-      "claim": 16527,
+      "artifact": 218,
+      "symbol": 5303,
+      "reference": 9121,
+      "evidence": 14275,
+      "claim": 14449,
       "claim_relation": 0,
-      "diagnostic": 4913,
-      "work_item": 280
+      "diagnostic": 4216,
+      "work_item": 273
     },
-    "query_latency_ms_p50": 2.5,
-    "query_latency_ms_p95": 25.38,
+    "query_latency_ms_p50": 2.33,
+    "query_latency_ms_p95": 21.22,
     "CALIBRATION": {
       "safety": {
         "n_unsupported": 18,
@@ -32,17 +32,17 @@
       },
       "availability": {
         "n_answerable": 20,
-        "false_abstention_rate": 0.15,
-        "acceptance_rate": 0.85
+        "false_abstention_rate": 0.2,
+        "acceptance_rate": 0.8
       },
       "retrieval": {
-        "claim_recall@1": 0.75,
-        "claim_recall@5": 0.75,
-        "claim_recall@10": 0.75,
-        "claim_MRR": 0.756,
+        "claim_recall@1": 0.7,
+        "claim_recall@5": 0.7,
+        "claim_recall@10": 0.7,
+        "claim_MRR": 0.706,
         "evidence_recall@1": 0.35,
         "evidence_recall@10": 0.6,
-        "evidence_MRR": 0.422
+        "evidence_MRR": 0.42
       },
       "ambiguity": {
         "n": 3,
@@ -110,17 +110,17 @@
       },
       "availability": {
         "n_answerable": 21,
-        "false_abstention_rate": 0.095,
-        "acceptance_rate": 0.905
+        "false_abstention_rate": 0.143,
+        "acceptance_rate": 0.857
       },
       "retrieval": {
-        "claim_recall@1": 0.762,
-        "claim_recall@5": 0.81,
-        "claim_recall@10": 0.857,
-        "claim_MRR": 0.797,
+        "claim_recall@1": 0.714,
+        "claim_recall@5": 0.762,
+        "claim_recall@10": 0.81,
+        "claim_MRR": 0.749,
         "evidence_recall@1": 0.333,
-        "evidence_recall@10": 0.571,
-        "evidence_MRR": 0.382
+        "evidence_recall@10": 0.524,
+        "evidence_MRR": 0.374
       },
       "ambiguity": {
         "n": 2,
@@ -149,17 +149,17 @@
       },
       "availability": {
         "n_answerable": 62,
-        "false_abstention_rate": 0.097,
-        "acceptance_rate": 0.903
+        "false_abstention_rate": 0.129,
+        "acceptance_rate": 0.871
       },
       "retrieval": {
-        "claim_recall@1": 0.774,
-        "claim_recall@5": 0.806,
-        "claim_recall@10": 0.823,
-        "claim_MRR": 0.798,
+        "claim_recall@1": 0.742,
+        "claim_recall@5": 0.774,
+        "claim_recall@10": 0.79,
+        "claim_MRR": 0.766,
         "evidence_recall@1": 0.355,
-        "evidence_recall@10": 0.645,
-        "evidence_MRR": 0.43
+        "evidence_recall@10": 0.629,
+        "evidence_MRR": 0.427
       },
       "ambiguity": {
         "n": 8,
@@ -408,14 +408,14 @@
       "class": "exact_lookup",
       "scope": "IN_SCOPE_ANSWERABLE",
       "split": "CALIBRATION",
-      "decision": "EXPOSE",
-      "correct": true,
-      "failed_invariant": null,
+      "decision": "ABSTAIN",
+      "correct": false,
+      "failed_invariant": "INV-1_subject",
       "parse_status": "PARSED",
-      "claim_rank": 1,
-      "evidence_rank": 19,
-      "exposed": true,
-      "n_hits": 19,
+      "claim_rank": null,
+      "evidence_rank": null,
+      "exposed": false,
+      "n_hits": 0,
       "all_trusted": true,
       "all_verified": true
     },
@@ -520,14 +520,14 @@
       "class": "exact_lookup",
       "scope": "IN_SCOPE_ANSWERABLE",
       "split": "TEST",
-      "decision": "EXPOSE",
-      "correct": true,
-      "failed_invariant": null,
+      "decision": "ABSTAIN",
+      "correct": false,
+      "failed_invariant": "INV-1_subject",
       "parse_status": "PARSED",
-      "claim_rank": 1,
-      "evidence_rank": 6,
-      "exposed": true,
-      "n_hits": 6,
+      "claim_rank": null,
+      "evidence_rank": null,
+      "exposed": false,
+      "n_hits": 0,
       "all_trusted": true,
       "all_verified": true
     },

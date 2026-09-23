@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "A": [
+      {
+        "query": "what is the default key derivation scheme",
+        "shape": "default_value_phrasing",
+        "why": "'what separator does X use by default' names a real attribute in prose the parser does not map. A synonym-free canonical property index over direct children closes it.",
+        "minimum_capability": "index direct-child attribute names for lookup"
+      },
+      {
+        "query": "what separator does Signer use by default",
+        "shape": "default_value_phrasing",
+        "why": "'what separator does X use by default' names a real attribute in prose the parser does not map. A synonym-free canonical property index over direct children closes it.",
+        "minimum_capability": "index direct-child attribute names for lookup"
+      },
+      {
+        "query": "what does itsdangerous re-export from exc",
+        "shape": "reexport_question",
+        "why": "'what does X re-export' is exactly the IMPORTS claims of a package __init__, already compiled.",
+        "minimum_capability": "map 're-export' to the IMPORTS predicate"
+      },
+      {
+        "query": "what does base64_decode raise on failure",
+        "shape": "raises_question",
+        "why": "'what does X raise on failure' is a CALLS claim to an exception class, already compiled.",
+        "minimum_capability": "map 'raise' phrasing to CALLS with an exception-typed object"
+      },
+      {
+        "query": "what is a salt used for",
+        "shape": "docstring_purpose",
+        "why": "The docstring is already extracted and stored on the symbol. A HAS_PURPOSE claim over the docstring's first sentence is derivable with no model.",
+        "minimum_capability": "add HAS_PURPOSE claims sourced from docstrings"
+      },
+      {
+        "query": "what is raised when a token is too old",
+        "shape": "raises_question",
+        "why": "'what does X raise on failure' is a CALLS claim to an exception class, already compiled.",
+        "minimum_capability": "map 'raise' phrasing to CALLS with an exception-typed object"
+      }
+    ],
+    "B": [
+      {
+        "query": "salt",
+        "shape": "bare_concept",
+        "why": "'salt' names a documented concept, not a compiled symbol. Requires locating a definition in prose.",
+        "minimum_capability": "document-level concept extraction"
+      },
+      {
+        "query": "how is the signing key derived from the secret",
+        "shape": "why_rationale",
+        "why": "'why was X chosen' requires interpreting argumentation in prose. No compiled claim expresses it.",
+        "minimum_capability": "document-level rationale extraction"
+      },
+      {
+        "query": "which component turns bytes into a shortened textual form",
+        "shape": "paraphrase_component",
+        "why": "'which component handles X behaviour' needs a mapping from a concept to symbols that is not lexical.",
+        "minimum_capability": "concept-to-symbol linking"
+      },
+      {
+        "query": "why should different salts be used",
+        "shape": "why_rationale",
+        "why": "'why was X chosen' requires interpreting argumentation in prose. No compiled claim expresses it.",
+        "minimum_capability": "document-level rationale extraction"
+      },
+      {
+        "query": "why was X designed this way",
+        "shape": "why_rationale",
+        "why": "'why was X chosen' requires interpreting argumentation in prose. No compiled claim expresses it.",
+        "minimum_capability": "document-level rationale extraction"
+      },
+      {
+        "query": "which component handles X behaviour",
+        "shape": "paraphrase_component",
+        "why": "'which component handles X behaviour' needs a mapping from a concept to symbols that is not lexical.",
+        "minimum_capability": "concept-to-symbol linking"
+      }
+    ],
+    "C": [
+      {
+        "query": "how does the routing system work overall",
+        "shape": "how_mechanism",
+        "why": "'how does routing work overall' requires composing many structural claims into a narrative.",
+        "minimum_capability": "multi-claim composition over the existing graph"
+      },
+      {
+        "query": "explain the middleware architecture",
+        "shape": "how_mechanism",
+        "why": "'how does routing work overall' requires composing many structural claims into a narrative.",
+        "minimum_capability": "multi-claim composition over the existing graph"
+      },
+      {
+        "query": "what are the tradeoffs of this design",
+        "shape": "tradeoffs",
+        "why": "'what are the tradeoffs' requires relating several rationale claims that do not yet exist.",
+        "minimum_capability": "rationale claims (B) plus composition (C)"
+      }
+    ],
+    "D": [
+      {
+        "query": "???",
+        "shape": "malformed",
+        "why": "Not a well-formed question. No capability answers it faithfully.",
+        "minimum_capability": "none: correct behaviour is to refuse"
+      },
+      {
+        "query": "the the the",
+        "shape": "malformed",
+        "why": "Not a well-formed question. No capability answers it faithfully.",
+        "minimum_capability": "none: correct behaviour is to refuse"
+      },
+      {
+        "query": "give me everything",
+        "shape": "malformed",
+        "why": "Not a well-formed question. No capability answers it faithfully.",
+        "minimum_capability": "none: correct behaviour is to refuse"
+      },
+      {
+        "query": "asdf qwer zxcv",
+        "shape": "malformed",
+        "why": "Not a well-formed question. No capability answers it faithfully.",
+        "minimum_capability": "none: correct behaviour is to refuse"
+      },
+      {
+        "query": "what is the default timeout of RedisSessionStore",
+        "shape": "unsupported_fact",
+        "why": "The fact is absent from the corpus. Any answer would be fabrication.",
+        "minimum_capability": "none: correct behaviour is to refuse"
+      }
+    ]
+  },
+  "counts": {
+    "A": 6,
+    "B": 6,
+    "C": 3,
+    "D": 5
+  },
+  "total": 20,
+  "class_A_share": 0.3,
+  "conclusion": "A future model stage should be scoped to classes B and C only. Class A is a claim-model gap, not a language-understanding gap, and building an LLM stage to cover it would hide a deterministic capability behind a probabilistic one."
+}

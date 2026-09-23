@@ -58,25 +58,6 @@ class ModuleIndex:
     def lookup(self, module: str, name: str) -> str | None:
         return self.modules.get(module, {}).get(name)
 
-    def resolve_origin(self, dotted: str, depth: int = 2) -> str | None:
-        """Resolve a dotted origin to a defined symbol, following re-exports.
-
-        `from pkg import helper` where pkg/__init__ does `from pkg.core import
-        helper` needs one hop. Bounded depth: a cycle must not hang the pass.
-        """
-        if "." not in dotted:
-            return None
-        module, name = dotted.rsplit(".", 1)
-        direct = self.lookup(module, name)
-        if direct:
-            return direct
-        if depth > 0 and self.has_module(module):
-            # the name may be re-exported by `module`; its own binding table is
-            # not persisted, so a re-export is reported by the caller as
-            # HEURISTIC rather than silently invented here.
-            return None
-        return None
-
 
 def resolve(analysis, module_name: str, index: ModuleIndex, reexports: dict[str, str]):
     """Return a new reference list with resolution upgraded or corrected.

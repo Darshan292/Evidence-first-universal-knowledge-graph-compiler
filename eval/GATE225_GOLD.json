@@ -1,0 +1,2200 @@
+{
+  "version": "1.1.0",
+  "authored": "2026-09-23",
+  "corpus": "eval/corpus3 (werkzeug @ 6048fa48753c7b61e35cc34537667809dee8fa35, BSD-3-Clause)",
+  "corpus_root": "eval/corpus3",
+  "provenance": "Ground truth derived from the raw source by an independent stdlib-ast pass (this script, which must not import kgc). Negatives are perturbations of verified real facts. No output of the implementation under test was consulted.",
+  "queries": [
+    {
+      "id": "G225-0001",
+      "class": "exact_lookup",
+      "query": "Locked",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/exceptions.py"
+      ],
+      "evidence_must_contain": "class Locked",
+      "claim_target": {
+        "entity": "Locked",
+        "property": "definition"
+      },
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0002",
+      "class": "exact_lookup",
+      "query": "GuardedIterator",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/middleware/lint.py"
+      ],
+      "evidence_must_contain": "class GuardedIterator",
+      "claim_target": {
+        "entity": "GuardedIterator",
+        "property": "definition"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0003",
+      "class": "exact_lookup",
+      "query": "ImmutableMultiDict",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/datastructures/structures.py"
+      ],
+      "evidence_must_contain": "class ImmutableMultiDict",
+      "claim_target": {
+        "entity": "ImmutableMultiDict",
+        "property": "definition"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0004",
+      "class": "exact_lookup",
+      "query": "MissingPage",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "examples/cupoftee/pages.py"
+      ],
+      "evidence_must_contain": "class MissingPage",
+      "claim_target": {
+        "entity": "MissingPage",
+        "property": "definition"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0005",
+      "class": "exact_lookup",
+      "query": "WebsocketMismatch",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/routing/exceptions.py"
+      ],
+      "evidence_must_contain": "class WebsocketMismatch",
+      "claim_target": {
+        "entity": "WebsocketMismatch",
+        "property": "definition"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0006",
+      "class": "exact_lookup",
+      "query": "Gone",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/exceptions.py"
+      ],
+      "evidence_must_contain": "class Gone",
+      "claim_target": {
+        "entity": "Gone",
+        "property": "definition"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0007",
+      "class": "exact_lookup",
+      "query": "Plnt",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "examples/plnt/webapp.py"
+      ],
+      "evidence_must_contain": "class Plnt",
+      "claim_target": {
+        "entity": "Plnt",
+        "property": "definition"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0008",
+      "class": "exact_lookup",
+      "query": "ResponseCacheControl",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/datastructures/cache_control.py"
+      ],
+      "evidence_must_contain": "class ResponseCacheControl",
+      "claim_target": {
+        "entity": "ResponseCacheControl",
+        "property": "definition"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0009",
+      "class": "exact_lookup",
+      "query": "File",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/sansio/multipart.py"
+      ],
+      "evidence_must_contain": "class File",
+      "claim_target": {
+        "entity": "File",
+        "property": "definition"
+      },
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0010",
+      "class": "exact_lookup",
+      "query": "BadRequest",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/exceptions.py"
+      ],
+      "evidence_must_contain": "class BadRequest",
+      "claim_target": {
+        "entity": "BadRequest",
+        "property": "definition"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0011",
+      "class": "exact_lookup",
+      "query": "_CharsetAccept",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/datastructures/accept.py"
+      ],
+      "evidence_must_contain": "class _CharsetAccept",
+      "claim_target": {
+        "entity": "_CharsetAccept",
+        "property": "definition"
+      },
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0012",
+      "class": "exact_lookup",
+      "query": "TestEnvironHeaders",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "tests/test_datastructures.py"
+      ],
+      "evidence_must_contain": "class TestEnvironHeaders",
+      "claim_target": {
+        "entity": "TestEnvironHeaders",
+        "property": "definition"
+      },
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0013",
+      "class": "exact_lookup",
+      "query": "BaseConverter",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/routing/converters.py"
+      ],
+      "evidence_must_contain": "class BaseConverter",
+      "claim_target": {
+        "entity": "BaseConverter",
+        "property": "definition"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0014",
+      "class": "exact_lookup",
+      "query": "RuleFactory",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/routing/rules.py"
+      ],
+      "evidence_must_contain": "class RuleFactory",
+      "claim_target": {
+        "entity": "RuleFactory",
+        "property": "definition"
+      },
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0015",
+      "class": "exact_lookup",
+      "query": "test_client_response_wrapper",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "tests/test_test.py"
+      ],
+      "evidence_must_contain": "def test_client_response_wrapper",
+      "claim_target": {
+        "entity": "test_client_response_wrapper",
+        "property": "definition"
+      },
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0016",
+      "class": "exact_lookup",
+      "query": "test_url_request_descriptors_hosts",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "tests/test_wrappers.py"
+      ],
+      "evidence_must_contain": "def test_url_request_descriptors_hosts",
+      "claim_target": {
+        "entity": "test_url_request_descriptors_hosts",
+        "property": "definition"
+      },
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0017",
+      "class": "exact_lookup",
+      "query": "append_slash_redirect",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/utils.py"
+      ],
+      "evidence_must_contain": "def append_slash_redirect",
+      "claim_target": {
+        "entity": "append_slash_redirect",
+        "property": "definition"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0018",
+      "class": "exact_lookup",
+      "query": "test_server",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "tests/test_serving.py"
+      ],
+      "evidence_must_contain": "def test_server",
+      "claim_target": {
+        "entity": "test_server",
+        "property": "definition"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0019",
+      "class": "exact_lookup",
+      "query": "generate_adhoc_ssl_pair",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/serving.py"
+      ],
+      "evidence_must_contain": "def generate_adhoc_ssl_pair",
+      "claim_target": {
+        "entity": "generate_adhoc_ssl_pair",
+        "property": "definition"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0020",
+      "class": "exact_lookup",
+      "query": "blog_show",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "examples/i18nurls/views.py"
+      ],
+      "evidence_must_contain": "def blog_show",
+      "claim_target": {
+        "entity": "blog_show",
+        "property": "definition"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0021",
+      "class": "exact_lookup",
+      "query": "test_iri_to_uri_idempotence_ascii_only",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "tests/test_urls.py"
+      ],
+      "evidence_must_contain": "def test_iri_to_uri_idempotence_ascii_only",
+      "claim_target": {
+        "entity": "test_iri_to_uri_idempotence_ascii_only",
+        "property": "definition"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0022",
+      "class": "exact_lookup",
+      "query": "test_cookie_for_different_path",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "tests/test_test.py"
+      ],
+      "evidence_must_contain": "def test_cookie_for_different_path",
+      "claim_target": {
+        "entity": "test_cookie_for_different_path",
+        "property": "definition"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0023",
+      "class": "exact_lookup",
+      "query": "_log",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/_internal.py"
+      ],
+      "evidence_must_contain": "def _log",
+      "claim_target": {
+        "entity": "_log",
+        "property": "definition"
+      },
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0024",
+      "class": "exact_lookup",
+      "query": "test_no_cache_conditional_default",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "tests/test_send_file.py"
+      ],
+      "evidence_must_contain": "def test_no_cache_conditional_default",
+      "claim_target": {
+        "entity": "test_no_cache_conditional_default",
+        "property": "definition"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0025",
+      "class": "property_lookup",
+      "query": "what is the SHAREDWORKER of SecFetchDest",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/http.py"
+      ],
+      "evidence_must_contain": "SHAREDWORKER",
+      "claim_target": {
+        "entity": "SecFetchDest",
+        "property": "SHAREDWORKER"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0026",
+      "class": "property_lookup",
+      "query": "what is the code of BadRequest",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/exceptions.py"
+      ],
+      "evidence_must_contain": "code",
+      "claim_target": {
+        "entity": "BadRequest",
+        "property": "code"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0027",
+      "class": "property_lookup",
+      "query": "what is the code of Locked",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/exceptions.py"
+      ],
+      "evidence_must_contain": "code",
+      "claim_target": {
+        "entity": "Locked",
+        "property": "code"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0028",
+      "class": "property_lookup",
+      "query": "what is the WEBSOCKET of SecFetchMode",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/http.py"
+      ],
+      "evidence_must_contain": "WEBSOCKET",
+      "claim_target": {
+        "entity": "SecFetchMode",
+        "property": "WEBSOCKET"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0029",
+      "class": "property_lookup",
+      "query": "what is the on_update of _UpdateDictMixin",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/datastructures/mixins.py"
+      ],
+      "evidence_must_contain": "on_update",
+      "claim_target": {
+        "entity": "_UpdateDictMixin",
+        "property": "on_update"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0030",
+      "class": "property_lookup",
+      "query": "what is the SCRIPT of SecFetchDest",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/http.py"
+      ],
+      "evidence_must_contain": "SCRIPT",
+      "claim_target": {
+        "entity": "SecFetchDest",
+        "property": "SCRIPT"
+      },
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0031",
+      "class": "property_lookup",
+      "query": "what is the last_sync of Syncable",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "examples/cupoftee/network.py"
+      ],
+      "evidence_must_contain": "last_sync",
+      "claim_target": {
+        "entity": "Syncable",
+        "property": "last_sync"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0032",
+      "class": "property_lookup",
+      "query": "what is the code of Gone",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/exceptions.py"
+      ],
+      "evidence_must_contain": "code",
+      "claim_target": {
+        "entity": "Gone",
+        "property": "code"
+      },
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0033",
+      "class": "property_lookup",
+      "query": "what is the code of RequestedRangeNotSatisfiable",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/exceptions.py"
+      ],
+      "evidence_must_contain": "code",
+      "claim_target": {
+        "entity": "RequestedRangeNotSatisfiable",
+        "property": "code"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0034",
+      "class": "property_lookup",
+      "query": "what is the __hash__ of EnvironHeaders",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/datastructures/headers.py"
+      ],
+      "evidence_must_contain": "__hash__",
+      "claim_target": {
+        "entity": "EnvironHeaders",
+        "property": "__hash__"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0035",
+      "class": "property_lookup",
+      "query": "what is the FRAME of SecFetchDest",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/http.py"
+      ],
+      "evidence_must_contain": "FRAME",
+      "claim_target": {
+        "entity": "SecFetchDest",
+        "property": "FRAME"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0036",
+      "class": "property_lookup",
+      "query": "what is the PUT of View",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "examples/webpylike/webpylike.py"
+      ],
+      "evidence_must_contain": "PUT",
+      "claim_target": {
+        "entity": "View",
+        "property": "PUT"
+      },
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0037",
+      "class": "property_lookup",
+      "query": "what is the _hash_cache of _ImmutableDictMixin",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/datastructures/mixins.py"
+      ],
+      "evidence_must_contain": "_hash_cache",
+      "claim_target": {
+        "entity": "_ImmutableDictMixin",
+        "property": "_hash_cache"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0038",
+      "class": "property_lookup",
+      "query": "what is the NOOPENER_ALLOW_POPUPS of COOP",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/http.py"
+      ],
+      "evidence_must_contain": "NOOPENER_ALLOW_POPUPS",
+      "claim_target": {
+        "entity": "COOP",
+        "property": "NOOPENER_ALLOW_POPUPS"
+      },
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0039",
+      "class": "property_lookup",
+      "query": "what is the url_rule of Search",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "examples/cupoftee/pages.py"
+      ],
+      "evidence_must_contain": "url_rule",
+      "claim_target": {
+        "entity": "Search",
+        "property": "url_rule"
+      },
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0040",
+      "class": "property_lookup",
+      "query": "what is the code of GatewayTimeout",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/exceptions.py"
+      ],
+      "evidence_must_contain": "code",
+      "claim_target": {
+        "entity": "GatewayTimeout",
+        "property": "code"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0041",
+      "class": "structural_relation",
+      "query": "which class does HTTPVersionNotSupported extend",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/exceptions.py"
+      ],
+      "evidence_must_contain": "class HTTPVersionNotSupported",
+      "claim_target": {
+        "entity": "HTTPVersionNotSupported",
+        "relation": "EXTENDS",
+        "object": "HTTPException"
+      },
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0042",
+      "class": "structural_relation",
+      "query": "which class does StatReloaderLoop extend",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/_reloader.py"
+      ],
+      "evidence_must_contain": "class StatReloaderLoop",
+      "claim_target": {
+        "entity": "StatReloaderLoop",
+        "relation": "EXTENDS",
+        "object": "ReloaderLoop"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0043",
+      "class": "structural_relation",
+      "query": "which class does ThreadedWSGIServer extend",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/serving.py"
+      ],
+      "evidence_must_contain": "class ThreadedWSGIServer",
+      "claim_target": {
+        "entity": "ThreadedWSGIServer",
+        "relation": "EXTENDS",
+        "object": "BaseWSGIServer"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0044",
+      "class": "structural_relation",
+      "query": "which class does about extend",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "examples/webpylike/example.py"
+      ],
+      "evidence_must_contain": "class about",
+      "claim_target": {
+        "entity": "about",
+        "relation": "EXTENDS",
+        "object": "View"
+      },
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0045",
+      "class": "structural_relation",
+      "query": "which class does UnprocessableEntity extend",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/exceptions.py"
+      ],
+      "evidence_must_contain": "class UnprocessableEntity",
+      "claim_target": {
+        "entity": "UnprocessableEntity",
+        "relation": "EXTENDS",
+        "object": "HTTPException"
+      },
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0046",
+      "class": "structural_relation",
+      "query": "which class does EndpointPrefix extend",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/routing/rules.py"
+      ],
+      "evidence_must_contain": "class EndpointPrefix",
+      "claim_target": {
+        "entity": "EndpointPrefix",
+        "relation": "EXTENDS",
+        "object": "RuleFactory"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0047",
+      "class": "structural_relation",
+      "query": "which class does Rule extend",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/routing/rules.py"
+      ],
+      "evidence_must_contain": "class Rule",
+      "claim_target": {
+        "entity": "Rule",
+        "relation": "EXTENDS",
+        "object": "RuleFactory"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0048",
+      "class": "structural_relation",
+      "query": "which class does IntegerConverter extend",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/routing/converters.py"
+      ],
+      "evidence_must_contain": "class IntegerConverter",
+      "claim_target": {
+        "entity": "IntegerConverter",
+        "relation": "EXTENDS",
+        "object": "BaseConverter"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0049",
+      "class": "structural_relation",
+      "query": "which class does MisdirectedRequest extend",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/exceptions.py"
+      ],
+      "evidence_must_contain": "class MisdirectedRequest",
+      "claim_target": {
+        "entity": "MisdirectedRequest",
+        "relation": "EXTENDS",
+        "object": "HTTPException"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0050",
+      "class": "structural_relation",
+      "query": "which class does NeedData extend",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/sansio/multipart.py"
+      ],
+      "evidence_must_contain": "class NeedData",
+      "claim_target": {
+        "entity": "NeedData",
+        "relation": "EXTENDS",
+        "object": "Event"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0051",
+      "class": "structural_relation",
+      "query": "which class does MethodNotAllowed extend",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/exceptions.py"
+      ],
+      "evidence_must_contain": "class MethodNotAllowed",
+      "claim_target": {
+        "entity": "MethodNotAllowed",
+        "relation": "EXTENDS",
+        "object": "HTTPException"
+      },
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0052",
+      "class": "structural_relation",
+      "query": "which class does RevisionedPage extend",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "examples/simplewiki/database.py"
+      ],
+      "evidence_must_contain": "class RevisionedPage",
+      "claim_target": {
+        "entity": "RevisionedPage",
+        "relation": "EXTENDS",
+        "object": "Revision"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0053",
+      "class": "cross_file_relation",
+      "query": "what does werkzeug.datastructures.range import",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/datastructures/range.py"
+      ],
+      "evidence_must_contain": "import",
+      "claim_target": {
+        "entity": "werkzeug.datastructures.range",
+        "relation": "IMPORTS",
+        "object": "werkzeug.http.is_byte_range_valid"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0054",
+      "class": "cross_file_relation",
+      "query": "what does werkzeug.datastructures import",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/datastructures/__init__.py"
+      ],
+      "evidence_must_contain": "import",
+      "claim_target": {
+        "entity": "werkzeug.datastructures",
+        "relation": "IMPORTS",
+        "object": "werkzeug.file_storage.FileMultiDict"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0055",
+      "class": "cross_file_relation",
+      "query": "what does werkzeug.middleware.shared_data import",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/middleware/shared_data.py"
+      ],
+      "evidence_must_contain": "import",
+      "claim_target": {
+        "entity": "werkzeug.middleware.shared_data",
+        "relation": "IMPORTS",
+        "object": "werkzeug.security.safe_join"
+      },
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0056",
+      "class": "cross_file_relation",
+      "query": "what does werkzeug.datastructures import",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/datastructures/__init__.py"
+      ],
+      "evidence_must_contain": "import",
+      "claim_target": {
+        "entity": "werkzeug.datastructures",
+        "relation": "IMPORTS",
+        "object": "werkzeug.auth.Authorization"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0057",
+      "class": "cross_file_relation",
+      "query": "what does werkzeug.utils import",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/utils.py"
+      ],
+      "evidence_must_contain": "import",
+      "claim_target": {
+        "entity": "werkzeug.utils",
+        "relation": "IMPORTS",
+        "object": "werkzeug.wsgi.wrap_file"
+      },
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0058",
+      "class": "cross_file_relation",
+      "query": "what does werkzeug.utils import",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/utils.py"
+      ],
+      "evidence_must_contain": "import",
+      "claim_target": {
+        "entity": "werkzeug.utils",
+        "relation": "IMPORTS",
+        "object": "werkzeug.datastructures.headers.Headers"
+      },
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0059",
+      "class": "cross_file_relation",
+      "query": "what does werkzeug.sansio.response import",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/sansio/response.py"
+      ],
+      "evidence_must_contain": "import",
+      "claim_target": {
+        "entity": "werkzeug.sansio.response",
+        "relation": "IMPORTS",
+        "object": "werkzeug.http._load_retry_after"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0060",
+      "class": "cross_file_relation",
+      "query": "what does werkzeug.middleware.shared_data import",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/middleware/shared_data.py"
+      ],
+      "evidence_must_contain": "import",
+      "claim_target": {
+        "entity": "werkzeug.middleware.shared_data",
+        "relation": "IMPORTS",
+        "object": "werkzeug.utils.get_content_type"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0061",
+      "class": "cross_file_relation",
+      "query": "what does werkzeug.routing.map import",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "src/werkzeug/routing/map.py"
+      ],
+      "evidence_must_contain": "import",
+      "claim_target": {
+        "entity": "werkzeug.routing.map",
+        "relation": "IMPORTS",
+        "object": "werkzeug.exceptions.MethodNotAllowed"
+      },
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0062",
+      "class": "cross_file_relation",
+      "query": "what does examples.simplewiki.actions import",
+      "answerable": true,
+      "expected_decision": [
+        "EXPOSE",
+        "EXPOSE_CONFLICTED"
+      ],
+      "answer_units": [
+        "examples/simplewiki/actions.py"
+      ],
+      "evidence_must_contain": "import",
+      "claim_target": {
+        "entity": "examples.simplewiki.actions",
+        "relation": "IMPORTS",
+        "object": "examples.simplewiki.database.RevisionedPage"
+      },
+      "split": "TEST",
+      "scope": "IN_SCOPE_ANSWERABLE"
+    },
+    {
+      "id": "G225-0063",
+      "class": "unsupported_entity",
+      "query": "what is the default timeout of RedisSessionStore",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "RedisSessionStore does not exist in the corpus",
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0064",
+      "class": "unsupported_entity",
+      "query": "what is the default timeout of JWTSigner",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "JWTSigner does not exist in the corpus",
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0065",
+      "class": "unsupported_entity",
+      "query": "what is the default timeout of GraphQLRouter",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "GraphQLRouter does not exist in the corpus",
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0066",
+      "class": "unsupported_entity",
+      "query": "what is the default timeout of KafkaProducer",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "KafkaProducer does not exist in the corpus",
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0067",
+      "class": "unsupported_entity",
+      "query": "what is the default timeout of OAuthMiddleware",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "OAuthMiddleware does not exist in the corpus",
+      "split": "TEST",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0068",
+      "class": "unsupported_entity",
+      "query": "what is the default timeout of TenantResolver",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "TenantResolver does not exist in the corpus",
+      "split": "TEST",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0069",
+      "class": "unsupported_entity",
+      "query": "what is the default timeout of ShardCoordinator",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "ShardCoordinator does not exist in the corpus",
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0070",
+      "class": "unsupported_entity",
+      "query": "what is the default timeout of WebhookDispatcher",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "WebhookDispatcher does not exist in the corpus",
+      "split": "TEST",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0071",
+      "class": "wrong_property",
+      "query": "what is the encryption_key of ServiceUnavailable",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "ServiceUnavailable exists; encryption_key is not one of its attributes",
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0072",
+      "class": "wrong_property",
+      "query": "what is the encryption_key of ImmutableMultiDictMixin",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "ImmutableMultiDictMixin exists; encryption_key is not one of its attributes",
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0073",
+      "class": "wrong_property",
+      "query": "what is the encryption_key of RuleFactory",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "RuleFactory exists; encryption_key is not one of its attributes",
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0074",
+      "class": "wrong_property",
+      "query": "what is the encryption_key of ImATeapot",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "ImATeapot exists; encryption_key is not one of its attributes",
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0075",
+      "class": "wrong_property",
+      "query": "what is the encryption_key of SharedDataMiddleware",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "SharedDataMiddleware exists; encryption_key is not one of its attributes",
+      "split": "TEST",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0076",
+      "class": "wrong_property",
+      "query": "what is the encryption_key of ThreadedStream",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "ThreadedStream exists; encryption_key is not one of its attributes",
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0077",
+      "class": "wrong_property",
+      "query": "what is the encryption_key of FileStorage",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "FileStorage exists; encryption_key is not one of its attributes",
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0078",
+      "class": "wrong_property",
+      "query": "what is the encryption_key of ValidationError",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "ValidationError exists; encryption_key is not one of its attributes",
+      "split": "TEST",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0079",
+      "class": "wrong_property",
+      "query": "what is the encryption_key of Authorization",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "Authorization exists; encryption_key is not one of its attributes",
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0080",
+      "class": "wrong_property",
+      "query": "what is the encryption_key of _InteractiveConsole",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "_InteractiveConsole exists; encryption_key is not one of its attributes",
+      "split": "TEST",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0081",
+      "class": "wrong_value",
+      "query": "is the code of TooManyRequests equal to 987654",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "real value is '429'; 987654 appears nowhere",
+      "split": "TEST",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0082",
+      "class": "wrong_value",
+      "query": "is the SAME_ORIGIN of COOP equal to 987654",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "real value is \"'same-origin'\"; 987654 appears nowhere",
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0083",
+      "class": "wrong_value",
+      "query": "is the code of RequestedRangeNotSatisfiable equal to 987654",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "real value is '416'; 987654 appears nowhere",
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0084",
+      "class": "wrong_value",
+      "query": "is the storage_class of TestCallbackDict equal to 987654",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "real value is 'ds.CallbackDict'; 987654 appears nowhere",
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0085",
+      "class": "wrong_value",
+      "query": "is the storage_class of TestEnvironHeaders equal to 987654",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "real value is 'ds.EnvironHeaders'; 987654 appears nowhere",
+      "split": "TEST",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0086",
+      "class": "wrong_value",
+      "query": "is the _query_string of EnvironBuilder equal to 987654",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "real value is 'None'; 987654 appears nowhere",
+      "split": "TEST",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0087",
+      "class": "wrong_value",
+      "query": "is the request_queue_size of BaseWSGIServer equal to 987654",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "real value is 'LISTEN_QUEUE'; 987654 appears nowhere",
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0088",
+      "class": "wrong_value",
+      "query": "is the default_base_url of _Routing equal to 987654",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "real value is \"'http://app.test'\"; 987654 appears nowhere",
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0089",
+      "class": "wrong_value",
+      "query": "is the SAME_ORIGIN of CORP equal to 987654",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "real value is \"'same-origin'\"; 987654 appears nowhere",
+      "split": "TEST",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0090",
+      "class": "wrong_value",
+      "query": "is the browser of _UserAgent equal to 987654",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "real value is 'None'; 987654 appears nowhere",
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0091",
+      "class": "wrong_relationship",
+      "query": "does BadGateway extend KafkaProducer",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "BadGateway extends HTTPException, not a nonexistent class",
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0092",
+      "class": "wrong_relationship",
+      "query": "does Field extend KafkaProducer",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "Field extends Event, not a nonexistent class",
+      "split": "TEST",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0093",
+      "class": "wrong_relationship",
+      "query": "does NotFound extend KafkaProducer",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "NotFound extends HTTPException, not a nonexistent class",
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0094",
+      "class": "wrong_relationship",
+      "query": "does PathConverter extend KafkaProducer",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "PathConverter extends BaseConverter, not a nonexistent class",
+      "split": "TEST",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0095",
+      "class": "wrong_relationship",
+      "query": "does BadRequestKeyError extend KafkaProducer",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "BadRequestKeyError extends BadRequest, not a nonexistent class",
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0096",
+      "class": "wrong_relationship",
+      "query": "does Submount extend KafkaProducer",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "Submount extends RuleFactory, not a nonexistent class",
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0097",
+      "class": "wrong_relationship",
+      "query": "does _CharsetAccept extend KafkaProducer",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "_CharsetAccept extends Accept, not a nonexistent class",
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0098",
+      "class": "wrong_relationship",
+      "query": "does RequestRedirect extend KafkaProducer",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "RequestRedirect extends RoutingException, not a nonexistent class",
+      "split": "TEST",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0099",
+      "class": "source_scope",
+      "query": "is url_rule of ServerList defined in pyproject.toml",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "it is defined in examples/cupoftee/pages.py",
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0100",
+      "class": "source_scope",
+      "query": "is SAME_ORIGIN of COOP defined in pyproject.toml",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "it is defined in src/werkzeug/http.py",
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0101",
+      "class": "source_scope",
+      "query": "is code of RequestURITooLarge defined in pyproject.toml",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "it is defined in src/werkzeug/exceptions.py",
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0102",
+      "class": "source_scope",
+      "query": "is code of InternalServerError defined in pyproject.toml",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "it is defined in src/werkzeug/exceptions.py",
+      "split": "TEST",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0103",
+      "class": "source_scope",
+      "query": "is __test__ of TestResponse defined in pyproject.toml",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "it is defined in src/werkzeug/test.py",
+      "split": "TEST",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0104",
+      "class": "source_scope",
+      "query": "is code of NotImplemented defined in pyproject.toml",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "it is defined in src/werkzeug/exceptions.py",
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0105",
+      "class": "source_scope",
+      "query": "is code of TooManyRequests defined in pyproject.toml",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "it is defined in src/werkzeug/exceptions.py",
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0106",
+      "class": "source_scope",
+      "query": "is STYLE of SecFetchDest defined in pyproject.toml",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "it is defined in src/werkzeug/http.py",
+      "split": "TEST",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0107",
+      "class": "ambiguous_entity",
+      "query": "what is the name of Application",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "Application is defined in 2 modules (['examples.httpbasicauth', 'examples.i18nurls.application']) with no disambiguator",
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0108",
+      "class": "ambiguous_entity",
+      "query": "what is the name of Page",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "Page is defined in 2 modules (['examples.cupoftee.application', 'examples.simplewiki.database']) with no disambiguator",
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0109",
+      "class": "ambiguous_entity",
+      "query": "what is the name of Pagination",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "Pagination is defined in 4 modules (['examples.couchy.utils', 'examples.plnt.utils', 'examples.shorty.utils']) with no disambiguator",
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0110",
+      "class": "ambiguous_entity",
+      "query": "what is the name of Request",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "Request is defined in 5 modules (['examples.coolmagic.utils', 'examples.i18nurls.application', 'examples.simplewiki.utils']) with no disambiguator",
+      "split": "TEST",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0111",
+      "class": "ambiguous_entity",
+      "query": "what is the name of Response",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "Response is defined in 5 modules (['examples.coolmagic.utils', 'examples.i18nurls.application', 'examples.simplewiki.utils']) with no disambiguator",
+      "split": "TEST",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0112",
+      "class": "ambiguous_entity",
+      "query": "what is the name of Server",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "Server is defined in 2 modules (['examples.cupoftee.network', 'examples.cupoftee.pages']) with no disambiguator",
+      "split": "CALIBRATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0113",
+      "class": "ambiguous_entity",
+      "query": "what is the name of State",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "State is defined in 2 modules (['werkzeug.routing.matcher', 'werkzeug.sansio.multipart']) with no disambiguator",
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0114",
+      "class": "ambiguous_entity",
+      "query": "what is the name of TemplateResponse",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "TemplateResponse is defined in 2 modules (['examples.coolmagic.utils', 'examples.i18nurls.application']) with no disambiguator",
+      "split": "VALIDATION",
+      "scope": "IN_SCOPE_UNSUPPORTED"
+    },
+    {
+      "id": "G225-0115",
+      "class": "rationale_prose",
+      "query": "why was Revision designed this way",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "rationale is not a compiled claim; deterministic scope excludes it",
+      "split": "TEST",
+      "scope": "OUT_OF_DETERMINISTIC_SCOPE",
+      "note": "The fact may or may not exist in the corpus; it is not expressible as a typed constraint over compiled claims. Abstaining is correct, but scored SEPARATELY so it does not flatter the false-support rate."
+    },
+    {
+      "id": "G225-0116",
+      "class": "rationale_prose",
+      "query": "why was Blog designed this way",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "rationale is not a compiled claim; deterministic scope excludes it",
+      "split": "CALIBRATION",
+      "scope": "OUT_OF_DETERMINISTIC_SCOPE",
+      "note": "The fact may or may not exist in the corpus; it is not expressible as a typed constraint over compiled claims. Abstaining is correct, but scored SEPARATELY so it does not flatter the false-support rate."
+    },
+    {
+      "id": "G225-0117",
+      "class": "rationale_prose",
+      "query": "why was _RetryAfter designed this way",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "rationale is not a compiled claim; deterministic scope excludes it",
+      "split": "CALIBRATION",
+      "scope": "OUT_OF_DETERMINISTIC_SCOPE",
+      "note": "The fact may or may not exist in the corpus; it is not expressible as a typed constraint over compiled claims. Abstaining is correct, but scored SEPARATELY so it does not flatter the false-support rate."
+    },
+    {
+      "id": "G225-0118",
+      "class": "rationale_prose",
+      "query": "why was MIMEAccept designed this way",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "rationale is not a compiled claim; deterministic scope excludes it",
+      "split": "TEST",
+      "scope": "OUT_OF_DETERMINISTIC_SCOPE",
+      "note": "The fact may or may not exist in the corpus; it is not expressible as a typed constraint over compiled claims. Abstaining is correct, but scored SEPARATELY so it does not flatter the false-support rate."
+    },
+    {
+      "id": "G225-0119",
+      "class": "rationale_prose",
+      "query": "why was WWWAuthenticate designed this way",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "rationale is not a compiled claim; deterministic scope excludes it",
+      "split": "TEST",
+      "scope": "OUT_OF_DETERMINISTIC_SCOPE",
+      "note": "The fact may or may not exist in the corpus; it is not expressible as a typed constraint over compiled claims. Abstaining is correct, but scored SEPARATELY so it does not flatter the false-support rate."
+    },
+    {
+      "id": "G225-0120",
+      "class": "rationale_prose",
+      "query": "why was Data designed this way",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "rationale is not a compiled claim; deterministic scope excludes it",
+      "split": "VALIDATION",
+      "scope": "OUT_OF_DETERMINISTIC_SCOPE",
+      "note": "The fact may or may not exist in the corpus; it is not expressible as a typed constraint over compiled claims. Abstaining is correct, but scored SEPARATELY so it does not flatter the false-support rate."
+    },
+    {
+      "id": "G225-0121",
+      "class": "rationale_prose",
+      "query": "how does the routing system work overall",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "document-level interpretation required",
+      "split": "CALIBRATION",
+      "scope": "OUT_OF_DETERMINISTIC_SCOPE",
+      "note": "The fact may or may not exist in the corpus; it is not expressible as a typed constraint over compiled claims. Abstaining is correct, but scored SEPARATELY so it does not flatter the false-support rate."
+    },
+    {
+      "id": "G225-0122",
+      "class": "rationale_prose",
+      "query": "explain the middleware architecture",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "document-level interpretation required",
+      "split": "VALIDATION",
+      "scope": "OUT_OF_DETERMINISTIC_SCOPE",
+      "note": "The fact may or may not exist in the corpus; it is not expressible as a typed constraint over compiled claims. Abstaining is correct, but scored SEPARATELY so it does not flatter the false-support rate."
+    },
+    {
+      "id": "G225-0123",
+      "class": "rationale_prose",
+      "query": "what are the tradeoffs of this design",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "document-level interpretation required",
+      "split": "VALIDATION",
+      "scope": "OUT_OF_DETERMINISTIC_SCOPE",
+      "note": "The fact may or may not exist in the corpus; it is not expressible as a typed constraint over compiled claims. Abstaining is correct, but scored SEPARATELY so it does not flatter the false-support rate."
+    },
+    {
+      "id": "G225-0124",
+      "class": "malformed",
+      "query": "???",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "not a well-formed question",
+      "split": "CALIBRATION",
+      "scope": "OUT_OF_DETERMINISTIC_SCOPE",
+      "note": "The fact may or may not exist in the corpus; it is not expressible as a typed constraint over compiled claims. Abstaining is correct, but scored SEPARATELY so it does not flatter the false-support rate."
+    },
+    {
+      "id": "G225-0125",
+      "class": "malformed",
+      "query": "the the the",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "not a well-formed question",
+      "split": "TEST",
+      "scope": "OUT_OF_DETERMINISTIC_SCOPE",
+      "note": "The fact may or may not exist in the corpus; it is not expressible as a typed constraint over compiled claims. Abstaining is correct, but scored SEPARATELY so it does not flatter the false-support rate."
+    },
+    {
+      "id": "G225-0126",
+      "class": "malformed",
+      "query": "give me everything",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "not a well-formed question",
+      "split": "CALIBRATION",
+      "scope": "OUT_OF_DETERMINISTIC_SCOPE",
+      "note": "The fact may or may not exist in the corpus; it is not expressible as a typed constraint over compiled claims. Abstaining is correct, but scored SEPARATELY so it does not flatter the false-support rate."
+    },
+    {
+      "id": "G225-0127",
+      "class": "malformed",
+      "query": "asdf qwer zxcv",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "not a well-formed question",
+      "split": "VALIDATION",
+      "scope": "OUT_OF_DETERMINISTIC_SCOPE",
+      "note": "The fact may or may not exist in the corpus; it is not expressible as a typed constraint over compiled claims. Abstaining is correct, but scored SEPARATELY so it does not flatter the false-support rate."
+    },
+    {
+      "id": "G225-0128",
+      "class": "paraphrase",
+      "query": "which component handles clientdisconnected behaviour",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "paraphrase without typed constraints; outside deterministic scope",
+      "split": "TEST",
+      "scope": "OUT_OF_DETERMINISTIC_SCOPE",
+      "note": "The fact may or may not exist in the corpus; it is not expressible as a typed constraint over compiled claims. Abstaining is correct, but scored SEPARATELY so it does not flatter the false-support rate."
+    },
+    {
+      "id": "G225-0129",
+      "class": "paraphrase",
+      "query": "which component handles testfilestorage behaviour",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "paraphrase without typed constraints; outside deterministic scope",
+      "split": "CALIBRATION",
+      "scope": "OUT_OF_DETERMINISTIC_SCOPE",
+      "note": "The fact may or may not exist in the corpus; it is not expressible as a typed constraint over compiled claims. Abstaining is correct, but scored SEPARATELY so it does not flatter the false-support rate."
+    },
+    {
+      "id": "G225-0130",
+      "class": "paraphrase",
+      "query": "which component handles testresponse behaviour",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "paraphrase without typed constraints; outside deterministic scope",
+      "split": "VALIDATION",
+      "scope": "OUT_OF_DETERMINISTIC_SCOPE",
+      "note": "The fact may or may not exist in the corpus; it is not expressible as a typed constraint over compiled claims. Abstaining is correct, but scored SEPARATELY so it does not flatter the false-support rate."
+    },
+    {
+      "id": "G225-0131",
+      "class": "paraphrase",
+      "query": "which component handles testmultipartparser behaviour",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "paraphrase without typed constraints; outside deterministic scope",
+      "split": "TEST",
+      "scope": "OUT_OF_DETERMINISTIC_SCOPE",
+      "note": "The fact may or may not exist in the corpus; it is not expressible as a typed constraint over compiled claims. Abstaining is correct, but scored SEPARATELY so it does not flatter the false-support rate."
+    },
+    {
+      "id": "G225-0132",
+      "class": "paraphrase",
+      "query": "which component handles notimplemented behaviour",
+      "answerable": false,
+      "expected_decision": [
+        "ABSTAIN",
+        "ABSTAIN_AMBIGUOUS"
+      ],
+      "rationale": "paraphrase without typed constraints; outside deterministic scope",
+      "split": "CALIBRATION",
+      "scope": "OUT_OF_DETERMINISTIC_SCOPE",
+      "note": "The fact may or may not exist in the corpus; it is not expressible as a typed constraint over compiled claims. Abstaining is correct, but scored SEPARATELY so it does not flatter the false-support rate."
+    }
+  ],
+  "scoring_note": "Three groups, never merged: IN_SCOPE_ANSWERABLE drives availability, IN_SCOPE_UNSUPPORTED drives the safety metrics, and OUT_OF_DETERMINISTIC_SCOPE is reported on its own. Counting prose abstentions as safety successes would inflate the false-support rate downward with queries the system was never asked to answer."
+}

@@ -1,0 +1,378 @@
+<!doctype html><meta charset="utf-8"><title>Evidence-first answer</title>
+<style>
+ :root{--fg:#1b1f23;--bg:#fff;--dim:#6a737d;--line:#e1e4e8}
+ @media(prefers-color-scheme:dark){:root{--fg:#e6edf3;--bg:#0d1117;--dim:#8b949e;--line:#30363d}}
+ body{font:15px/1.6 ui-sans-serif,system-ui,sans-serif;color:var(--fg);background:var(--bg);
+       max-width:56rem;margin:2rem auto;padding:0 16px}
+ h1{font-size:1.4rem} h2{font-size:.95rem;text-transform:uppercase;letter-spacing:.06em;
+   color:var(--dim);border-bottom:1px solid var(--line);padding-bottom:.3rem;margin-top:2rem}
+ pre{background:color-mix(in srgb,var(--fg) 5%,transparent);padding:.6rem;border-radius:6px;
+   overflow:auto;font-size:12px;line-height:1.45}
+ .dim{color:var(--dim);font-size:12.5px} li{margin:.6rem 0}
+ .ok{border-left:3px solid #2da44e;padding-left:.7rem}
+ .bad{border-left:3px solid #cf222e;padding-left:.7rem}
+ .verdict{font-weight:600} .answer{color:#2da44e} .abstain{color:#bf8700}
+ .struct{font-size:12.5px;margin-top:.2rem} .explicit_contradiction{color:#cf222e}
+ .supported{color:#2da44e} ul{padding-left:1.1rem}
+</style>
+<h1>How does send_from_directory prevent unsafe paths?</h1><p class="verdict answer">ANSWER — PROPOSED</p>
+<section class=""><h2>Answer (PROPOSED — semantic interpretation)</h2><p>send_from_directory does not trust the path it is given. It passes the directory and the untrusted path to safe_join, which returns None when the result would escape the base directory; send_from_directory then raises NotFound rather than opening the file.</p></section>
+<section class=""><h2>Statements and their evidence</h2><ul><li class="ok">send_from_directory joins the untrusted path onto the directory with safe_join and raises NotFound when the join is refused.<div class="dim">evidence 1039eea5bf62 — src/werkzeug/utils.py bytes 18574-20160</div><div class="struct supported">CALLS(werkzeug.utils.send_from_directory, werkzeug.security.safe_join) — SUPPORTED<span class="dim"> DERIVED claim in the compiled graph</span></div></li><li class="ok">safe_join returns None when the untrusted component would escape the base directory, which is the signal the caller acts on.<div class="dim">evidence 7e51d079e4aa — src/werkzeug/security.py bytes 4684-7215</div></li></ul></section>
+<section class=""><h2>Evidence retrieved (deterministic)</h2><article><header><code>1039eea5bf62</code> <b>src/werkzeug/utils.py</b>:522 — werkzeug.utils.send_from_directory <span class="dim">(1586B, identifier)</span></header><pre>def send_from_directory(
+    directory: os.PathLike[str] | str,
+    path: os.PathLike[str] | str,
+    environ: WSGIEnvironment,
+    **kwargs: t.Any,
+) -&gt; Response:
+    &quot;&quot;&quot;Send a file from within a directory using :func:`send_file`.
+
+    This is a secure way to serve files from a folder, such as static
+    files or uploads. Uses :func:`~werkzeug.security.safe_join` to
+    ensure the path coming from the client is not maliciously crafted to
+    point outside the specified directory.
+
+    If the final path does not point to an existing regular file,
+    returns a 404 :exc:`~werkzeug.exceptions.NotFound` error.
+
+    :param directory: The directory that ``path`` must be located under. This *must not*
+        be a value provided by the client, otherwise it becomes insecure.
+    :param path: The path to the file to send, relative to ``directory``. This is the
+        part of the path provided by the client, which is checked for security.
+    :param environ: The WSGI environ for the current request.
+    :param kwargs: Arguments to pass to :func:`send_file`.
+
+    .. versionadded:: 2.0
+        Adapted from Flask&#x27;s implementation.
+    &quot;&quot;&quot;
+    path_str = safe_join(os.fspath(directory), os.fspath(path))
+
+    if path_str is None:
+        raise NotFound()
+
+    # Flask will pass app.root_path, allowing its send_from_directory
+    # wrapper to not have to deal with paths.
+    if &quot;_root_path&quot; in kwargs:
+        path_str = os.path.join(kwargs[&quot;_root_path&quot;], path_str)
+
+    if not os.path.isfile(path_str):
+        raise NotFound()
+
+    return send_file(path_str, environ, **kwargs)</pre></article><article><header><code>ea80f7b4ff76</code> <b>src/werkzeug/exceptions.py</b>:353 — werkzeug.exceptions.NotFound <span class="dim">(306B, graph: send_from_directory CALLS NotFound)</span></header><pre>class NotFound(HTTPException):
+    &quot;&quot;&quot;*404* `Not Found`
+
+    Raise if a resource does not exist and never existed.
+    &quot;&quot;&quot;
+
+    code = 404
+    description = (
+        &quot;The requested URL was not found on the server. If you entered&quot;
+        &quot; the URL manually please check your spelling and try again.&quot;
+    )</pre></article><article><header><code>7e51d079e4aa</code> <b>src/werkzeug/security.py</b>:143 — werkzeug.security.safe_join <span class="dim">(2531B, graph: send_from_directory CALLS safe_join)</span></header><pre>def safe_join(directory: str, *untrusted: str) -&gt; str | None:
+    &quot;&quot;&quot;Safely join zero or more untrusted path components to a trusted base
+    directory to avoid escaping the base directory. Return ``None`` if the path
+    is not safe.
+
+    The untrusted path is assumed to be from/for a URL, such as for serving
+    files. Therefore, it should only use the forward slash ``/`` path separator,
+    and will be joined using that separator. On Windows, the backslash ``\\``
+    separator is not allowed.
+
+    This only considers the path name, it does not validate if it does or does
+    not exist, if it is a symlink, or other properties of the file or
+    filesystem. It&#x27;s up to the application to ensure that the contents of
+    ``directory`` can be trusted.
+
+    On Windows, special device names such as ``CON`` and ``NUL`` are not
+    allowed, as this is used for serving files with :func:`.send_from_directory`
+    and those files will hang when read.
+
+    NTFS alternate data streams (ADS) like ``filename:stream`` are
+    allowed. :func:`.secure_filename` will remove the ``:`` when saving.
+
+    :param directory: The trusted base directory.
+    :param untrusted: The untrusted path components relative to the
+        base directory.
+    :return: A safe path, otherwise ``None``.
+
+    .. versionchanged:: 3.1.6
+        Special device names in multi-segment paths are not allowed on Windows.
+
+    .. versionchanged:: 3.1.5
+        More special device names, regardless of extension or trailing spaces,
+        are not allowed on Windows.
+
+    .. versionchanged:: 3.1.4
+        Special device names are not allowed on Windows.
+    &quot;&quot;&quot;
+    if not directory:
+        # Ensure we end up with ./path if directory=&quot;&quot; is given,
+        # otherwise the first untrusted part could become trusted.
+        directory = &quot;.&quot;
+
+    parts = [directory]
+
+    for part in untrusted:
+        if not part:
+            continue
+
+        part = posixpath.normpath(part)
+
+        if (
+            os.path.isabs(part)
+            # ntpath.isabs doesn&#x27;t catch this
+            or part.startswith(&quot;/&quot;)
+            or part == &quot;..&quot;
+            or part.startswith(&quot;../&quot;)
+            or any(sep in part for sep in _os_alt_seps)
+            or (
+                os.name == &quot;nt&quot;
+                and any(
+                    p.partition(&quot;.&quot;)[0].strip().upper() in _windows_device_files
+                    for p in part.split(&quot;/&quot;)
+                )
+            )
+        ):
+            return None
+
+        parts.append(part)
+
+    return posixpath.join(*parts)</pre></article><article><header><code>c83db71f6841</code> <b>src/werkzeug/utils.py</b>:303 — werkzeug.utils.send_file <span class="dim">(8440B, graph: send_from_directory CALLS send_file)</span></header><pre>def send_file(
+    path_or_file: os.PathLike[str] | str | t.IO[bytes],
+    environ: WSGIEnvironment,
+    mimetype: str | None = None,
+    as_attachment: bool = False,
+    download_name: str | None = None,
+    conditional: bool = True,
+    etag: bool | str = True,
+    last_modified: datetime | int | float | None = None,
+    max_age: None | (int | t.Callable[[str | None], int | None]) = None,
+    use_x_sendfile: bool = False,
+    response_class: type[Response] | None = None,
+    _root_path: os.PathLike[str] | str | None = None,
+) -&gt; Response:
+    &quot;&quot;&quot;Send the contents of a file to the client.
+
+    The first argument can be a file path or a file-like object. Paths
+    are preferred in most cases because Werkzeug can manage the file and
+    get extra information from the path. Passing a file-like object
+    requires that the file is opened in binary mode, and is mostly
+    useful when building a file in memory with :class:`io.BytesIO`.
+
+    Never pass file paths provided by a user. The path is assumed to be
+    trusted, so a user could craft a path to access a file you didn&#x27;t
+    intend. Use :func:`send_from_directory` to safely serve user-provided paths.
+
+    If the WSGI server sets a ``file_wrapper`` in ``environ``, it is
+    used, otherwise Werkzeug&#x27;s built-in wrapper is used. Alternatively,
+    if the HTTP server supports ``X-Sendfile``, ``use_x_sendfile=True``
+    will tell the server to send the given path, which is much more
+    efficient than reading it in Python.
+
+    :param path_or_file: The path to the file to send, relative to the
+        current working directory if a relative path is given.
+        Alternatively, a file-like object opened in binary mode. Make
+        sure the file pointer is seeked to the start of the data.
+    :param environ: The WSGI environ for the current request.
+    :param mimetype: The MIME type to send for the file. If not
+        provided, it will try to detect it from the file name.
+    :param as_attachment: Indicate to a browser that it should offer to
+        save the file instead of displaying it.
+    :param download_name: The default name browsers will use when saving
+        the file. Defaults to the passed file name.
+    :param conditional: Enable conditional and range responses based on
+        request headers. Requires passing a file path and ``environ``.
+    :param etag: Calculate an ETag for the file, which requires passing
+        a file path. Can also be a string to use instead.
+    :param last_modified: The last modified time to send for the file,
+        in seconds. If not provided, it will try to detect it from the
+        file path.
+    :param max_age: How long the client should cache the file, in
+        seconds. If set, ``Cache-Control`` will be ``public``, otherwise
+        it will be ``no-cache`` to prefer conditional caching.
+    :param use_x_sendfile: Set the ``X-Sendfile`` header to let the
+        server to efficiently send the file. Requires support from the
+        HTTP server. Requires passing a file path.
+    :param response_class: Build the response using this class. Defaults
+        to :class:`~werkzeug.wrappers.Response`.
+    :param _root_path: Do not use. For internal use only. Use
+        :func:`send_from_directory` to safely send files under a path.
+
+    .. versionchanged:: 2.0.2
+        ``send_file`` only sets a detected ``Content-Encoding`` if
+        ``as_attachment`` is disabled.
+
+    .. versionadded:: 2.0
+        Adapted from Flask&#x27;s implementation.
+
+    .. versionchanged:: 2.0
+        ``download_name`` replaces Flask&#x27;s ``attachment_filename``
+         parameter. If ``as_attachment=False``, it is passed with
+         ``Content-Disposition: inline`` instead.
+
+    .. versionchanged:: 2.0
+        ``max_age`` replaces Flask&#x27;s ``cache_timeout`` parameter.
+        ``conditional`` is enabled and ``max_age`` is not set by
+        default.
+
+    .. versionchanged:: 2.0
+        ``etag`` replaces Flask&#x27;s ``add_etags`` parameter. It can be a
+        string to use instead of generating one.
+
+    .. versionchanged:: 2.0
+        If an encoding is returned when guessing ``mimetype`` from
+        ``download_name``, set the ``Content-Encoding`` header.
+    &quot;&quot;&quot;
+    if response_class is None:
+        from .wrappers import Response
+
+        response_class = Response
+
+    path: str | None = None
+    file: t.IO[bytes] | None = None
+    size: int | None = None
+    mtime: float | None = None
+    headers = Headers()
+
+    if isinstance(path_or_file, (os.PathLike, str)) or hasattr(
+        path_or_file, &quot;__fspath__&quot;
+    ):
+        path_or_file = t.cast(&quot;os.PathLike[str] | str&quot;, path_or_file)
+
+        # Flask will pass app.root_path, allowing its send_file wrapper
+        # to not have to deal with paths.
+        if _root_path is not None:
+            path = os.path.join(_root_path, path_or_file)
+        else:
+            path = os.path.abspath(path_or_file)
+
+        stat = os.stat(path)
+        size = stat.st_size
+        mtime = stat.st_mtime
+    else:
+        file = path_or_file
+
+    if download_name is None and path is not None:
+        download_name = os.path.basename(path)
+
+    if mimetype is None:
+        if download_name is None:
+            raise TypeError(
+                &quot;Unable to detect the MIME type because a file name is&quot;
+                &quot; not available. Either set &#x27;download_name&#x27;, pass a&quot;
+                &quot; path instead of a file, or set &#x27;mimetype&#x27;.&quot;
+            )
+
+        mimetype, encoding = mimetypes.guess_type(download_name)
+
+        if mimetype is None:
+            mimetype = &quot;application/octet-stream&quot;
+
+        # Don&#x27;t send encoding for attachments, it causes browsers to
+        # save decompress tar.gz files.
+        if encoding is not None and not as_attachment:
+            headers.set(&quot;Content-Encoding&quot;, encoding)
+
+    if download_name is not None:
+        try:
+            download_name.encode(&quot;ascii&quot;)
+        except UnicodeEncodeError:
+            simple = unicodedata.normalize(&quot;NFKD&quot;, download_name)
+            simple = simple.encode(&quot;ascii&quot;, &quot;ignore&quot;).decode(&quot;ascii&quot;)
+            # safe = RFC 5987 attr-char
+            quoted = quote(download_name, safe=&quot;!#$&amp;+-.^_`|~&quot;)
+            names = {&quot;filename&quot;: simple, &quot;filename*&quot;: f&quot;UTF-8&#x27;&#x27;{quoted}&quot;}
+        else:
+            names = {&quot;filename&quot;: download_name}
+
+        value = &quot;attachment&quot; if as_attachment else &quot;inline&quot;
+        headers.set(&quot;Content-Disposition&quot;, value, **names)
+    elif as_attachment:
+        raise TypeError(
+            &quot;No name provided for attachment. Either set&quot;
+            &quot; &#x27;download_name&#x27; or pass a path instead of a file.&quot;
+        )
+
+    if use_x_sendfile and path is not None:
+        headers[&quot;X-Sendfile&quot;] = path
+        data = None
+    else:
+        if file is None:
+            file = open(path, &quot;rb&quot;)  # type: ignore[arg-type]
+        elif isinstance(file, io.BytesIO):
+            size = file.getbuffer().nbytes
+        elif isinstance(file, io.TextIOBase):
+            raise ValueError(&quot;Files must be opened in binary mode or use BytesIO.&quot;)
+
+        data = wrap_file(environ, file)
+
+    rv = response_class(
+        data, mimetype=mimetype, headers=headers, direct_passthrough=True
+    )
+
+    if size is not None:
+        rv.content_length = size
+
+    if last_modified is not None:
+        rv.last_modified = last_modified
+    elif mtime is not None:
+        rv.last_modified = mtime
+
+    rv.cache_control.no_cache = True
+
+    # Flask will pass app.get_send_file_max_age, allowing its send_file
+    # wrapper to not have to deal with paths.
+    if callable(max_age):
+        max_age = max_age(path)
+
+    if max_age is not None:
+        if max_age &gt; 0:
+            rv.cache_control.no_cache = None
+            rv.cache_control.public = True
+
+        rv.cache_control.max_age = max_age
+        rv.expires = int(time() + max_age)
+
+    if isinstance(etag, str):
+        rv.etag = etag
+    elif etag and path is not None:
+        check = adler32(path.encode()) &amp; 0xFFFFFFFF
+        rv.etag = f&quot;{mtime}-{size}-{check}&quot;
+
+    if conditional:
+        try:
+            rv = rv.make_conditional(environ, accept_ranges=True, complete_length=size)
+        except RequestedRangeNotSatisfiable:
+            if file is not None:
+                file.close()
+
+            raise
+
+        # Some x-sendfile implementations incorrectly ignore the 304
+        # status code and send the file anyway.
+        if rv.status_code == 304:
+            rv.headers.pop(&quot;X-Sendfile&quot;, None)
+
+    return rv</pre></article></section>
+<section class=""><h2>Deterministic structural facts (DERIVED — compiler, not model)</h2><ul><li><code>CALLS(send_from_directory, os.fspath)</code><span class="dim"> — src/werkzeug/utils.py bytes 19745-19765</span><pre>os.fspath(directory)</pre></li><li><code>CALLS(send_from_directory, os.path.isfile)</code><span class="dim"> — src/werkzeug/utils.py bytes 20059-20083</span><pre>os.path.isfile(path_str)</pre></li><li><code>CALLS(send_from_directory, os.path.join)</code><span class="dim"> — src/werkzeug/utils.py bytes 20002-20046</span><pre>os.path.join(kwargs[&quot;_root_path&quot;], path_str)</pre></li><li><code>CALLS(send_from_directory, werkzeug.exceptions.NotFound)</code><span class="dim"> — src/werkzeug/utils.py bytes 19824-19834</span><pre>NotFound()</pre></li><li><code>CALLS(send_from_directory, werkzeug.security.safe_join)</code><span class="dim"> — src/werkzeug/utils.py bytes 19735-19783</span><pre>safe_join(os.fspath(directory), os.fspath(path))</pre></li><li><code>CALLS(send_from_directory, werkzeug.utils.send_file)</code><span class="dim"> — src/werkzeug/utils.py bytes 20122-20160</span><pre>send_file(path_str, environ, **kwargs)</pre></li></ul></section>
+<section class=""><h2>Why this outcome</h2><p>every material statement cites evidence that exists, was retrieved for this question, and still matches the source bytes</p></section>
+<section class=""><h2>Run</h2><pre>{
+  &quot;status&quot;: &quot;ANSWER&quot;,
+  &quot;attempts&quot;: 1,
+  &quot;regenerations&quot;: 0,
+  &quot;structural&quot;: &quot;CHECKED&quot;,
+  &quot;usage&quot;: {
+    &quot;llm_calls&quot;: 1,
+    &quot;input_tokens&quot;: 4092,
+    &quot;output_tokens&quot;: 217,
+    &quot;cache_hits&quot;: 0,
+    &quot;seconds&quot;: 0.0,
+    &quot;regenerations&quot;: 0
+  },
+  &quot;budget&quot;: {
+    &quot;interpretation_attempts&quot;: 0,
+    &quot;answer_attempts&quot;: 2,
+    &quot;max_context_chars&quot;: 24000,
+    &quot;max_spans&quot;: 6
+  },
+  &quot;latency_seconds&quot;: 0.087
+}</pre></section>

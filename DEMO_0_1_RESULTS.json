@@ -1,0 +1,266 @@
+{
+  "corpus": "eval/corpus3 (Werkzeug 6048fa48)",
+  "flagship": {
+    "accepted": {
+      "status": "ANSWER",
+      "answer": "send_from_directory does not trust the path it is given. It passes the directory and the untrusted path to safe_join, which returns None when the result would escape the base directory; send_from_directory then raises NotFound rather than opening the file.",
+      "statements": [
+        {
+          "text": "send_from_directory joins the untrusted path onto the directory with safe_join and raises NotFound when the join is refused.",
+          "ok": true,
+          "evidence": [
+            {
+              "id": "1039eea5bf62baef1fbcc00e6b593a4c",
+              "file": "src/werkzeug/utils.py",
+              "bytes": [
+                18574,
+                20160
+              ],
+              "ok": true
+            }
+          ],
+          "structural": [
+            {
+              "assertion": "CALLS(werkzeug.utils.send_from_directory, werkzeug.security.safe_join)",
+              "status": "SUPPORTED"
+            }
+          ]
+        },
+        {
+          "text": "safe_join returns None when the untrusted component would escape the base directory, which is the signal the caller acts on.",
+          "ok": true,
+          "evidence": [
+            {
+              "id": "7e51d079e4aa08e4c410dce87d88f0d8",
+              "file": "src/werkzeug/security.py",
+              "bytes": [
+                4684,
+                7215
+              ],
+              "ok": true
+            }
+          ],
+          "structural": []
+        }
+      ],
+      "evidence_retrieved": [
+        "1039eea5bf62baef1fbcc00e6b593a4c",
+        "ea80f7b4ff769eca08a72ca726e11f32",
+        "7e51d079e4aa08e4c410dce87d88f0d8",
+        "c83db71f68417abe352d6207cc4ffd9f"
+      ],
+      "how_found": [
+        "identifier",
+        "graph: send_from_directory CALLS NotFound",
+        "graph: send_from_directory CALLS safe_join",
+        "graph: send_from_directory CALLS send_file"
+      ],
+      "usage": {
+        "llm_calls": 1,
+        "input_tokens": 4092,
+        "output_tokens": 217,
+        "cache_hits": 0,
+        "seconds": 0.0,
+        "regenerations": 0
+      },
+      "attempts": 1,
+      "regenerations": 0,
+      "latency_seconds": 0.087,
+      "context_chars": 12863
+    },
+    "rejected": {
+      "status": "ABSTAIN",
+      "abstain_reason": "the candidate answer failed deterministic validation 2 times and was not shown. Last reason: statement 'It uses a sandbox module.': evidence 0000000000: no such evidence id in the store (fabricated citation)",
+      "validation_reason": "statement 'It uses a sandbox module.': evidence 0000000000: no such evidence id in the store (fabricated citation)",
+      "attempts": 2,
+      "regenerations": 1,
+      "structural_status": "CHECKED"
+    }
+  },
+  "targets": [
+    {
+      "id": "J1-009",
+      "question": "How does safe_join stop an untrusted path component from escaping the base directory, and what does it return when the path is rejected?",
+      "evidence_retrieved": 6,
+      "context_chars": 7167,
+      "how": [
+        "fts5/bm25",
+        "identifier"
+      ],
+      "top_symbols": [
+        "werkzeug.security.safe_join",
+        "werkzeug.middleware.shared_data.SharedDataMiddleware.get_directory_loader",
+        "werkzeug.middleware.shared_data.SharedDataMiddleware.get_directory_loader.loader"
+      ],
+      "structural_facts": 9,
+      "latency_seconds": 0.14
+    },
+    {
+      "id": "J1-037",
+      "question": "How does LocalProxy resolve the object it forwards to, and what happens if nothing is bound?",
+      "evidence_retrieved": 4,
+      "context_chars": 13836,
+      "how": [
+        "graph",
+        "identifier"
+      ],
+      "top_symbols": [
+        "werkzeug.local.LocalProxy",
+        "werkzeug.local._ProxyIOp",
+        "werkzeug.local._ProxyLookup"
+      ],
+      "structural_facts": 6,
+      "latency_seconds": 0.101
+    },
+    {
+      "id": "J1-047",
+      "question": "How does send_from_directory differ from send_file in terms of safety?",
+      "evidence_retrieved": 5,
+      "context_chars": 13747,
+      "how": [
+        "graph",
+        "identifier"
+      ],
+      "top_symbols": [
+        "werkzeug.utils.send_from_directory",
+        "werkzeug.utils.send_file",
+        "werkzeug.exceptions.NotFound"
+      ],
+      "structural_facts": 37,
+      "latency_seconds": 0.159
+    },
+    {
+      "id": "J1-049",
+      "question": "Walk me through how run_simple wires together the reloader, the debugger and the server.",
+      "evidence_retrieved": 4,
+      "context_chars": 21734,
+      "how": [
+        "graph",
+        "identifier"
+      ],
+      "top_symbols": [
+        "werkzeug.serving.run_simple",
+        "werkzeug._internal._log",
+        "werkzeug._reloader.run_with_reloader"
+      ],
+      "structural_facts": 20,
+      "latency_seconds": 0.125
+    },
+    {
+      "id": "J1-054",
+      "question": "How does MapAdapter.build construct a URL, and what happens when a required argument is missing?",
+      "evidence_retrieved": 5,
+      "context_chars": 9355,
+      "how": [
+        "graph",
+        "identifier"
+      ],
+      "top_symbols": [
+        "werkzeug.routing.map.MapAdapter.build",
+        "werkzeug.routing.rules.Rule.build",
+        "couchy.models.URL"
+      ],
+      "structural_facts": 12,
+      "latency_seconds": 0.108
+    },
+    {
+      "id": "J1-006",
+      "question": "What is the default status code and mimetype for a Response object?",
+      "evidence_retrieved": 4,
+      "context_chars": 5992,
+      "how": [
+        "fts5/bm25"
+      ],
+      "top_symbols": [
+        "simplewiki.utils.Response",
+        "werkzeug.sansio.response.Response.__init__",
+        "werkzeug.utils.redirect"
+      ],
+      "structural_facts": 3,
+      "latency_seconds": 0.054
+    },
+    {
+      "id": "J1-022",
+      "question": "What is max_cookie_size and what happens when a Set-Cookie header goes over it?",
+      "evidence_retrieved": 2,
+      "context_chars": 3365,
+      "how": [
+        "identifier"
+      ],
+      "top_symbols": [
+        "werkzeug.sansio.response.Response.max_cookie_size",
+        "werkzeug.test.Cookie"
+      ],
+      "structural_facts": 0,
+      "latency_seconds": 0.053
+    },
+    {
+      "id": "J1-002",
+      "question": "How many proxies does ProxyFix trust by default for each of the X-Forwarded- headers?",
+      "evidence_retrieved": 6,
+      "context_chars": 18368,
+      "how": [
+        "fts5/bm25",
+        "identifier"
+      ],
+      "top_symbols": [
+        "werkzeug.middleware.proxy_fix.ProxyFix",
+        "werkzeug.middleware.proxy_fix.ProxyFix._get_real_value",
+        "werkzeug.middleware.proxy_fix.ProxyFix.__call__"
+      ],
+      "structural_facts": 0,
+      "latency_seconds": 0.042
+    },
+    {
+      "id": "J1-043",
+      "question": "What's the default cache timeout SharedDataMiddleware sends for static files?",
+      "evidence_retrieved": 6,
+      "context_chars": 21317,
+      "how": [
+        "fts5/bm25",
+        "identifier"
+      ],
+      "top_symbols": [
+        "werkzeug.middleware.shared_data.SharedDataMiddleware",
+        "werkzeug.middleware.shared_data.SharedDataMiddleware.__call__",
+        "werkzeug.middleware.shared_data.SharedDataMiddleware.__init__"
+      ],
+      "structural_facts": 0,
+      "latency_seconds": 0.03
+    },
+    {
+      "id": "J1-038",
+      "question": "What are the default chunk_size and timeout for ProxyMiddleware?",
+      "evidence_retrieved": 6,
+      "context_chars": 16555,
+      "how": [
+        "fts5/bm25",
+        "identifier"
+      ],
+      "top_symbols": [
+        "werkzeug.middleware.http_proxy.ProxyMiddleware",
+        "werkzeug.middleware.http_proxy.ProxyMiddleware.__init__",
+        "werkzeug.middleware.http_proxy.ProxyMiddleware.proxy_to.application.read"
+      ],
+      "structural_facts": 0,
+      "latency_seconds": 0.03
+    }
+  ],
+  "compile": {
+    "absent": [],
+    "failed": 0,
+    "symbols": 6102,
+    "claims": 16244,
+    "counts": {
+      "artifact": 225,
+      "symbol": 6102,
+      "reference": 10120,
+      "evidence": 16066,
+      "claim": 16244,
+      "claim_relation": 0,
+      "diagnostic": 5166,
+      "work_item": 280
+    },
+    "invariants": []
+  }
+}

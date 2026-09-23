@@ -15,6 +15,15 @@ from dataclasses import dataclass
 FUNCTIONAL = "FUNCTIONAL"          # at most one value per (subject, scope)
 MULTI_VALUED = "MULTI_VALUED"      # many values are normal and additive
 
+# Completeness decides whether ABSENCE means anything. It almost never does.
+# This graph is not closed-world: CALLS resolves 17% of its edges, decorator
+# calls are excluded by design, and 85 of werkzeug's 225 artifacts are never
+# analysed. A missing edge is evidence about the compiler, not about the code.
+# A predicate may falsify an assertion by absence ONLY where it carries an
+# explicit guarantee for a named scope -- and only while the artifact parsed OK.
+CLOSED_WORLD = "CLOSED_WORLD"      # absence within `completeness_scope` is meaningful
+OPEN_WORLD = "OPEN_WORLD"          # absence means nothing at all
+
 
 @dataclass(frozen=True)
 class PredicateSpec:
@@ -27,6 +36,14 @@ class PredicateSpec:
     allowed_establishment: tuple[str, ...]
     cardinality: str            # FUNCTIONAL | MULTI_VALUED
     emitted_by_compiler: bool   # does any adapter actually produce this today?
+    completeness: str = OPEN_WORLD      # CLOSED_WORLD | OPEN_WORLD
+    completeness_scope: str = ""        # what, exactly, the guarantee covers
+
+    @property
+    def may_falsify_by_absence(self) -> bool:
+        """Whether a missing claim can contradict an assertion about this
+        predicate. Defaults to False; being wrong here invents contradictions."""
+        return self.completeness == CLOSED_WORLD
 
     @property
     def may_contradict(self) -> bool:
@@ -40,7 +57,11 @@ _SEM = ("DERIVED", "CONFIRMED", "PROPOSED", "DISPUTED")
 CANONICAL: dict[str, PredicateSpec] = {
     # ---- structural, multi-valued: many objects are normal and additive ----
     "CONTAINS":  PredicateSpec("CONTAINS", "subject lexically encloses object",
-                               "symbol", "symbol", True, True, _S, MULTI_VALUED, True),
+                               "symbol", "symbol", True, True, _S, MULTI_VALUED, True,
+                               CLOSED_WORLD,
+                               "the DIRECT children of a symbol, in an artifact whose "
+                               "parse_status is OK and which recorded no "
+                               "UNRESOLVED_PARENT_OCCURRENCE diagnostic"),
     "DEFINES":   PredicateSpec("DEFINES", "subject artifact introduces object symbol",
                                "artifact", "symbol", True, True, _S, MULTI_VALUED, False),
     "CALLS":     PredicateSpec("CALLS", "subject contains a call site targeting object",
@@ -51,7 +72,11 @@ CANONICAL: dict[str, PredicateSpec] = {
     # not a dispute. Treating it as functional would reproduce the very defect
     # this gate corrects, in a predicate the instruction's example list omitted.
     "EXTENDS":   PredicateSpec("EXTENDS", "subject class derives from object class",
-                               "symbol", "symbol|literal", True, True, _S, MULTI_VALUED, True),
+                               "symbol", "symbol|literal", True, True, _S, MULTI_VALUED, True,
+                               CLOSED_WORLD,
+                               "the DIRECT bases named in a class header, in an artifact "
+                               "whose parse_status is OK. `ast.ClassDef.bases` is the "
+                               "complete list; it says nothing about the MRO"),
     "READS":     PredicateSpec("READS", "subject reads object's value",
                                "symbol", "symbol", True, True, _S, MULTI_VALUED, False),
     "WRITES":    PredicateSpec("WRITES", "subject assigns object's value",
@@ -138,3 +163,19 @@ def is_trusted(pred: str, establishment: str) -> bool:
         return False
     spec = CANONICAL.get(pred)
     return establishment in spec.allowed_establishment if spec else True
+
+
+def may_falsify_by_absence(pred: str) -> bool:
+    """Whether a missing claim for this predicate can contradict an assertion.
+
+    Unknown predicates are OPEN_WORLD. Getting this wrong in the permissive
+    direction manufactures contradictions, which is worse than missing one --
+    the same asymmetry `may_contradict` is built on.
+    """
+    spec = CANONICAL.get(pred)
+    return bool(spec) and spec.may_falsify_by_absence
+
+
+def completeness_scope(pred: str) -> str:
+    spec = CANONICAL.get(pred)
+    return spec.completeness_scope if spec else ""

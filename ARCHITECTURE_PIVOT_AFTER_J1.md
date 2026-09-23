@@ -1,6 +1,8 @@
 # ARCHITECTURE DECISION — Evidence-first semantic pivot after J-1
 
-**Date:** 2026-09-23 · **Status:** decision document, no implementation
+**Date:** 2026-09-23 · **Status:** ACCEPTED, with five corrections applied after review
+**Corrections:** (1) uniqueness claim withdrawn, §11 · (2) absence ≠ contradiction, §11/§13 ·
+(3) no `HAS_BEHAVIOUR` junk drawer, §9 · (4) no silent sentence deletion, §8 · (5) bounded budget, §14
 **Decision: CONTINUE — the evidence-first semantic pivot is justified, with a sharpened thesis (§13).**
 
 Every claim in this document is argued from J-1 measurements or from measurements
@@ -209,9 +211,13 @@ as a trusted answer". All three are enforced in the database and in
    quotation re-derived. This is the check K-1.1's harness already performs.
 4. **Quotation integrity** — any span the answer quotes inline must occur
    verbatim in the cited bytes.
-5. **Coverage** — a sentence with no citation is removed. If removal empties the
-   answer, the system abstains.
-6. **Structural falsification** — §13.
+5. **Coverage** — every *material* statement must carry an evidence mapping. A
+   material statement with none is **not deleted**: the answer is rejected and
+   regenerated once with the failure reason returned to the model. A second
+   failure is an **abstention**. Silently dropping a sentence would leave a
+   shorter answer that looks fully supported, which is the failure mode this
+   gate exists to prevent. (Correction 4.)
+6. **Structural check** — §13, and only in the form §13 permits.
 
 **What this gate cannot do, stated plainly.** It verifies *grounding*, not
 *entailment*. It can prove the cited bytes exist, were retrieved, and say what
@@ -238,7 +244,7 @@ is the strongest evidence that Gate 1's four-axis design was right.
 | `establishment` | **`PROPOSED`** — "model-produced, evidence-verified, not derivable". Defined in `kgc/ir.py` since Gate 1, never used |
 | `lifecycle` | `CANDIDATE` → `VERIFIED` if an independent check confirms it → `ACTIVE` |
 | `verification_strength` | of the **evidence**, not the assertion. A docstring span is `EXACT`; the interpretation of it is not evidence at all |
-| `epistemic_state` / `claim_relation` | `CONTRADICTS` when the graph falsifies it (§13) |
+| `epistemic_state` / `claim_relation` | `CONTRADICTS` **only** on an explicit contradiction against a closed-world-complete predicate (§13). Absence is `NOT_ESTABLISHED`, never `CONTRADICTS` |
 | `predicate` | a *small* semantic set, not one per question — see below |
 
 `kgc/predicates.is_trusted` already returns `False` for
@@ -247,24 +253,36 @@ is the strongest evidence that Gate 1's four-axis design was right.
 future reader collapsing "may be stored" into "may be answered with". **That test
 was written for exactly this moment.**
 
-**The smallest semantic predicate set**, derived from the six example questions
-in the brief rather than invented:
+**Correction 3 — no new predicate yet, and no junk drawer.**
 
-| question | semantic predicate |
-|---|---|
-| How does `safe_join` prevent traversal? | `HAS_BEHAVIOUR` (subject → a described behaviour, evidence-bound) |
-| When does an upload spill to disk? | `HAS_BEHAVIOUR` (condition-shaped) |
-| How does `LocalProxy` resolve its target? | `HAS_BEHAVIOUR` |
-| What happens when a required argument is missing? | `HAS_BEHAVIOUR` (error path) |
-| Why is `UserAgent` deprecated? | `HAS_PURPOSE` (already declared) |
-| How does `run_simple` wire server and reloader? | `HAS_BEHAVIOUR` + existing `CALLS` |
+The earlier draft proposed `HAS_BEHAVIOUR` as a single semantic predicate for
+the six example questions. That is rejected. A predicate whose object is
+arbitrary prose is not a predicate; it is a text column with a graph edge
+wrapped round it, and it would quietly become the container for everything the
+vocabulary cannot express — exactly the ontology creep §15 forbids.
 
-**Two predicates, both already in or adjacent to the vocabulary.** Six questions,
-one new predicate. That is the test the brief set — "do not create one new
-predicate per question" — and it passes. `HAS_BEHAVIOUR` is `FUNCTIONAL`-adjacent
-but should be `MULTI_VALUED`: a function has many behaviours, and Gate 2.5's
-lesson is that treating a multi-valued predicate as functional manufactures false
-contradictions.
+**For Demo 0.1 a semantic answer is a query-time observation, not a graph edge.**
+It is produced, validated, displayed and recorded in the run log. It is *not*
+written into the claim table:
+
+```
+SemanticAnswer
+  question                the user's sentence
+  subject                 the entity it is about, resolved against the graph
+  statements[]            each with text + evidence_ids + structural_dependencies
+  evidence_set            existing evidence ids, never minted
+  structural_facts_used   DERIVED claims consulted, by claim_id
+  establishment           PROPOSED  (never DERIVED, never merged with it)
+  validation              the gate's verdict and why
+```
+
+Nothing here is new storage: `evidence_id` and `claim_id` already exist, and
+`PROPOSED` has been a legal `establishment` value since Gate 1.
+
+**When a formal semantic predicate would be justified:** after J-2, if a
+*repeated* pattern appears across many questions with a stable subject/object
+shape — and then it is named for the pattern, not for a question. Until a
+measurement shows such a pattern, adding a predicate is speculation.
 
 **The exposure rule that keeps the two kinds separate:** a `DERIVED` claim and a
 `PROPOSED` claim may both appear in an answer, but they are **never merged into
@@ -304,29 +322,83 @@ product shows sources. The §8 gate checks that a citation exists, was retrieved
 and is byte-exact — **that is roughly what good RAG citation already does.** If
 this is the differentiator, it is thin, and I will not pretend otherwise.
 
-**What survives the attack.** One thing, and it is not retrieval:
+**Correction 1 — the uniqueness claim is withdrawn.**
 
-> **The deterministic graph can falsify the semantic layer.**
+An earlier draft said *"no RAG system can do this."* That is false and is
+removed. **CodeQL, Sourcegraph, LSIF/SCIP indexers and every serious static
+analyser already provide compiler-derived structural facts and call graphs**,
+and some are far more complete than this compiler: CodeQL resolves types and
+data flow, where this graph resolves 1,405 of 8,375 `CALLS` edges and zero
+`EXTENDS` edges to a symbol. Anyone can put an LLM in front of those, and some
+have.
 
-When a model says "`send_from_directory` validates the path via `safe_join`", the
-graph either contains `send_from_directory CALLS safe_join` or it does not.
-Here it does. When a model says "`X` extends `Y`" and no `EXTENDS` claim exists,
-that is a detectable contradiction — not low confidence, a **contradiction**,
-recordable as `claim_relation(CONTRADICTS)`, which the schema has carried since
-Gate 1 and which Gate 2.5 gave correct cardinality semantics.
+**The defensible claim, stated without uniqueness:**
 
-No RAG system can do this, because no RAG system has a deterministic ground
-truth to contradict. A knowledge-graph builder cannot do it either, because its
-edges are themselves model-generated — that is the "LLM-generated triples"
-failure this project rejected in Phase 0 and has now spent six gates earning the
-right to reject.
+> Generic retrieval alone does not provide deterministic source truth. This
+> system integrates compiler-derived structural facts as a **hard epistemic
+> boundary** for semantic interpretation.
 
-**The honest scope of that differentiator.** It catches structural assertions
-only: calls, imports, inheritance, containment, class-body values. It cannot
-falsify "the reloader prefers watchdog", because no deterministic claim covers
-it. So the falsifier applies to a **minority** of the sentences in a behavioural
-answer — and that minority is exactly where a model is most likely to be
-confidently wrong, because invented call relationships are a known failure mode.
+The proposed differentiation is the *combination*, not any one part:
+
+```
+compiler-derived deterministic facts
+  + a hard trust boundary that a model cannot cross
+  + semantic interpretation behind that boundary
+  + explicit contradiction detection, where deterministic completeness permits it
+  + exact evidence paths from answer to source bytes
+```
+
+The parts that are genuinely uncommon are the trust boundary being enforced in
+the *storage layer* — a model-established structural claim is physically
+unrepresentable, not merely discouraged — and abstention being a first-class,
+reasoned outcome rather than a fallback.
+
+**This remains an empirical product hypothesis, not an established fact.**
+Nobody has yet shown that a developer prefers a grounded, abstaining answer to a
+fluent, unchecked one. J-2 must measure it. If the answer is no, the
+differentiation is real and worthless, which is a different failure from being
+absent.
+
+**Correction 2 — absence is not contradiction. This is a core epistemic rule.**
+
+The earlier draft said that if a model asserts `X extends Y` and no `EXTENDS`
+claim exists, that is a contradiction. **That is wrong, and acting on it would
+manufacture false contradictions at scale.** This graph is not closed-world
+complete: `CALLS` resolves 16.8% of its edges, decorator calls are deliberately
+absent since K-1.2, `IMPORTS` and `EXTENDS` resolve to zero symbols, and 85 of
+225 artifacts are never analysed. Absence of an edge is overwhelmingly evidence
+about the compiler, not about the code.
+
+Four distinct outcomes, never collapsed:
+
+| outcome | meaning |
+|---|---|
+| `SUPPORTED` | a deterministic claim affirms the semantic assertion |
+| `EXPLICIT_CONTRADICTION` | a deterministic claim **denies** it, and the predicate is closed-world complete for that scope |
+| `NOT_ESTABLISHED` | the graph neither affirms nor denies. **The default.** Not a defect, not a warning |
+| `ABSTAIN` | the answer as a whole cannot be grounded |
+
+**A deterministic predicate may falsify a semantic assertion by absence only
+when it carries an explicit completeness guarantee for the relevant scope.**
+This becomes a small field on the predicate spec — `completeness` plus the scope
+it holds for — not a framework:
+
+| predicate | completeness | holds for |
+|---|---|---|
+| `EXTENDS` | **CLOSED_WORLD** | the *direct bases* of a class whose artifact parsed OK — the AST gives the complete base list |
+| `CONTAINS` | **CLOSED_WORLD** | the *direct children* of a symbol in an artifact that parsed OK |
+| `CALLS` | OPEN_WORLD | dynamic dispatch, unresolved targets, and decorators excluded by design |
+| `IMPORTS` | OPEN_WORLD | star-imports make bound names statically unknowable |
+| `HAS_VALUE` | OPEN_WORLD | annotated assignments and module-level constants are excluded |
+
+So: `class C(A, B)` plus a model asserting `C` directly extends `D` is an
+**explicit contradiction**. A missing `CALLS(X, Y)` is **`NOT_ESTABLISHED`** and
+proves nothing.
+
+**The honest scope of the falsifier.** It reaches direct inheritance and direct
+containment, and affirms (never denies) calls. It cannot falsify "the reloader
+prefers watchdog", because no deterministic claim covers it. It therefore applies
+to a **small minority** of the statements in a behavioural answer.
 
 **Verdict on differentiation: sufficient, but narrower than the brief's framing.**
 The differentiator is *structural falsification of semantic output*, not
@@ -424,11 +496,22 @@ is real in the graph today and is the single best demonstration of the thesis.
 to a model at ingestion, claim verified semantic answers, or report a safety
 number.
 
-**Cost envelope, measured:** median 4.4K tokens of retrieved context per
-question, one interpretation call and one answer call, cached by the content hash
-of (question, retrieved evidence ids). Viable on a free tier and on a local
-model, because the deterministic gate does not care which model produced the
-sentence.
+**Cost envelope — a bounded budget, not a fixed cost (Correction 5).**
+
+The 4.4K median is a **measured starting point on one corpus**, not a production
+guarantee. Demo 0.1 carries an explicit, configurable budget:
+
+| limit | default |
+|---|---|
+| interpretation attempts | 1 |
+| answer attempts | 2 (one regeneration after a validation failure) |
+| maximum retrieved context | configured character cap, enforced before the call |
+
+and records, per question: LLM calls, input tokens, output tokens, cache hits,
+regeneration count, and abstentions caused by validation failure. Responses are
+cached on the content hash of (model, prompt), so an identical input never costs
+twice. Viable on a free tier and on a local model, because the deterministic gate
+does not care which model produced the sentence.
 
 ## 15. Explicitly rejected
 

@@ -1,104 +1,156 @@
 """J-2 runner. Executes the FROZEN system over the FROZEN query set.
 
-It changes nothing about the system: it imports kgq.answer.ask, the same entry
-point the workbench uses, and records what comes back. No per-question logic,
-no prompt edits, no retrieval tweaks -- J-2 §18.
+It changes nothing about the system: it imports `kgq.answer.ask`, the same entry
+point the workbench uses, and records what comes back. No per-question logic, no
+prompt edits, no retrieval tweaks (§18).
 
-Durability (harness amendment, execution only): every completed question is
-persisted atomically before the next one starts, so an interrupted run resumes
-instead of being lost. Nothing about what is measured changes.
+Two harness-side concerns only, both explicitly authorised:
+
+  RATE LIMITING   Groq's tier allows 8,000 tokens per minute per model. An
+                  unpaced run gets HTTP 429, `ask()` correctly reports "model
+                  unavailable" and abstains -- which measures a billing tier,
+                  not a semantic layer. `PacedProvider` only delays and retries
+                  transport.
+
+  MEASUREMENT     Per-request token counts are read off the WIRE, from the
+                  provider's own `usage` block, never estimated from character
+                  counts. This is done by wrapping `urllib.request.urlopen`
+                  inside this process, so `kgq/provider.py` stays byte-identical.
+
+Results are written after every question, so an interruption cannot destroy
+completed work, and `--resume` continues a partial file.
 """
 from __future__ import annotations
 
-import argparse, hashlib, json, os, pathlib, sys, tempfile, time
+import argparse, hashlib, json, os, pathlib, sys, time, urllib.error, urllib.request
+
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2]))
 
-from kgc import SCHEMA_VERSION
-from kgq import DEMO_VERSION
 from kgq.answer import ANSWER, Budget, ask
 from kgq.provider import Provider, ProviderError
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 QUERIES = ROOT / "eval/j2/J2_QUERIES.json"
-GOLD = ROOT / "eval/j2/J2_GOLD.json"
 CORPUS = (ROOT / "eval/corpus3").resolve()
-CORPUS_SHA = "19f4028a0a9f15b4e77d41ad489ee3368b72b309c9ac2836b1d34941fc32d35f"
 
 
-def sha(p: pathlib.Path) -> str:
-    return hashlib.sha256(p.read_bytes()).hexdigest()
+# ── wire-level measurement ──────────────────────────────────────────────
+class Wire:
+    """Observes every HTTP call the frozen provider makes. Measurement only.
 
-
-def write_atomic(path: pathlib.Path, payload: dict) -> None:
-    """Write-then-rename so a kill can never leave a half-written checkpoint.
-
-    os.replace is atomic within a filesystem, and the temp file is fsynced
-    first, so the rename cannot publish bytes the kernel has not committed.
+    It records the provider's own reported usage -- prompt_tokens,
+    completion_tokens, total_tokens, and any cache field the provider chooses to
+    expose -- rather than estimating from characters. It never alters a request,
+    a response, or a decision.
     """
-    path.parent.mkdir(parents=True, exist_ok=True)
-    fd, tmp = tempfile.mkstemp(dir=str(path.parent), prefix=path.name + ".", suffix=".tmp")
-    try:
-        with os.fdopen(fd, "w") as fh:
-            json.dump(payload, fh, indent=2)
-            fh.flush()
-            os.fsync(fh.fileno())
-        os.replace(tmp, path)
-    except BaseException:
-        pathlib.Path(tmp).unlink(missing_ok=True)
-        raise
+
+    def __init__(self):
+        self.calls: list[dict] = []
+        self.http_429 = 0
+        self.http_other_errors = 0
+        self._orig = urllib.request.urlopen
+
+    def install(self):
+        wire = self
+
+        class _Replay:
+            def __init__(self, body, status):
+                self._body, self.status = body, status
+            def read(self, *a): return self._body
+            def __enter__(self): return self
+            def __exit__(self, *a): return False
+
+        def patched(req, *a, **kw):
+            t0 = time.perf_counter()
+            try:
+                resp = wire._orig(req, *a, **kw)
+                body = resp.read()
+                status = getattr(resp, "status", 200)
+                try:
+                    resp.close()
+                except Exception:
+                    pass
+            except urllib.error.HTTPError as exc:
+                if exc.code == 429:
+                    wire.http_429 += 1
+                else:
+                    wire.http_other_errors += 1
+                wire.calls.append({"http_status": exc.code,
+                                   "seconds": round(time.perf_counter() - t0, 3)})
+                raise
+            elapsed = round(time.perf_counter() - t0, 3)
+            rec = {"http_status": status, "seconds": elapsed}
+            try:
+                u = (json.loads(body.decode()) or {}).get("usage") or {}
+                rec["input_tokens"] = u.get("prompt_tokens")
+                rec["output_tokens"] = u.get("completion_tokens")
+                rec["total_tokens"] = u.get("total_tokens")
+                # §4: recorded only if the provider exposes it. Nothing is done
+                # to the prompts to induce caching.
+                details = u.get("prompt_tokens_details") or {}
+                cached = details.get("cached_tokens", u.get("cached_tokens"))
+                rec["cached_tokens"] = cached
+                rec["cache_hit"] = bool(cached) if cached is not None else None
+                cd = u.get("completion_tokens_details") or {}
+                if "reasoning_tokens" in cd:
+                    rec["reasoning_tokens"] = cd["reasoning_tokens"]
+                for k in ("queue_time", "prompt_time", "completion_time", "total_time"):
+                    if k in u:
+                        rec[k] = u[k]
+            except Exception:
+                pass
+            wire.calls.append(rec)
+            return _Replay(body, status)
+
+        urllib.request.urlopen = patched
+        return self
+
+    def drain(self) -> list[dict]:
+        out, self.calls = self.calls, []
+        return out
 
 
 class PacedProvider:
     """Rate-limit pacing for the HARNESS, not the system.
 
-    Groq's free tier allows 8,000 tokens per minute per model. A J-2 answer
-    prompt carries up to 24,000 characters of evidence, so roughly one question
-    per minute fits. Without pacing the provider returns HTTP 429, `ask()`
-    correctly reports "model unavailable" and abstains -- which would measure
-    Groq's billing tier, not the semantic layer.
-
-    This wrapper only delays and retries transport. It does not alter messages,
-    temperature, budgets, retrieval, validation or any decision the system
-    makes. `Provider.chat`'s own accounting still records the real API time, so
-    latency is reported from that and excludes every sleep here.
+    Only delays and retries transport. It does not alter messages, temperature,
+    budgets, retrieval, validation or any decision the system makes.
+    `Provider.chat`'s own accounting still records the real API time, so latency
+    is reported from that and excludes every sleep here.
     """
 
     TPM = 8000
     HEADROOM = 0.92
 
-    def __init__(self, inner, *, verbose: bool = True, paced_seconds: float = 0.0,
-                 retries: int = 0):
+    def __init__(self, inner, *, verbose: bool = True):
         self.inner = inner
         self.verbose = verbose
         self._window: list[tuple[float, int]] = []
-        self.paced_seconds = paced_seconds          # carried across a resume
-        self.rate_limit_retries = retries
+        self.paced_seconds = 0.0
+        self.rate_limit_retries = 0
 
     base_url = property(lambda self: self.inner.base_url)
     model = property(lambda self: self.inner.model)
     usage = property(lambda self: self.inner.usage)
 
-    def _spent_last_minute(self) -> int:
+    def _spent(self) -> int:
         now = time.time()
         self._window = [(t, n) for t, n in self._window if now - t < 60]
         return sum(n for _, n in self._window)
 
-    def _wait_for_room(self, need: int) -> None:
-        while self._window and self._spent_last_minute() + need > self.TPM * self.HEADROOM:
-            oldest = self._window[0][0]
-            nap = max(1.0, 61 - (time.time() - oldest))
+    def _wait(self, need: int) -> None:
+        while self._window and self._spent() + need > self.TPM * self.HEADROOM:
+            nap = max(1.0, 61 - (time.time() - self._window[0][0]))
             if self.verbose:
-                print(f"        pacing {nap:.0f}s "
-                      f"({self._spent_last_minute()}/{self.TPM} tpm)", flush=True)
+                print(f"        pacing {nap:.0f}s ({self._spent()}/{self.TPM} tpm)", flush=True)
             time.sleep(nap)
             self.paced_seconds += nap
 
     def chat(self, messages, **kw):
-        # max_tokens is a ceiling, not a forecast: these replies run a few hundred
-        # tokens. Over-estimating it costs a full 60s window on every call.
+        # max_tokens is a ceiling, not a forecast
         estimate = (sum(len(m.get("content", "")) for m in messages) // 4
                     + kw.get("max_tokens", 1200) // 3)
-        self._wait_for_room(estimate)
+        self._wait(estimate)
         for attempt in range(6):
             before = self.inner.usage.input_tokens + self.inner.usage.output_tokens
             try:
@@ -119,56 +171,10 @@ class PacedProvider:
         raise AssertionError("unreachable")
 
 
-def frozen_identity(run_label: str, provider, db: str, budget: Budget, qfile: pathlib.Path) -> dict:
-    """Everything a resume must match before it may append to a checkpoint."""
-    return {
-        "run_label": run_label,
-        "queries_file": str(qfile),
-        "queries_sha256": sha(qfile),
-        "gold_sha256": sha(GOLD),
-        "corpus_content_sha256": CORPUS_SHA,
-        "system_under_test": {
-            "compiler_commit": json.loads((ROOT / "eval/j2/J2_SYSTEM_UNDER_TEST.json")
-                                          .read_text())["compiler_commit"],
-            "schema_version": SCHEMA_VERSION,
-            "demo_version": DEMO_VERSION,
-        },
-        "provider": {
-            "base_url": provider.base_url,
-            "model": provider.model,
-            "temperature": 0.0,                     # Provider.chat's default
-            "budget": budget.as_dict(),
-        },
-        "database": db,
-    }
-
-
-def check_resumable(ckpt: dict, now: dict) -> list[str]:
-    """Return the list of frozen inputs that differ. Empty list means resumable.
-
-    The database file's own hash is deliberately NOT compared: the retriever
-    builds an FTS index on first use, so the file legitimately changes during a
-    run. The corpus hash is what pins the content.
-    """
-    was = ckpt["frozen"]
-    bad = []
-    for key in ("run_label", "queries_sha256", "gold_sha256", "corpus_content_sha256",
-                "database", "queries_file"):
-        if was.get(key) != now.get(key):
-            bad.append(f"{key}: checkpoint {was.get(key)!r} != now {now.get(key)!r}")
-    for key in ("base_url", "model", "temperature"):
-        if was["provider"].get(key) != now["provider"].get(key):
-            bad.append(f"provider.{key}: checkpoint {was['provider'].get(key)!r} "
-                       f"!= now {now['provider'].get(key)!r}")
-    if was["provider"].get("budget") != now["provider"].get("budget"):
-        bad.append(f"provider.budget: checkpoint {was['provider'].get('budget')} "
-                   f"!= now {now['provider'].get('budget')}")
-    for key in ("compiler_commit", "schema_version", "demo_version"):
-        if was["system_under_test"].get(key) != now["system_under_test"].get(key):
-            bad.append(f"system_under_test.{key}: checkpoint "
-                       f"{was['system_under_test'].get(key)!r} != "
-                       f"now {now['system_under_test'].get(key)!r}")
-    return bad
+def write_atomic(path: pathlib.Path, payload: dict) -> None:
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(json.dumps(payload, indent=2) + "\n")
+    tmp.replace(path)
 
 
 def main() -> int:
@@ -178,109 +184,92 @@ def main() -> int:
     ap.add_argument("--run-label", required=True)
     ap.add_argument("--cache", default="")
     ap.add_argument("--queries", default="")
-    ap.add_argument("--checkpoint", default="", help="defaults to <out>.ckpt.json")
-    ap.add_argument("--resume", action="store_true",
-                    help="continue an existing checkpoint instead of refusing")
+    ap.add_argument("--resume", action="store_true")
     a = ap.parse_args()
 
     qfile = pathlib.Path(a.queries) if a.queries else QUERIES
-    qs = json.loads(qfile.read_bytes())["questions"]
-    ckpt_path = pathlib.Path(a.checkpoint or (a.out + ".ckpt.json"))
-    budget = Budget()
-
-    inner = Provider.from_env(cache_path=a.cache or None)
-    now = frozen_identity(a.run_label, inner, a.db, budget, qfile)
+    qraw = qfile.read_bytes()
+    qs = json.loads(qraw)["questions"]
+    out_path = pathlib.Path(a.out)
 
     done: dict[str, dict] = {}
-    carried = {"paced_seconds": 0.0, "retries": 0,
-               "usage": {"llm_calls": 0, "input_tokens": 0, "output_tokens": 0,
-                         "cache_hits": 0, "seconds": 0.0}}
-    if ckpt_path.exists():
-        ckpt = json.loads(ckpt_path.read_text())
-        if not a.resume:
-            # never silently restart from question 1 over a real checkpoint
-            print(f"REFUSING: a checkpoint already exists at {ckpt_path} with "
-                  f"{len(ckpt.get('results', []))} completed question(s).\n"
-                  f"Pass --resume to continue it, or delete it to start over.",
-                  file=sys.stderr)
-            return 2
-        bad = check_resumable(ckpt, now)
-        if bad:
-            print("REFUSING TO RESUME: frozen inputs differ from the checkpoint.",
-                  file=sys.stderr)
-            for b in bad:
-                print(f"  - {b}", file=sys.stderr)
-            return 3
-        done = {r["id"]: r for r in ckpt.get("results", [])}
-        carried["paced_seconds"] = ckpt.get("harness_paced_seconds", 0.0)
-        carried["retries"] = ckpt.get("harness_rate_limit_retries", 0)
-        carried["usage"] = ckpt.get("cumulative_usage", carried["usage"])
-        print(f"resuming {ckpt_path}: {len(done)} already complete, "
-              f"{len(qs) - len(done)} remaining")
+    if a.resume and out_path.is_file():
+        prev = json.loads(out_path.read_text())
+        done = {r["id"]: r for r in prev.get("results", [])}
+        print(f"resuming: {len(done)} of {len(qs)} already recorded")
 
-    provider = PacedProvider(inner, paced_seconds=carried["paced_seconds"],
-                             retries=carried["retries"])
+    wire = Wire().install()
+    provider = PacedProvider(Provider.from_env(cache_path=a.cache or None))
+
+    header = {
+        "run_label": a.run_label,
+        "queries_file": str(qfile),
+        "queries_sha256": hashlib.sha256(qraw).hexdigest(),
+        "gold_sha256": hashlib.sha256((ROOT / "eval/j2/J2_GOLD.json").read_bytes()).hexdigest(),
+        "corpus_content_sha256": "19f4028a0a9f15b4e77d41ad489ee3368b72b309c9ac2836b1d34941fc32d35f",
+        "database": a.db,
+        "database_sha256": hashlib.sha256(pathlib.Path(a.db).read_bytes()).hexdigest(),
+        "provider": {"base_url": provider.base_url, "model": provider.model,
+                     "temperature": 0.0, "max_tokens_per_call": 1200,
+                     "endpoint_type": "OpenAI-compatible /chat/completions",
+                     "cache": a.cache or "disabled"},
+        "budget": Budget().as_dict(),
+        "started": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+    }
+
+    results = [done[q["id"]] for q in qs if q["id"] in done]
     t_all = time.perf_counter()
-
-    def snapshot(extra: dict | None = None) -> dict:
-        u = provider.usage.as_dict()
-        cum = {k: carried["usage"].get(k, 0) + u.get(k, 0) for k in u}
-        return {
-            "run_label": a.run_label,
-            "frozen": now,
-            "completed_ids": [q["id"] for q in qs if q["id"] in done],
-            "completed_count": len(done),
-            "total_questions": len(qs),
-            "results": [done[q["id"]] for q in qs if q["id"] in done],
-            "cumulative_usage": cum,
-            "harness_paced_seconds": round(provider.paced_seconds, 1),
-            "harness_rate_limit_retries": provider.rate_limit_retries,
-            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-            **(extra or {}),
-        }
-
-    pending = [q for q in qs if q["id"] not in done]
-    for i, q in enumerate(pending, 1):
+    for i, q in enumerate(qs, 1):
+        if q["id"] in done:
+            print(f"  [{i:2}/{len(qs)}] {q['id']}  (already recorded)", flush=True)
+            continue
+        wire.drain()
         t0 = time.perf_counter()
-        u = provider.usage
-        before = u.as_dict()
         try:
             r = ask(q["question"], db_path=a.db, corpus_root=str(CORPUS),
-                    provider=provider, budget=budget)
+                    provider=provider, budget=Budget())
             d = r.as_dict()
             d["is_answer"] = r.status == ANSWER
             d["error"] = None
         except Exception as exc:                 # a crash is a result, not a gap
             d = {"question": q["question"], "status": "RUNNER_ERROR",
                  "error": f"{type(exc).__name__}: {exc}", "is_answer": False}
-        after = u.as_dict()
+        reqs = wire.drain()
         d["id"] = q["id"]
         d["wall_seconds"] = round(time.perf_counter() - t0, 3)
-        d["usage_delta"] = {k: after.get(k, 0) - before.get(k, 0) for k in after}
-        done[q["id"]] = d
-        write_atomic(ckpt_path, snapshot())       # durable BEFORE the next question
-        print(f"  [{len(done):2}/{len(qs)}] {q['id']}  {d['status']:18} "
-              f"{d['wall_seconds']:6.2f}s", flush=True)
+        d["requests"] = reqs                     # actual per-request wire usage
+        d["measured"] = {
+            "llm_calls": len([x for x in reqs if x.get("http_status") == 200]),
+            "input_tokens": sum(x.get("input_tokens") or 0 for x in reqs),
+            "output_tokens": sum(x.get("output_tokens") or 0 for x in reqs),
+            "total_tokens": sum(x.get("total_tokens") or 0 for x in reqs),
+            "cached_tokens": sum(x.get("cached_tokens") or 0 for x in reqs),
+            "cache_hit": any(x.get("cache_hit") for x in reqs),
+            "reasoning_tokens": sum(x.get("reasoning_tokens") or 0 for x in reqs),
+            "http_429": len([x for x in reqs if x.get("http_status") == 429]),
+            "api_seconds": round(sum(x.get("seconds") or 0 for x in reqs), 3),
+        }
+        results.append(d)
+        m = d["measured"]
+        print(f"  [{i:2}/{len(qs)}] {q['id']}  {d['status']:18} "
+              f"calls={m['llm_calls']} in={m['input_tokens']:>5} out={m['output_tokens']:>4} "
+              f"api={m['api_seconds']:5.2f}s wall={d['wall_seconds']:6.2f}s", flush=True)
 
-    assert len(done) == len(qs), f"{len(done)} != {len(qs)}"
-    ordered = [done[q["id"]] for q in qs]
-    ids = [r["id"] for r in ordered]
-    assert len(set(ids)) == len(ids), "duplicate question ids in the final artifact"
+        payload = dict(header)
+        payload.update({
+            "complete": len(results) == len(qs),
+            "completed_count": len(results),
+            "harness_paced_seconds": round(provider.paced_seconds, 1),
+            "harness_rate_limit_retries": provider.rate_limit_retries,
+            "http_429_total": wire.http_429,
+            "http_other_errors": wire.http_other_errors,
+            "elapsed_seconds": round(time.perf_counter() - t_all, 2),
+            "results": results,
+        })
+        write_atomic(out_path, payload)          # persist after EVERY question
 
-    final = snapshot({
-        "database_sha256": sha(pathlib.Path(a.db)),
-        "queries_sha256": now["queries_sha256"],
-        "gold_sha256": now["gold_sha256"],
-        "corpus_content_sha256": CORPUS_SHA,
-        "provider": now["provider"] | {"cache": a.cache or "disabled"},
-        "budget": budget.as_dict(),
-        "database": a.db,
-        "session_seconds": round(time.perf_counter() - t_all, 2),
-        "results": ordered,
-    })
-    write_atomic(pathlib.Path(a.out), final)
-    print(f"\nwrote {a.out}  ({len(ordered)} results, "
-          f"{final['session_seconds']}s this session)")
+    print(f"\nwrote {a.out}  ({len(results)}/{len(qs)} recorded, "
+          f"{round(time.perf_counter() - t_all, 1)}s)")
     return 0
 
 

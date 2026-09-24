@@ -1,0 +1,302 @@
+{
+  "run_label": "run1 gpt-oss-120b t=0",
+  "queries_file": "/home/user/Evidence-first-universal-knowledge-graph-compiler/eval/j2/J2_QUERIES.json",
+  "queries_sha256": "977ca0761b769c8797c471b035ad735022295bcf2175446fd6bd843a56b1a713",
+  "gold_sha256": "4e6b39b36a2ce1719d674e038e04fa0f0591425d36d4270c9091b7cfd7cb873a",
+  "corpus_content_sha256": "19f4028a0a9f15b4e77d41ad489ee3368b72b309c9ac2836b1d34941fc32d35f",
+  "database": "eval/j2/j2_run1.sqlite",
+  "database_sha256": "6f650032c6543c4bff3ef96f9e8ec47ac0fafd8574e4570877329b44e195c869",
+  "provider": {
+    "base_url": "https://api.groq.com/openai/v1",
+    "model": "openai/gpt-oss-120b",
+    "temperature": 0.0,
+    "max_tokens_per_call": 1200,
+    "endpoint_type": "OpenAI-compatible /chat/completions",
+    "cache": "disabled"
+  },
+  "budget": {
+    "interpretation_attempts": 1,
+    "answer_attempts": 2,
+    "max_context_chars": 24000,
+    "max_spans": 6
+  },
+  "started": "2026-09-24T07:04:10Z",
+  "complete": false,
+  "completed_count": 1,
+  "harness_paced_seconds": 0.0,
+  "harness_rate_limit_retries": 0,
+  "http_429_total": 0,
+  "http_other_errors": 0,
+  "elapsed_seconds": 6.89,
+  "results": [
+    {
+      "question": "How do I hash a password with Werkzeug, and which algorithm does it pick if I don't specify one?",
+      "status": "ABSTAIN",
+      "answer": "",
+      "abstain_reason": "the candidate answer failed deterministic validation 2 times and was not shown. Last reason: statement 'You hash a password by calling werkzeug.security.generate_pa': evidence 3ad8d2f568: quotation not found in cited bytes",
+      "intent": {
+        "subject": "Werkzeug",
+        "requested_fact": "how to hash a password and which algorithm is used by default",
+        "answer_type": "behaviour",
+        "scope": null,
+        "ambiguous": false,
+        "search_terms": [
+          "Werkzeug",
+          "hash password",
+          "generate_password_hash",
+          "default algorithm"
+        ],
+        "source": "model"
+      },
+      "subjects": [],
+      "evidence": [
+        {
+          "evidence_id": "06c8c3e3043c894d3625f09767a81311",
+          "rel_path": "src/werkzeug/security.py",
+          "byte_start": 3876,
+          "byte_end": 4681,
+          "line_start": 121,
+          "symbol": "werkzeug.security.check_password_hash",
+          "kind": "function",
+          "how": "fts5/bm25",
+          "chars": 805,
+          "excerpt": "def check_password_hash(pwhash: str, password: str) -> bool:\n    \"\"\"Securely check that the given stored password hash, previously generated using\n    :func:`generate_password_hash`, matches the given password.\n\n    Methods may be deprecated and removed if they are no longer considered secure. To\n    migrate old hashes, you may generate a new hash when checking an old hash, or you\n    may contact users with a link to reset their password.\n\n    :param pwhash: The hashed password.\n    :param password: The plaintext password.\n\n    .. versionchanged:: 3.0\n        All plain hashes are no longer supported.\n    \"\"\"\n    try:\n        method, salt, hashval = pwhash.split(\"$\", 2)\n    except ValueError:\n        return False\n\n    return hmac.compare_digest(_hash_internal(method, salt, password)[0], hashval)"
+        },
+        {
+          "evidence_id": "3c0ad9acd112c4a237a2e13c2599de91",
+          "rel_path": "tests/test_security.py",
+          "byte_start": 658,
+          "byte_end": 895,
+          "line_start": 27,
+          "symbol": "test_security.test_salted_hashes",
+          "kind": "function",
+          "how": "fts5/bm25",
+          "chars": 237,
+          "excerpt": "def test_salted_hashes():\n    hash1 = generate_password_hash(\"secret\")\n    hash2 = generate_password_hash(\"secret\")\n    assert hash1 != hash2\n    assert check_password_hash(hash1, \"secret\")\n    assert check_password_hash(hash2, \"secret\")"
+        },
+        {
+          "evidence_id": "3ad8d2f5689ad4e32b407e4b8a2511a9",
+          "rel_path": "src/werkzeug/security.py",
+          "byte_start": 2210,
+          "byte_end": 3873,
+          "line_start": 79,
+          "symbol": "werkzeug.security.generate_password_hash",
+          "kind": "function",
+          "how": "fts5/bm25",
+          "chars": 1663,
+          "excerpt": "def generate_password_hash(\n    password: str, method: str = \"scrypt\", salt_length: int = 16\n) -> str:\n    \"\"\"Securely hash a password for storage. A password can be compared to a stored hash\n    using :func:`check_password_hash`.\n\n    The following methods are supported:\n\n    -   ``scrypt``, the default. The parameters are ``n``, ``r``, and ``p``, the default\n        is ``scrypt:32768:8:1``. See :func:`hashlib.scrypt`.\n    -   ``pbkdf2``, less secure. The parameters are ``hash_method`` and ``iterations``,\n        the default is ``pbkdf2:sha256:600000``. See :func:`hashlib.pbkdf2_hmac`.\n\n    Default parameters may be updated to reflect current guidelines, and methods may be\n    deprecated and removed if they are no longer considered secure. To migrate old\n    hashes, you may generate a new hash when checking an old hash, or you may contact\n    users with a link to reset their password.\n\n    :param password: The plaintext password.\n    :param method: The key derivation function and parameters.\n    :param salt_length: The number of characters to generate for the salt.\n\n    .. versionchanged:: 3.1\n        The default iterations for pbkdf2 was increased to 1,000,000.\n\n    .. versionchanged:: 3.0\n        All plain hashes are no longer supported.\n\n    .. versionchanged:: 2.3\n        Scrypt support was added.\n\n    .. versionchanged:: 2.3\n        The default iterations for pbkdf2 was increased to 600,000.\n    \"\"\"\n    if salt_length <= 0:\n        raise ValueError(\"Salt length must be at least 1.\")\n\n    salt = secrets.token_urlsafe(salt_length)\n    h, actual_method = _hash_internal(method, salt, password)\n    return f\"{actual_method}${salt}${h}\""
+        },
+        {
+          "evidence_id": "9232f6035488c868541d201641a24808",
+          "rel_path": "tests/test_security.py",
+          "byte_start": 473,
+          "byte_end": 655,
+          "line_start": 21,
+          "symbol": "test_security.test_pbkdf2",
+          "kind": "function",
+          "how": "fts5/bm25",
+          "chars": 182,
+          "excerpt": "def test_pbkdf2():\n    value = generate_password_hash(\"secret\", method=\"pbkdf2\")\n    assert check_password_hash(value, \"secret\")\n    assert value.startswith(\"pbkdf2:sha256:1000000$\")"
+        },
+        {
+          "evidence_id": "40402cef7ed18a093431b39261b3f881",
+          "rel_path": "src/werkzeug/security.py",
+          "byte_start": 522,
+          "byte_end": 2207,
+          "line_start": 27,
+          "symbol": "werkzeug.security._hash_internal",
+          "kind": "function",
+          "how": "fts5/bm25",
+          "chars": 1685,
+          "excerpt": "def _hash_internal(method: str, salt: str, password: str) -> tuple[str, str]:\n    method, *args = method.split(\":\")\n    salt_bytes = salt.encode()\n    password_bytes = password.encode()\n\n    # Security note: If the method contains args, they came from a stored,\n    # trusted hash previously generated by generate_password_hash. An attacker\n    # who could modify them can already compromise the entire application.\n\n    if method == \"scrypt\":\n        if not args:\n            n = 2**15\n            r = 8\n            p = 1\n        else:\n            try:\n                n, r, p = map(int, args)\n            except ValueError:\n                raise ValueError(\"'scrypt' takes 3 arguments.\") from None\n\n        maxmem = 132 * n * r * p  # ideally 128, but some extra seems needed\n        return (\n            hashlib.scrypt(\n                password_bytes, salt=salt_bytes, n=n, r=r, p=p, maxmem=maxmem\n            ).hex(),\n            f\"scrypt:{n}:{r}:{p}\",\n        )\n    elif method == \"pbkdf2\":\n        len_args = len(args)\n\n        if len_args == 0:\n            hash_name = \"sha256\"\n            iterations = DEFAULT_PBKDF2_ITERATIONS\n        elif len_args == 1:\n            hash_name = args[0]\n            iterations = DEFAULT_PBKDF2_ITERATIONS\n        elif len_args == 2:\n            hash_name = args[0]\n            iterations = int(args[1])\n        else:\n            raise ValueError(\"'pbkdf2' takes 2 arguments.\")\n\n        return (\n            hashlib.pbkdf2_hmac(\n                hash_name, password_bytes, salt_bytes, iterations\n            ).hex(),\n            f\"pbkdf2:{hash_name}:{iterations}\",\n        )\n    else:\n        raise ValueError(f\"Invalid hash method '{method}'.\")"
+        },
+        {
+          "evidence_id": "e34271a3b1f0e99c454df206ec672439",
+          "rel_path": "tests/test_security.py",
+          "byte_start": 293,
+          "byte_end": 470,
+          "line_start": 15,
+          "symbol": "test_security.test_scrypt",
+          "kind": "function",
+          "how": "fts5/bm25",
+          "chars": 177,
+          "excerpt": "def test_scrypt():\n    value = generate_password_hash(\"secret\", method=\"scrypt\")\n    assert check_password_hash(value, \"secret\")\n    assert value.startswith(\"scrypt:32768:8:1$\")"
+        }
+      ],
+      "structural_facts": [],
+      "claims": [
+        {
+          "text": "You hash a password by calling werkzeug.security.generate_password_hash with the plaintext password (e.g., generate_password_hash('secret')).",
+          "evidence_ids": [
+            "3ad8d2f5689ad4e32b407e4b8a2511a9"
+          ],
+          "quote": "def generate_password_hash(password: str, method: str = \"scrypt\", salt_length: int = 16) -> str:",
+          "structural_dependencies": [
+            {
+              "predicate": "CALLS",
+              "subject": "werkzeug.security.generate_password_hash",
+              "object": "None"
+            }
+          ]
+        },
+        {
+          "text": "If you omit the method argument, Werkzeug uses the scrypt algorithm by default.",
+          "evidence_ids": [
+            "3ad8d2f5689ad4e32b407e4b8a2511a9"
+          ],
+          "quote": "method: str = \"scrypt\"",
+          "structural_dependencies": []
+        }
+      ],
+      "validation": {
+        "outcome": "REJECTED",
+        "problems": [],
+        "reason": "statement 'You hash a password by calling werkzeug.security.generate_pa': evidence 3ad8d2f568: quotation not found in cited bytes",
+        "claims": [
+          {
+            "text": "You hash a password by calling werkzeug.security.generate_password_hash with the plaintext password (e.g., generate_password_hash('secret')).",
+            "ok": false,
+            "problems": [
+              "evidence 3ad8d2f568: quotation not found in cited bytes"
+            ],
+            "evidence": [
+              {
+                "evidence_id": "3ad8d2f5689ad4e32b407e4b8a2511a9",
+                "exists": true,
+                "retrieved": true,
+                "locator_valid": true,
+                "bytes_match": true,
+                "quote_found": false,
+                "rel_path": "src/werkzeug/security.py",
+                "byte_start": 2210,
+                "byte_end": 3873,
+                "locator_kind": "byte_range",
+                "strength": "EXACT",
+                "error": null,
+                "ok": false
+              }
+            ],
+            "structural": [
+              {
+                "predicate": "CALLS",
+                "subject": "werkzeug.security.generate_password_hash",
+                "object": "None",
+                "status": "NOT_ESTABLISHED",
+                "detail": "CALLS is OPEN_WORLD -- absence proves nothing (unresolved targets, dynamic dispatch and excluded call sites all produce absences)",
+                "claim_id": null,
+                "completeness": "OPEN_WORLD"
+              }
+            ]
+          },
+          {
+            "text": "If you omit the method argument, Werkzeug uses the scrypt algorithm by default.",
+            "ok": true,
+            "problems": [],
+            "evidence": [
+              {
+                "evidence_id": "3ad8d2f5689ad4e32b407e4b8a2511a9",
+                "exists": true,
+                "retrieved": true,
+                "locator_valid": true,
+                "bytes_match": true,
+                "quote_found": true,
+                "rel_path": "src/werkzeug/security.py",
+                "byte_start": 2210,
+                "byte_end": 3873,
+                "locator_kind": "byte_range",
+                "strength": "EXACT",
+                "error": null,
+                "ok": true
+              }
+            ],
+            "structural": []
+          }
+        ]
+      },
+      "attempts": 2,
+      "regenerations": 0,
+      "usage": {
+        "llm_calls": 3,
+        "input_tokens": 4797,
+        "output_tokens": 2004,
+        "cache_hits": 0,
+        "seconds": 6.868,
+        "regenerations": 0
+      },
+      "budget": {
+        "interpretation_attempts": 1,
+        "answer_attempts": 2,
+        "max_context_chars": 24000,
+        "max_spans": 6
+      },
+      "latency_seconds": 6.894,
+      "establishment": "PROPOSED",
+      "structural_status": "CHECKED",
+      "identity": {
+        "scope": null,
+        "names": [],
+        "ambiguous": []
+      },
+      "model_prose_unvalidated": "",
+      "is_answer": false,
+      "error": null,
+      "id": "J2-001",
+      "wall_seconds": 6.894,
+      "requests": [
+        {
+          "http_status": 200,
+          "seconds": 1.026,
+          "input_tokens": 244,
+          "output_tokens": 238,
+          "total_tokens": 482,
+          "cached_tokens": null,
+          "cache_hit": null,
+          "reasoning_tokens": 149,
+          "queue_time": 0.087449925,
+          "prompt_time": 0.011222746,
+          "completion_time": 0.498702414,
+          "total_time": 0.50992516
+        },
+        {
+          "http_status": 200,
+          "seconds": 3.261,
+          "input_tokens": 2236,
+          "output_tokens": 1200,
+          "total_tokens": 3436,
+          "cached_tokens": null,
+          "cache_hit": null,
+          "reasoning_tokens": 810,
+          "queue_time": 0.086805612,
+          "prompt_time": 0.310266467,
+          "completion_time": 2.5054617439999998,
+          "total_time": 2.815728211
+        },
+        {
+          "http_status": 200,
+          "seconds": 2.579,
+          "input_tokens": 2317,
+          "output_tokens": 566,
+          "total_tokens": 2883,
+          "cached_tokens": 256,
+          "cache_hit": true,
+          "reasoning_tokens": 292,
+          "queue_time": 0.217458672,
+          "prompt_time": 0.752704846,
+          "completion_time": 1.423963813,
+          "total_time": 2.176668659
+        }
+      ],
+      "measured": {
+        "llm_calls": 3,
+        "input_tokens": 4797,
+        "output_tokens": 2004,
+        "total_tokens": 6801,
+        "cached_tokens": 256,
+        "cache_hit": true,
+        "reasoning_tokens": 1251,
+        "http_429": 0,
+        "api_seconds": 6.866
+      }
+    }
+  ]
+}

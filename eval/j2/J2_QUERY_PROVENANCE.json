@@ -1,0 +1,368 @@
+{
+  "queries_file": "eval/j2/J2_QUERIES.json",
+  "queries_sha256": "977ca0761b769c8797c471b035ad735022295bcf2175446fd6bd843a56b1a713",
+  "frozen": "2026-09-24",
+  "registered_before": "gold labelling, any system run, any adjudication",
+  "why": "J-1 is burned: the system was developed with sight of J-1's failures (the Demo 0.1 retrieval budget fix came from J1-006; the flagship demo question is J1-009/J1-047's subject). A J-2 question that asks a fact a J-1 question already asked is therefore a weaker test than a fresh one. No question was removed or edited \u2014 removing questions after reading them is exactly the tuning \u00a718 forbids. They are STRATIFIED so results can be reported separately, the same treatment \u00a715 gives the demo targets.",
+  "author_independence_verified": {
+    "method": "first-hand read of the authoring agent's own tool-call log",
+    "tool_calls": 45,
+    "read_outside_eval_corpus3": false,
+    "known_leak": "one `find eval/` listed FILENAMES in eval/, which include J1_GOLD.json and J1_INDEPENDENT_QUERIES.json. Contents were never opened. The author learned such files exist, nothing more."
+  },
+  "counts": {
+    "J1_OVERLAP_STRONG": 10,
+    "J1_OVERLAP_PARTIAL": 14,
+    "FRESH": 24
+  },
+  "primary_denominator": "FRESH only",
+  "secondary_denominators": [
+    "J1_OVERLAP_PARTIAL",
+    "J1_OVERLAP_STRONG"
+  ],
+  "strata": {
+    "J2-001": {
+      "question": "How do I hash a password with Werkzeug, and which algorithm does it pick if I don't specify one?",
+      "stratum": "J1_OVERLAP_STRONG",
+      "j1_counterparts": [
+        "J1-001"
+      ],
+      "demo_target": null
+    },
+    "J2-002": {
+      "question": "What exactly does safe_join reject, and does it care whether the file actually exists?",
+      "stratum": "J1_OVERLAP_STRONG",
+      "j1_counterparts": [
+        "J1-009",
+        "J1-047"
+      ],
+      "demo_target": "Demo 0.1/0.2 flagship subject (send_from_directory / safe_join)"
+    },
+    "J2-003": {
+      "question": "redirect() gives me a 303 now where it used to give 302. What's the reasoning behind that change?",
+      "stratum": "J1_OVERLAP_PARTIAL",
+      "j1_counterparts": [
+        "J1-036"
+      ],
+      "demo_target": null
+    },
+    "J2-004": {
+      "question": "If I need the client to repeat a POST against the new location instead of switching to GET, which redirect status should I use?",
+      "stratum": "J1_OVERLAP_PARTIAL",
+      "j1_counterparts": [
+        "J1-036"
+      ],
+      "demo_target": null
+    },
+    "J2-005": {
+      "question": "what's the difference between strict_slashes and merge_slashes",
+      "stratum": "J1_OVERLAP_PARTIAL",
+      "j1_counterparts": [
+        "J1-017",
+        "J1-041"
+      ],
+      "demo_target": null
+    },
+    "J2-006": {
+      "question": "If I accidentally add the same rule to a Map twice, does anything complain or does one of them just silently never match?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-007": {
+      "question": "When two rules could both match the same path, how does the router decide which one wins?",
+      "stratum": "J1_OVERLAP_STRONG",
+      "j1_counterparts": [
+        "J1-005"
+      ],
+      "demo_target": null
+    },
+    "J2-008": {
+      "question": "I want a URL converter that can match a value containing slashes. How do I write one, and what does part_isolating have to do with it?",
+      "stratum": "J1_OVERLAP_STRONG",
+      "j1_counterparts": [
+        "J1-011",
+        "J1-015"
+      ],
+      "demo_target": null
+    },
+    "J2-009": {
+      "question": "Why does the int converter refuse non-ASCII digits?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-010": {
+      "question": "Sometimes build() returns just a path and sometimes a full URL with scheme and host. What decides that?",
+      "stratum": "J1_OVERLAP_PARTIAL",
+      "j1_counterparts": [
+        "J1-054"
+      ],
+      "demo_target": null
+    },
+    "J2-011": {
+      "question": "Where does the \"Did you mean ... instead?\" text in a BuildError come from?",
+      "stratum": "J1_OVERLAP_PARTIAL",
+      "j1_counterparts": [
+        "J1-054"
+      ],
+      "demo_target": null
+    },
+    "J2-012": {
+      "question": "Can I have host matching and subdomain matching switched on at the same time?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-013": {
+      "question": "There are several things called match in the routing package. Which one is the one that actually walks the rules and extracts the values?",
+      "stratum": "J1_OVERLAP_PARTIAL",
+      "j1_counterparts": [
+        "J1-013",
+        "J1-024"
+      ],
+      "demo_target": null
+    },
+    "J2-014": {
+      "question": "What happens when the Host header of a request isn't a suffix of the server_name I passed to bind_to_environ?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-015": {
+      "question": "What's the right way to stop a client sending me a request body that's too big to handle?",
+      "stratum": "J1_OVERLAP_PARTIAL",
+      "j1_counterparts": [
+        "J1-007"
+      ],
+      "demo_target": null
+    },
+    "J2-016": {
+      "question": "max_content_length, max_form_memory_size, max_form_parts \u2014 do I really need all three, and what does each one actually stop?",
+      "stratum": "J1_OVERLAP_STRONG",
+      "j1_counterparts": [
+        "J1-007"
+      ],
+      "demo_target": null
+    },
+    "J2-017": {
+      "question": "When someone uploads a file, is it buffered in memory or written to a temp file, and at what point does it switch?",
+      "stratum": "J1_OVERLAP_STRONG",
+      "j1_counterparts": [
+        "J1-014"
+      ],
+      "demo_target": null
+    },
+    "J2-018": {
+      "question": "I read from request.stream and afterwards request.form came back empty. Why?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-019": {
+      "question": "What actually raises ClientDisconnected, and can I rely on it?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-020": {
+      "question": "Why does the development server read and discard whatever is left on the socket after the application has finished?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-021": {
+      "question": "Does the built-in development server support HTTP/1.1 keep-alive?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-022": {
+      "question": "How does the dev server handle a request sent with Transfer-Encoding: chunked?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-023": {
+      "question": "Where does the debugger PIN come from, is it stable across restarts, and can I turn it off?",
+      "stratum": "J1_OVERLAP_STRONG",
+      "j1_counterparts": [
+        "J1-012"
+      ],
+      "demo_target": null
+    },
+    "J2-024": {
+      "question": "Can I open the interactive debugger console from a machine other than the one running the server?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-025": {
+      "question": "Why doesn't the interactive debugger work with a forking server?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-026": {
+      "question": "Which reloader backend gets used by default, and how do I force it to use watchdog?",
+      "stratum": "J1_OVERLAP_STRONG",
+      "j1_counterparts": [
+        "J1-023"
+      ],
+      "demo_target": null
+    },
+    "J2-027": {
+      "question": "Will the reloader notice changes to files that aren't Python, like a Jinja template or a config.yaml?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-028": {
+      "question": "Roughly how much CPU does the stat reloader burn on a project with a few thousand files compared to watchdog?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-029": {
+      "question": "Would it be reasonable to run run_simple with threaded=True for a small internal tool sitting behind nginx?",
+      "stratum": "J1_OVERLAP_PARTIAL",
+      "j1_counterparts": [
+        "J1-035"
+      ],
+      "demo_target": null
+    },
+    "J2-030": {
+      "question": "What is a LocalProxy for, and when do I have to reach for _get_current_object()?",
+      "stratum": "J1_OVERLAP_PARTIAL",
+      "j1_counterparts": [
+        "J1-037"
+      ],
+      "demo_target": null
+    },
+    "J2-031": {
+      "question": "isinstance(user, User) returns True even though user is a proxy. How is that pulled off?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-032": {
+      "question": "Is Local per-thread or per-context? I need to know whether it survives an await.",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-033": {
+      "question": "The Local docstring mentions a performance penalty from copying. What's it copying and why?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-034": {
+      "question": "Why is there a MultiDict at all instead of just a plain dict of lists, and when does getlist actually matter?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-035": {
+      "question": "The class is called Accept but its docstring talks about Accept-Encoding. Which header is it for?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-036": {
+      "question": "How do I set a SameSite cookie, and what values will it let me use?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-037": {
+      "question": "Why do some of my cookie values come back with backslash-octal escapes in them?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-038": {
+      "question": "Werkzeug warned me that a cookie is too large. Where does that size limit come from, and does the cookie still get sent?",
+      "stratum": "J1_OVERLAP_STRONG",
+      "j1_counterparts": [
+        "J1-022"
+      ],
+      "demo_target": null
+    },
+    "J2-039": {
+      "question": "What does ProxyFix actually rewrite in the environ, and why do I have to give it a count for each header rather than just switching it on?",
+      "stratum": "J1_OVERLAP_PARTIAL",
+      "j1_counterparts": [
+        "J1-002",
+        "J1-010"
+      ],
+      "demo_target": null
+    },
+    "J2-040": {
+      "question": "make_conditional \u2014 how does it decide between sending a 304 and a 412?",
+      "stratum": "J1_OVERLAP_PARTIAL",
+      "j1_counterparts": [
+        "J1-031"
+      ],
+      "demo_target": null
+    },
+    "J2-041": {
+      "question": "Which hash does generate_etag use, and why not MD5 or SHA-1?",
+      "stratum": "J1_OVERLAP_PARTIAL",
+      "j1_counterparts": [
+        "J1-031"
+      ],
+      "demo_target": null
+    },
+    "J2-042": {
+      "question": "When does a Response set Content-Length on its own, and when does it deliberately leave it off?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-043": {
+      "question": "Is there a shortcut for posting JSON with the test client instead of serialising the body myself?",
+      "stratum": "J1_OVERLAP_PARTIAL",
+      "j1_counterparts": [
+        "J1-025"
+      ],
+      "demo_target": null
+    },
+    "J2-044": {
+      "question": "Does the test client hold on to cookies between requests, and can I look at what it has stored?",
+      "stratum": "J1_OVERLAP_STRONG",
+      "j1_counterparts": [
+        "J1-018"
+      ],
+      "demo_target": null
+    },
+    "J2-045": {
+      "question": "Can the test client follow a redirect that points at a different host?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-046": {
+      "question": "There's a whole pile of things marked deprecated in 3.2 and due for removal in 3.3. What's the overall direction of that cleanup?",
+      "stratum": "J1_OVERLAP_PARTIAL",
+      "j1_counterparts": [
+        "J1-039",
+        "J1-051",
+        "J1-034"
+      ],
+      "demo_target": null
+    },
+    "J2-047": {
+      "question": "Why are there two Request classes, one under sansio and one under wrappers, and which one am I supposed to subclass?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    },
+    "J2-048": {
+      "question": "What is the werkzeug.socket key in the environ used for?",
+      "stratum": "FRESH",
+      "j1_counterparts": [],
+      "demo_target": null
+    }
+  }
+}

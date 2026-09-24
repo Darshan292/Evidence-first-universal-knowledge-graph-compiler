@@ -1,0 +1,839 @@
+{
+  "gold_for": "eval/j2/J2_QUERIES.json",
+  "queries_sha256": "977ca0761b769c8797c471b035ad735022295bcf2175446fd6bd843a56b1a713",
+  "corpus": "eval/corpus3 (Werkzeug 6048fa48753c7b61e35cc34537667809dee8fa35)",
+  "corpus_content_sha256": "19f4028a0a9f15b4e77d41ad489ee3368b72b309c9ac2836b1d34941fc32d35f",
+  "authored": "2026-09-24",
+  "method": "Established by reading eval/corpus3 directly, BEFORE any system run, any retrieval and any model call. No system output existed when this was written, so none could influence it (J-2 \u00a74).",
+  "answerability_scale": {
+    "ANSWERABLE": "the corpus establishes every material part of what was asked",
+    "PARTIAL": "the corpus establishes some material part and cannot establish another",
+    "UNANSWERABLE": "the corpus cannot establish the requested answer at all"
+  },
+  "counts": {
+    "ANSWERABLE": 42,
+    "PARTIAL": 5,
+    "UNANSWERABLE": 1
+  },
+  "gold": [
+    {
+      "id": "J2-001",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.security.generate_password_hash",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/security.py",
+          "source_locator": "line 80",
+          "excerpt": "def generate_password_hash(\n    password: str, method: str = \"scrypt\", salt_length: int = 16\n) -> str:"
+        },
+        {
+          "source_path": "src/werkzeug/security.py",
+          "source_locator": "lines 87-90",
+          "excerpt": "-   ``scrypt``, the default. The parameters are ``n``, ``r``, and ``p``, the default\n    is ``scrypt:32768:8:1``. See :func:`hashlib.scrypt`.\n-   ``pbkdf2``, less secure."
+        }
+      ],
+      "note": "The docstring says pbkdf2 defaults to 600,000 iterations while DEFAULT_PBKDF2_ITERATIONS = 1_000_000 (line 9). That inconsistency is real but is not what this question asks."
+    },
+    {
+      "id": "J2-002",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.security.safe_join",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/security.py",
+          "source_locator": "lines 193-208",
+          "excerpt": "if (\n    os.path.isabs(part)\n    # ntpath.isabs doesn't catch this\n    or part.startswith(\"/\")\n    or part == \"..\"\n    or part.startswith(\"../\")\n    or any(sep in part for sep in _os_alt_seps)\n    or (\n        os.name == \"nt\"\n        and any(\n            p.partition(\".\")[0].strip().upper() in _windows_device_files\n            for p in part.split(\"/\")\n        )\n    )\n):\n    return None"
+        },
+        {
+          "source_path": "src/werkzeug/security.py",
+          "source_locator": "lines 153-156",
+          "excerpt": "This only considers the path name, it does not validate if it does or does\nnot exist, if it is a symlink, or other properties of the file or\nfilesystem."
+        }
+      ],
+      "note": "Both halves are established: what is rejected, and that existence is explicitly NOT checked."
+    },
+    {
+      "id": "J2-003",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.utils.redirect",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/utils.py",
+          "source_locator": "lines 239-240",
+          "excerpt": ".. versionchanged:: 3.2\n    ``code`` defaults to 303 instead of 302."
+        },
+        {
+          "source_path": "src/werkzeug/utils.py",
+          "source_locator": "lines 214-230",
+          "excerpt": "The default ``303 See Other`` status code instructs the client to make a\n``GET`` request to the target, regardless of what method the current request\nis. This produces the correct result for the common use cases: page redirects\nand form success. ... Two older codes, ``302 Found`` and ``301 Moved Permanently``, are\nsuperseded by ``307`` and ``308`` respectively. They were not consistently\nimplemented by clients, which tend to switch ``POST`` to ``GET`` but\npreserve other methods."
+        }
+      ]
+    },
+    {
+      "id": "J2-004",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.utils.redirect",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/utils.py",
+          "source_locator": "lines 220-223",
+          "excerpt": "-   ``307 Temporary Redirect`` preserves the current method.\n-   ``308 Permanent Redirect`` preserves the current method, and instructs\n    the client to permanently apply the result."
+        }
+      ]
+    },
+    {
+      "id": "J2-005",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.routing.Map",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/routing/map.py",
+          "source_locator": "lines 51-55",
+          "excerpt": ":param strict_slashes: If a rule ends with a slash but the matched\n    URL does not, redirect to the URL with a trailing slash.\n:param merge_slashes: Merge consecutive slashes when matching or\n    building URLs. Matches will redirect to the normalized URL.\n    Slashes in variable parts are not merged."
+        }
+      ]
+    },
+    {
+      "id": "J2-006",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.routing.matcher.StateMachineMatcher.add",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/routing/matcher.py",
+          "source_locator": "lines 54-56",
+          "excerpt": "for existing in state.rules:\n    if rule.is_duplicate(existing):\n        raise DuplicateRuleError(existing, rule)"
+        },
+        {
+          "source_path": "src/werkzeug/routing/rules.py",
+          "source_locator": "lines 908-913",
+          "excerpt": "def is_duplicate(self, other: Rule) -> bool:\n    \"\"\"Check if this rule would match in the same way as another rule.\n\n    .. versionadded:: 3.2"
+        }
+      ],
+      "note": "It complains: DuplicateRuleError is raised at add time. It does not silently never-match."
+    },
+    {
+      "id": "J2-007",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.routing.matcher.StateMachineMatcher",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/routing/matcher.py",
+          "source_locator": "lines 119-121",
+          "excerpt": "part = parts[0]\n# To match this part try the static transitions first\nif part in state.static:"
+        },
+        {
+          "source_path": "src/werkzeug/routing/matcher.py",
+          "source_locator": "lines 61-68",
+          "excerpt": "# For every state the dynamic transitions should be sorted by\n# the weight of the transition\n...\nstate.dynamic.sort(key=lambda entry: entry[0].weight)"
+        }
+      ]
+    },
+    {
+      "id": "J2-008",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.routing.converters.BaseConverter.part_isolating",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/routing/converters.py",
+          "source_locator": "lines 26-36",
+          "excerpt": "regex = \"[^/]+\"\nweight = 100\npart_isolating = True\n\ndef __init_subclass__(cls, **kwargs: t.Any) -> None:\n    super().__init_subclass__(**kwargs)\n\n    # If the converter isn't inheriting its regex, disable part_isolating by default\n    # if the regex contains a / character.\n    if \"regex\" in cls.__dict__ and \"part_isolating\" not in cls.__dict__:\n        cls.part_isolating = \"/\" not in cls.regex"
+        },
+        {
+          "source_path": "src/werkzeug/routing/converters.py",
+          "source_locator": "lines 123-125",
+          "excerpt": "part_isolating = False\nregex = \"[^/].*?\"\nweight = 200"
+        }
+      ]
+    },
+    {
+      "id": "J2-009",
+      "answerability": "PARTIAL",
+      "intended_entity": "werkzeug.routing.converters.IntegerConverter",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/routing/converters.py",
+          "source_locator": "line 153",
+          "excerpt": "regex = r\"[0-9]+\""
+        },
+        {
+          "source_path": "src/werkzeug/routing/converters.py",
+          "source_locator": "lines 145-147",
+          "excerpt": ".. versionchanged:: 3.2\n    Non-ASCII digits are not allowed. The negative sign is not counted for\n    ``fixed_digits``. ``to_url`` performs validation."
+        },
+        {
+          "source_path": "CHANGES.rst",
+          "source_locator": "line 150",
+          "excerpt": "-   The ``int`` and ``float`` URL converters do not accept non-ASCII digits.\n     :issue:`3242`"
+        }
+      ],
+      "why_source_cannot_establish": "THAT non-ASCII digits are refused is established three times over. WHY is not stated anywhere in the corpus: the only pointer is :issue:`3242`, which is outside the corpus. Any causal explanation of the motivation is NOT establishable from this source."
+    },
+    {
+      "id": "J2-010",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.routing.MapAdapter.build",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/routing/map.py",
+          "source_locator": "lines 973-980",
+          "excerpt": "# Return a plain path if neither host or subdomain matching is enabled,\n# or if they are enabled and the current host matches.\nif not force_external and (\n    not (self.map.subdomain_matching or self.map.host_matching)\n    or (self.map.subdomain_matching and domain_part == self.subdomain)\n    or (self.map.host_matching and host == self.server_name)\n):\n    return f\"{self.script_name.rstrip('/')}/{path.lstrip('/')}\""
+        },
+        {
+          "source_path": "src/werkzeug/routing/map.py",
+          "source_locator": "lines 966-969",
+          "excerpt": "if websocket:\n    force_external = True"
+        }
+      ]
+    },
+    {
+      "id": "J2-011",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.routing.exceptions.BuildError",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/routing/exceptions.py",
+          "source_locator": "line 160",
+          "excerpt": "message.append(f\" Did you mean {self.suggested.endpoint!r} instead?\")"
+        },
+        {
+          "source_path": "src/werkzeug/routing/exceptions.py",
+          "source_locator": "lines 109-123",
+          "excerpt": "@cached_property\ndef suggested(self) -> Rule | None:\n    return self.closest_rule(self.adapter)\n\ndef closest_rule(self, adapter: MapAdapter | None) -> Rule | None:\n    def _score_rule(rule: Rule) -> float:\n        return sum(\n            [\n                0.98\n                * difflib.SequenceMatcher("
+        }
+      ]
+    },
+    {
+      "id": "J2-012",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.routing.Map",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/routing/map.py",
+          "source_locator": "line 135",
+          "excerpt": "self.subdomain_matching = subdomain_matching and not host_matching"
+        },
+        {
+          "source_path": "src/werkzeug/routing/map.py",
+          "source_locator": "lines 251-255",
+          "excerpt": "if self.host_matching:\n    if subdomain is not None:\n        raise ValueError(\n            \"Passing 'subdomain' is invalid when host matching is enabled.\"\n        )"
+        }
+      ],
+      "note": "The answer is no: host_matching silently forces subdomain_matching off. An answer claiming both can be on, or that an error is raised for the combination at Map construction, is wrong."
+    },
+    {
+      "id": "J2-013",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.routing.matcher.StateMachineMatcher.match",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/routing/matcher.py",
+          "source_locator": "lines 74-76",
+          "excerpt": "def match(\n    self, domain: str, path: str, method: str, websocket: bool\n) -> tuple[Rule, t.MutableMapping[str, t.Any]]:"
+        },
+        {
+          "source_path": "src/werkzeug/routing/map.py",
+          "source_locator": "line 659",
+          "excerpt": "result = self.map._matcher.match(domain_part, path_part, method, websocket)"
+        }
+      ],
+      "note": "MapAdapter.match is the public entry point; it delegates to StateMachineMatcher.match, which walks the states and extracts the values."
+    },
+    {
+      "id": "J2-014",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.routing.Map.bind_to_environ",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/routing/map.py",
+          "source_locator": "lines 375-386",
+          "excerpt": "if cur_server_name[offset:] != real_server_name:\n    # Host does not have server_name as a suffix. This can happen if\n    # the server was accessed by IP, or other names point to it in\n    # DNS. bind will use default_subdomain.\n    warnings.warn(\n        \"Couldn't determine current subdomain, but subdomain\"\n        \" matching is enabled. Using configured default\""
+        },
+        {
+          "source_path": "src/werkzeug/routing/map.py",
+          "source_locator": "lines 316-318",
+          "excerpt": ".. versionchanged:: 3.2\n    If ``server_name`` is not a suffix of ``Host``,\n    :attr:`default_subdomain` is used rather than ``\"<invalid>\"``."
+        }
+      ]
+    },
+    {
+      "id": "J2-015",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.wrappers.Request.max_content_length",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/wrappers/request.py",
+          "source_locator": "lines 73-81",
+          "excerpt": "max_content_length: int | None = None\n\"\"\"Stop reading data after this many bytes and raise\n:exc:`.RequestEntityTooLarge`. ...\n\nIt's better to configure this in the WSGI server or HTTP server, rather than\nthe WSGI application, which is why it's not set by default."
+        }
+      ],
+      "note": "The source's own recommendation is to enforce it at the WSGI/HTTP server, not in the application."
+    },
+    {
+      "id": "J2-016",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.wrappers.Request",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/wrappers/request.py",
+          "source_locator": "lines 73-76",
+          "excerpt": "max_content_length: int | None = None\n\"\"\"Stop reading data after this many bytes and raise\n:exc:`.RequestEntityTooLarge`."
+        },
+        {
+          "source_path": "src/werkzeug/wrappers/request.py",
+          "source_locator": "lines 88-92",
+          "excerpt": "max_form_memory_size: int | None = 500_000\n\"\"\"Stop parsing ``multipart/form-data`` if any non-file part is larger than\nthis number of bytes, and raise :exc:`.RequestEntityTooLarge`. File parts\ncan be larger, they are moved to disk at this limit. The default is 500kB.\nThis is an additional check, it does not replace :attr:`max_content_length`."
+        },
+        {
+          "source_path": "src/werkzeug/wrappers/request.py",
+          "source_locator": "lines 103-109",
+          "excerpt": "max_form_parts = 1000\n\"\"\"Stop parsing ``multipart/form-data`` if more than this number of parts\nare received, and raise :exc:`.RequestEntityTooLarge`. This is useful to\nstop a very large number of very small fields, especially files."
+        }
+      ],
+      "note": "Each is explicitly 'an additional check, it does not replace max_content_length'. max_form_memory_size is NOT applied to application/x-www-form-urlencoded (3.1.9)."
+    },
+    {
+      "id": "J2-017",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.formparser._make_stream_factory",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/formparser.py",
+          "source_locator": "lines 46-57",
+          "excerpt": "def _make_stream_factory(max_size: int | None) -> TStreamFactory:\n    if max_size is None:\n        # Could return BytesIO for this, keeping 500 kB default for now.\n        max_size = 1024 * 500\n...\n        return SpooledTemporaryFile(max_size=max_size, mode=\"rb+\")"
+        },
+        {
+          "source_path": "src/werkzeug/wrappers/request.py",
+          "source_locator": "lines 89-91",
+          "excerpt": "File parts\ncan be larger, they are moved to disk at this limit. The default is 500kB."
+        }
+      ],
+      "note": "SpooledTemporaryFile: in memory until max_size, then rolled to disk. Threshold is max_form_memory_size, default 500 kB."
+    },
+    {
+      "id": "J2-018",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.wrappers.Request.stream",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/wrappers/request.py",
+          "source_locator": "lines 476-478",
+          "excerpt": "\"\"\"The WSGI input stream, with safety checks. This stream can only be consumed\nonce."
+        },
+        {
+          "source_path": "src/werkzeug/wrappers/request.py",
+          "source_locator": "lines 480-482",
+          "excerpt": "The :attr:`data`\nattribute will contain the full bytes only if they do not represent form data.\nThe :attr:`form` attribute will contain the parsed form data in that case."
+        }
+      ],
+      "note": "The stream is single-consumption; reading it first leaves nothing for the form parser."
+    },
+    {
+      "id": "J2-019",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.exceptions.ClientDisconnected",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/wsgi.py",
+          "source_locator": "lines 514-515",
+          "excerpt": "if not self._limit_is_max or error is not None:\n    raise ClientDisconnected()"
+        },
+        {
+          "source_path": "src/werkzeug/exceptions.py",
+          "source_locator": "lines 242-244",
+          "excerpt": "Since disconnections cannot be reliably detected and are unspecified\nby WSGI to a large extent this might or might not be raised if a client\nis gone."
+        }
+      ],
+      "note": "'Can I rely on it' is answered explicitly in the negative by the class docstring."
+    },
+    {
+      "id": "J2-020",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.serving.WSGIRequestHandler.run_wsgi",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/serving.py",
+          "source_locator": "lines 348-353",
+          "excerpt": "# Check for any remaining data in the read socket, and discard it. This\n# will read past request.max_content_length, but lets the client see a\n# 413 response instead of a connection reset failure. If we supported\n# keep-alive connections, this naive approach would break by reading the\n# next request line. Since we know that write (above) closes every\n# connection we can read everything."
+        },
+        {
+          "source_path": "src/werkzeug/serving.py",
+          "source_locator": "lines 366-370",
+          "excerpt": "# Stop reading on no data, >=10GB, or 1000 reads. If a client sends\n# more than that, they'll get a connection reset failure.\nif not data or total_size >= 10_000_000_000 or total_reads > 1000:\n    break"
+        }
+      ]
+    },
+    {
+      "id": "J2-021",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.serving.WSGIRequestHandler.run_wsgi",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/serving.py",
+          "source_locator": "lines 298-302",
+          "excerpt": "# Always close the connection. This disables HTTP/1.1\n# keep-alive connections. They aren't handled well by\n# Python's http.server because it doesn't know how to\n# drain the stream before the next request line.\nself.send_header(\"Connection\", \"close\")"
+        },
+        {
+          "source_path": "src/werkzeug/serving.py",
+          "source_locator": "lines 730-736",
+          "excerpt": "# If the handler doesn't directly set a protocol version and\n# thread or process workers are used, then allow chunked\n# responses and keep-alive connections by enabling HTTP/1.1.\nif \"protocol_version\" not in vars(handler) and (\n    self.multithread or self.multiprocess\n):\n    handler.protocol_version = \"HTTP/1.1\""
+        }
+      ],
+      "note": "ADVERSARIAL. The correct answer is NO: 'Connection: close' is sent unconditionally, so keep-alive is disabled in practice. The make_server comment says HTTP/1.1 is enabled to 'allow chunked responses and keep-alive connections', which a reader citing only that span would misread as keep-alive being supported. An answer asserting keep-alive works when threaded=True is CONTRADICTED by serving.py:298-302."
+    },
+    {
+      "id": "J2-022",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.serving.DechunkedInput",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/serving.py",
+          "source_locator": "lines 99-101",
+          "excerpt": "class DechunkedInput(io.RawIOBase):\n    \"\"\"An input stream that handles ``Transfer-Encoding: chunked``."
+        },
+        {
+          "source_path": "src/werkzeug/serving.py",
+          "source_locator": "lines 229-231",
+          "excerpt": "if \"chunked\" in HeaderSet.from_header(environ.get(\"HTTP_TRANSFER_ENCODING\")):\n    ...\n    environ[\"wsgi.input\"] = DechunkedInput(environ[\"wsgi.input\"])"
+        }
+      ]
+    },
+    {
+      "id": "J2-023",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.debug.get_pin_and_cookie_name",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/debug/__init__.py",
+          "source_locator": "lines 143-149",
+          "excerpt": "def get_pin_and_cookie_name(\n    app: WSGIApplication,\n) -> tuple[str, str] | tuple[None, None]:\n    \"\"\"Given an application object this returns a semi-stable 9 digit pin\n    code and a random key.  The hope is that this is stable between\n    restarts to not make debugging particularly frustrating."
+        },
+        {
+          "source_path": "src/werkzeug/debug/__init__.py",
+          "source_locator": "lines 156-158",
+          "excerpt": "# Pin was explicitly disabled\nif pin == \"off\":\n    return None, None"
+        },
+        {
+          "source_path": "src/werkzeug/debug/__init__.py",
+          "source_locator": "lines 181-207",
+          "excerpt": "probably_public_bits = [\n    username,\n    modname,\n    getattr(app, \"__name__\", type(app).__name__),\n    getattr(mod, \"__file__\", None),\n]\n...\nprivate_bits = [str(uuid.getnode()), get_machine_id()]\n\nh = hashlib.sha3_256()\n...\nh.update(b\"pinsalt\")\nnum = f\"{int(h.hexdigest(), 16):09d}\"[:9]"
+        }
+      ],
+      "note": "Three parts: origin (SHA3-256 over public+private bits), stability ('semi-stable', 'the hope is that this is stable between restarts'), and disabling (WERKZEUG_DEBUG_PIN=off)."
+    },
+    {
+      "id": "J2-024",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.debug.DebuggedApplication.trusted_hosts",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/debug/__init__.py",
+          "source_locator": "lines 304-306",
+          "excerpt": "self.trusted_hosts: list[str] = [\".localhost\", \"127.0.0.1\"]\n...\nallows all subdomains. This only allows ``\".localhost\"`` domains by"
+        },
+        {
+          "source_path": "src/werkzeug/debug/__init__.py",
+          "source_locator": "line 465",
+          "excerpt": "return host_is_trusted(environ.get(\"HTTP_HOST\"), self.trusted_hosts)"
+        }
+      ],
+      "note": "By default no: only .localhost and 127.0.0.1 are trusted. trusted_hosts is settable, so it is possible but not the default."
+    },
+    {
+      "id": "J2-025",
+      "answerability": "PARTIAL",
+      "intended_entity": "werkzeug.debug.DebuggedApplication",
+      "evidence": [
+        {
+          "source_path": "docs/debug.rst",
+          "source_locator": "lines 24-27",
+          "excerpt": "The interactive debugger does not work in forking environments, such\nas a server that starts multiple processes. Most such environments\nare production servers, where the debugger should not be enabled\nanyway."
+        },
+        {
+          "source_path": "src/werkzeug/debug/__init__.py",
+          "source_locator": "line 247",
+          "excerpt": "debugging).  This requires a non-forking server."
+        }
+      ],
+      "why_source_cannot_establish": "THAT it does not work in a forking environment is stated twice. WHY is not stated. The mechanism (DebuggedApplication keeps traceback frames in an in-process dict, self.frames, so a different forked worker cannot serve the follow-up request) is inferable from the code but is nowhere asserted in the corpus. An answer that states the mechanism as fact is going beyond the source."
+    },
+    {
+      "id": "J2-026",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug._reloader.run_with_reloader",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/_reloader.py",
+          "source_locator": "lines 358-368",
+          "excerpt": "reloader_loops: dict[str, type[ReloaderLoop]] = {\n    \"stat\": StatReloaderLoop,\n    \"watchdog\": WatchdogReloaderLoop,\n}\n...\n    reloader_loops[\"auto\"] = reloader_loops[\"stat\"]\n...\n    reloader_loops[\"auto\"] = reloader_loops[\"watchdog\"]"
+        },
+        {
+          "source_path": "src/werkzeug/_reloader.py",
+          "source_locator": "line 395",
+          "excerpt": "reloader_type: str = \"auto\","
+        }
+      ],
+      "note": "Default is 'auto', which resolves to watchdog when importable and stat otherwise. Force with reloader_type='watchdog'."
+    },
+    {
+      "id": "J2-027",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug._reloader._find_stat_paths",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/_reloader.py",
+          "source_locator": "lines 103-106",
+          "excerpt": "for name in files:\n    if name.endswith((\".py\", \".pyc\")):\n        has_py = True\n        paths.add(os.path.join(root, name))"
+        },
+        {
+          "source_path": "src/werkzeug/_reloader.py",
+          "source_locator": "lines 71-77",
+          "excerpt": "\"\"\"Find paths for the stat reloader to watch. Returns imported\nmodule files, Python files under non-system paths. Extra files and\nPython files under extra directories can also be scanned."
+        },
+        {
+          "source_path": "src/werkzeug/_reloader.py",
+          "source_locator": "line 179",
+          "excerpt": "self.extra_files: set[str] = {os.path.abspath(x) for x in extra_files or ()}"
+        }
+      ],
+      "note": "No, not by default for the stat reloader: only .py/.pyc plus anything named in extra_files."
+    },
+    {
+      "id": "J2-028",
+      "answerability": "UNANSWERABLE",
+      "intended_entity": "werkzeug._reloader.StatReloaderLoop vs WatchdogReloaderLoop",
+      "evidence": [],
+      "why_source_cannot_establish": "The corpus contains no CPU measurement, benchmark, profile or comparative performance figure for either reloader. _find_stat_paths says system paths 'have to be excluded for efficiency' and carries a scan-pruning optimisation, which establishes that cost was a concern, not what the cost is. Any number, ratio or 'roughly X%' answer is unsupported by this source."
+    },
+    {
+      "id": "J2-029",
+      "answerability": "PARTIAL",
+      "intended_entity": "werkzeug.serving.run_simple",
+      "evidence": [
+        {
+          "source_path": "docs/serving.rst",
+          "source_locator": "line 32",
+          "excerpt": "The development server is not intended to be used on production systems."
+        },
+        {
+          "source_path": "src/werkzeug/serving.py",
+          "source_locator": "lines 842-843",
+          "excerpt": "\"WARNING: This is a development server. Do not use it in a production\"\n\" deployment. Use a production WSGI server instead.\""
+        },
+        {
+          "source_path": "src/werkzeug/serving.py",
+          "source_locator": "lines 730-736",
+          "excerpt": "# If the handler doesn't directly set a protocol version and\n# thread or process workers are used, then allow chunked\n# responses and keep-alive connections by enabling HTTP/1.1."
+        }
+      ],
+      "why_source_cannot_establish": "The corpus establishes an unambiguous general recommendation against the development server in production, and establishes what threaded=True changes mechanically. It does not address the specific judgement asked -- a small internal tool behind nginx -- and contains no criteria for when the general warning may be relaxed. A confident yes or no to the specific scenario is not establishable; the general warning is."
+    },
+    {
+      "id": "J2-030",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.local.LocalProxy",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/local.py",
+          "source_locator": "lines 431-437",
+          "excerpt": "``__repr__`` and ``__class__`` are proxied, so ``repr(x)`` and\n``isinstance(x, cls)`` will look like the proxied object. Use\n``issubclass(type(x), LocalProxy)`` to check if an object is a\nproxy."
+        },
+        {
+          "source_path": "src/werkzeug/local.py",
+          "source_locator": "lines 402-405",
+          "excerpt": "\"\"\"A proxy to the object bound to a context-local object. All\noperations on the proxy are forwarded to the bound object. If no\nobject is bound, a ``RuntimeError`` is raised."
+        },
+        {
+          "source_path": "src/werkzeug/local.py",
+          "source_locator": "line 532",
+          "excerpt": "object.__setattr__(self, \"_get_current_object\", _get_current_object)"
+        }
+      ]
+    },
+    {
+      "id": "J2-031",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.local.LocalProxy.__class__",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/local.py",
+          "source_locator": "line 571",
+          "excerpt": "__class__ = _ProxyLookup(fallback=lambda self: type(self), is_attr=True)"
+        },
+        {
+          "source_path": "src/werkzeug/local.py",
+          "source_locator": "lines 431-434",
+          "excerpt": "``__repr__`` and ``__class__`` are proxied, so ``repr(x)`` and\n``isinstance(x, cls)`` will look like the proxied object."
+        }
+      ]
+    },
+    {
+      "id": "J2-032",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.local.Local",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/local.py",
+          "source_locator": "lines 35-37",
+          "excerpt": "class Local:\n    \"\"\"Create a namespace of context-local data. This wraps a\n    :class:`ContextVar` containing a :class:`dict` value."
+        },
+        {
+          "source_path": "src/werkzeug/local.py",
+          "source_locator": "lines 48-49",
+          "excerpt": ".. versionchanged::\n    Uses ``ContextVar`` instead of a custom storage implementation."
+        }
+      ],
+      "note": "Per-context (contextvars), not per-thread."
+    },
+    {
+      "id": "J2-033",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.local.Local",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/local.py",
+          "source_locator": "lines 39-41",
+          "excerpt": "This may incur a performance penalty compared to using individual\ncontext vars, as it has to copy data to avoid mutating the dict"
+        },
+        {
+          "source_path": "src/werkzeug/local.py",
+          "source_locator": "lines 91-99",
+          "excerpt": "values = self.__storage.get({}).copy()\n...\n    values = values.copy()"
+        }
+      ],
+      "note": "It copies the storage dict (LocalStack: the list), to avoid mutating the value held by the ContextVar."
+    },
+    {
+      "id": "J2-034",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.datastructures.MultiDict",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/datastructures/structures.py",
+          "source_locator": "lines 143-152",
+          "excerpt": "A :class:`MultiDict` is a dictionary subclass customized to deal with\nmultiple values for the same key which is for example used by the parsing\nfunctions in the wrappers.  This is necessary because some HTML form\nelements pass multiple values for the same key.\n\n:class:`MultiDict` implements all standard dictionary methods.\nInternally, it saves all values for a key as a list, but the standard dict\naccess methods will only return the first value for a key. If you want to\ngain access to the other values, too, you have to use the `list` methods"
+        }
+      ]
+    },
+    {
+      "id": "J2-035",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.datastructures.Accept",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/datastructures/accept.py",
+          "source_locator": "lines 19-22",
+          "excerpt": "\"\"\"A parsed ``Accept-Encoding`` header.\n\nDespite its name, this class is used for the ``Accept-Encoding`` header.\n:class:`.MIMEAccept` is used for the ``Accept`` header."
+        }
+      ],
+      "note": "The source answers the apparent contradiction directly and unambiguously."
+    },
+    {
+      "id": "J2-036",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.http.dump_cookie",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/http.py",
+          "source_locator": "lines 1493-1497",
+          "excerpt": "if samesite is not None:\n    samesite = samesite.title()\n\n    if samesite not in {\"Strict\", \"Lax\", \"None\"}:\n        raise ValueError(\"SameSite must be 'Strict', 'Lax', or 'None'.\")"
+        },
+        {
+          "source_path": "src/werkzeug/http.py",
+          "source_locator": "line 1473",
+          "excerpt": "The string ``'None'`` is accepted for ``samesite``."
+        }
+      ],
+      "note": "Values are title-cased before the check, so 'lax' is accepted and normalised to 'Lax'."
+    },
+    {
+      "id": "J2-037",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.http.dump_cookie",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/http.py",
+          "source_locator": "lines 1502-1509",
+          "excerpt": "# Quote value if it contains characters not allowed by RFC 6265. Slash-escape with\n# three octal digits, which matches http.cookies, although the RFC suggests base64.\nif not _cookie_no_quote_re.fullmatch(value):\n    # Work with bytes here, since a UTF-8 character could be multiple bytes.\n    value = _cookie_slash_re.sub(\n        lambda m: _cookie_slash_map[m.group()], value.encode()\n    ).decode(\"ascii\")\n    value = f'\"{value}\"'"
+        }
+      ]
+    },
+    {
+      "id": "J2-038",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.sansio.response.Response.max_cookie_size",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/sansio/response.py",
+          "source_locator": "lines 70-76",
+          "excerpt": "#: this size will still be sent, but it may be ignored or handled\n#: incorrectly by some browsers. Set to 0 to disable this check.\n...\nmax_cookie_size = 4093"
+        },
+        {
+          "source_path": "src/werkzeug/sansio/response.py",
+          "source_locator": "lines 174-175",
+          "excerpt": "A warning is raised if the size of the cookie header exceeds\n:attr:`max_cookie_size`, but the header will still be set."
+        }
+      ],
+      "note": "Both halves: the limit is Response.max_cookie_size = 4093, and yes, the cookie is still sent."
+    },
+    {
+      "id": "J2-039",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.middleware.proxy_fix.ProxyFix",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/middleware/proxy_fix.py",
+          "source_locator": "lines 49-60",
+          "excerpt": "knows what values to trust. It is a security issue to trust values\n...\nenviron as ``werkzeug.proxy_fix.orig``, a dict.\n\n:param x_for: Number of values to trust for ``X-Forwarded-For``.\n:param x_proto: Number of values to trust for ``X-Forwarded-Proto``.\n:param x_host: Number of values to trust for ``X-Forwarded-Host``.\n:param x_port: Number of values to trust for ``X-Forwarded-Port``.\n:param x_prefix: Number of values to trust for"
+        },
+        {
+          "source_path": "src/werkzeug/middleware/proxy_fix.py",
+          "source_locator": "lines 38-39",
+          "excerpt": "\"\"\"Adjust the WSGI environ based on ``X-Forwarded-`` that proxies in"
+        }
+      ],
+      "note": "The count exists because each header carries one value per proxy hop and only the hops you actually control may be trusted."
+    },
+    {
+      "id": "J2-040",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.wrappers.Response.make_conditional",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/wrappers/response.py",
+          "source_locator": "lines 783-791",
+          "excerpt": "if not is206 and not is_resource_modified(\n    environ,\n    self.headers.get(\"ETag\"),\n    last_modified=self.headers.get(\"Last-Modified\"),\n):\n    if ETagSet.from_header(environ.get(\"HTTP_IF_MATCH\")):\n        self.status_code = 412\n    else:\n        self.status_code = 304"
+        }
+      ],
+      "note": "412 only when an If-Match header is present; otherwise 304."
+    },
+    {
+      "id": "J2-041",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.http.generate_etag",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/http.py",
+          "source_locator": "lines 1112-1124",
+          "excerpt": "def generate_etag(data: bytes) -> str:\n    \"\"\"Generate a strong ETag value by hashing the given data.\n\n    .. versionchanged:: 3.2\n        Use SHA3-256. SHA-1 is not allowed in FIPS-enabled systems. Use base64\n        instead of hex digest. This increases the length from 40 to 43\n        characters.\n\n    .. versionchanged:: 2.0\n        Use SHA-1. MD5 is not allowed in FIPS-enabled systems. This increases\n        the length from 32 to 40 characters.\n    \"\"\"\n    digest = hashlib.sha3_256(data, usedforsecurity=False).digest()"
+        }
+      ],
+      "note": "Both halves answerable, unusually: the hash is SHA3-256 and the stated reason for moving off SHA-1 and MD5 is FIPS-enabled systems."
+    },
+    {
+      "id": "J2-042",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.wrappers.Response.get_wsgi_headers",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/wrappers/response.py",
+          "source_locator": "lines 514-520",
+          "excerpt": "if 100 <= status < 200 or status == 204:\n    # Per section 3.3.2 of RFC 7230, \"a server MUST NOT send a\n    # Content-Length header field in any response with a status\n    # code of 1xx (Informational) or 204 (No Content).\"\n    headers.remove(\"Content-Length\")\nelif status == 304:\n    remove_entity_headers(headers)"
+        },
+        {
+          "source_path": "src/werkzeug/wrappers/response.py",
+          "source_locator": "lines 527-535",
+          "excerpt": "if (\n    self.automatically_set_content_length\n    and self.is_sequence\n    and content_length is None\n    and status not in (204, 304)\n    and not (100 <= status < 200)\n):\n    content_length = sum(len(x) for x in self.iter_encoded())\n    headers[\"Content-Length\"] = str(content_length)"
+        }
+      ],
+      "note": "Also requires is_sequence: a streaming response is not flattened to compute a length."
+    },
+    {
+      "id": "J2-043",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.test.EnvironBuilder",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/test.py",
+          "source_locator": "lines 220-221",
+          "excerpt": ":param json: An object to be serialized and assigned to ``data``.\n    Defaults the content type to ``\"application/json\"``."
+        },
+        {
+          "source_path": "src/werkzeug/test.py",
+          "source_locator": "lines 352-359",
+          "excerpt": "if json is not None:\n    ...\n        raise TypeError(\"can't provide both json and data\")\n\n    data = self.json_dumps(json)\n    ...\n        self.content_type = \"application/json\""
+        }
+      ]
+    },
+    {
+      "id": "J2-044",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.test.Client",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/test.py",
+          "source_locator": "lines 787-788",
+          "excerpt": ":param use_cookies: Persist cookies from ``Set-Cookie`` response headers to the"
+        },
+        {
+          "source_path": "src/werkzeug/test.py",
+          "source_locator": "lines 829-832",
+          "excerpt": "if use_cookies:\n    self._cookies: dict[tuple[str, str, str], Cookie] | None = {}\nelse:\n    self._cookies = None"
+        },
+        {
+          "source_path": "src/werkzeug/test.py",
+          "source_locator": "lines 836-853",
+          "excerpt": "def get_cookie(\n...\n    return self._cookies.get((domain, path, key))"
+        }
+      ],
+      "note": "Both halves: yes by default (use_cookies=True), and Client.get_cookie inspects them."
+    },
+    {
+      "id": "J2-045",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.test.Client.resolve_redirect",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/test.py",
+          "source_locator": "lines 1026-1032",
+          "excerpt": "# Explain why a redirect to a different server name won't be followed.\nif to_name_parts != from_name_parts:\n    if to_name_parts[-len(from_name_parts) :] == from_name_parts:\n        if not self.allow_subdomain_redirects:\n            raise RuntimeError(\"Following subdomain redirects is not enabled.\")\n    else:\n        raise RuntimeError(\"Following external redirects is not supported.\")"
+        }
+      ],
+      "note": "External host: never. Subdomain of the same server name: only with allow_subdomain_redirects=True."
+    },
+    {
+      "id": "J2-046",
+      "answerability": "PARTIAL",
+      "intended_entity": "werkzeug (3.2 deprecations)",
+      "evidence": [
+        {
+          "source_path": "CHANGES.rst",
+          "source_locator": "3.2.0 section",
+          "excerpt": "Individual deprecation entries, each naming what is deprecated and, in most cases, its replacement."
+        },
+        {
+          "source_path": "src/werkzeug/wrappers/request.py",
+          "source_locator": "lines 521-523",
+          "excerpt": ".. deprecated:: 3.2\n    Will be removed in Werkzeug 3.3. Use ``environ[\"REMOTE_USER\"]`` instead."
+        }
+      ],
+      "why_source_cannot_establish": "Each individual deprecation and its replacement is establishable. An 'overall direction' of the cleanup is nowhere stated as such in the corpus -- there is no roadmap, rationale document or summarising statement. Any characterisation of the project's intent is the answerer's synthesis, not a fact the source asserts.",
+      "note": "The Request.input_stream deprecation text is itself wrong in this snapshot: the docstring says 'Use environ[\"REMOTE_USER\"] instead' while the runtime warning says 'Use stream instead'."
+    },
+    {
+      "id": "J2-047",
+      "answerability": "ANSWERABLE",
+      "intended_entity": "werkzeug.sansio.request.Request vs werkzeug.wrappers.Request",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/sansio/request.py",
+          "source_locator": "lines 35-40",
+          "excerpt": "\"\"\"Represents the non-IO parts of a HTTP request, including the\nmethod, URL info, and headers.\n\nThis class is not meant for general use. It should only be used when\nimplementing WSGI, ASGI, or another HTTP application spec. Werkzeug\nprovides a WSGI implementation at :cls:`werkzeug.wrappers.Request`."
+        }
+      ],
+      "note": "The source answers 'which am I supposed to subclass' directly: werkzeug.wrappers.Request."
+    },
+    {
+      "id": "J2-048",
+      "answerability": "PARTIAL",
+      "intended_entity": "werkzeug.serving.WSGIRequestHandler.make_environ",
+      "evidence": [
+        {
+          "source_path": "src/werkzeug/serving.py",
+          "source_locator": "line 200",
+          "excerpt": "\"werkzeug.socket\": self.connection,"
+        }
+      ],
+      "why_source_cannot_establish": "The corpus establishes that the development server puts the raw socket object into the environ under this key. Nothing in the corpus reads the key, documents it, or states what a consumer is expected to do with it -- it is set for code outside this repository. An answer asserting a purpose (websocket upgrades, for instance) is not establishable from this source."
+    }
+  ]
+}

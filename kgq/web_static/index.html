@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Knowledge Graph Workbench</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%2314498f%22%2F%3E%3Cg%20stroke%3D%22%238db9e8%22%20stroke-width%3D%222%22%3E%3Cpath%20d%3D%22M11%2011%20L22%2016%20M11%2011%20L13%2023%20M22%2016%20L13%2023%22%2F%3E%3C%2Fg%3E%3Ccircle%20cx%3D%2211%22%20cy%3D%2211%22%20r%3D%224%22%20fill%3D%22%23fff%22%2F%3E%3Ccircle%20cx%3D%2222%22%20cy%3D%2216%22%20r%3D%223%22%20fill%3D%22%238db9e8%22%2F%3E%3Ccircle%20cx%3D%2213%22%20cy%3D%2223%22%20r%3D%223%22%20fill%3D%22%232a78d6%22%2F%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="#" id="home-link">
+    <span class="mark" aria-hidden="true"></span>
+    <span>
+      <b>Knowledge Graph Workbench</b>
+      <em>evidence-first &middot; local &middot; deterministic extraction</em>
+    </span>
+  </a>
+  <div class="topbar-right">
+    <span id="ws-chip" class="chip hidden"></span>
+    <span id="provider-chip" class="chip">model: checking&hellip;</span>
+  </div>
+</header>
+
+<!-- ─────────────────────────── HOME ─────────────────────────── -->
+<main id="home" class="view">
+  <section class="hero">
+    <h1>Compile real source into a graph you can trace back to bytes.</h1>
+    <p class="lede">
+      Upload code or documents. Everything you see afterwards &mdash; every symbol, every
+      edge, every sentence of an answer &mdash; carries the exact source span it came from,
+      re-read from disk when you look at it. No embeddings, no vector store, no cloud.
+    </p>
+    <ol class="pipeline" aria-label="How a source becomes an answer">
+      <li><b>Source</b><span>files on your disk</span></li>
+      <li><b>Deterministic extraction</b><span>a parser, never a model</span></li>
+      <li><b>Claims + evidence</b><span>byte spans, re-verifiable</span></li>
+      <li><b>Graph</b><span>edges you can click</span></li>
+      <li><b>Question</b><span>answers gated on their evidence</span></li>
+    </ol>
+  </section>
+
+  <section class="start">
+    <div class="card">
+      <h2>Start from your own source</h2>
+      <p class="muted">A <code>.zip</code> of a repository, or one <code>.py</code>,
+        <code>.pdf</code> or <code>.docx</code> file. Files in formats with no analyser are
+        recorded and reported, never silently dropped.</p>
+      <label class="filedrop" id="filedrop">
+        <input type="file" id="file-input" accept=".zip,.py,.pdf,.docx">
+        <span id="filedrop-label">Choose a file, or drop one here</span>
+      </label>
+      <button class="primary" id="upload-btn" disabled>Compile</button>
+      <p class="muted small">Archives are treated as hostile input: path traversal, absolute
+        paths, symlink members, oversized members and oversized archives are refused.</p>
+    </div>
+
+    <div class="card">
+      <h2>Or try the bundled corpus</h2>
+      <p class="muted">Werkzeug &mdash; 225 real Python files. Compiles in a few seconds and
+        is enough to ask the flagship question about path safety.</p>
+      <button class="secondary" id="demo-btn">Try Werkzeug</button>
+      <p class="muted small">Read from <code>eval/corpus3</code> in this checkout. Nothing is
+        bundled into the page.</p>
+    </div>
+  </section>
+
+  <section class="workspaces">
+    <h2>Workspaces</h2>
+    <p class="muted small">Each upload gets its own directory and its own database. Two
+      sources are never merged.</p>
+    <div id="ws-list" class="ws-list"><p class="muted">None yet.</p></div>
+  </section>
+</main>
+
+<!-- ───────────────────────── COMPILING ──────────────────────── -->
+<main id="progress" class="view hidden">
+  <h1 id="progress-title">Compiling</h1>
+  <ol class="stages" id="stage-list"></ol>
+  <p id="progress-error" class="banner critical hidden"></p>
+  <div id="progress-files"></div>
+</main>
+
+<!-- ───────────────────────── WORKSPACE ──────────────────────── -->
+<main id="workspace" class="view hidden">
+  <nav class="tabs" role="tablist">
+    <button role="tab" class="tab active" data-tab="overview">Overview</button>
+    <button role="tab" class="tab" data-tab="graph">Graph</button>
+    <button role="tab" class="tab" data-tab="ask">Ask</button>
+  </nav>
+
+  <!-- overview -->
+  <section id="tab-overview" class="tabpane">
+    <div class="tiles" id="tiles"></div>
+    <div class="two-col">
+      <figure class="card chartcard">
+        <figcaption>
+          <h3>Claims by predicate</h3>
+          <p class="muted small">Every one of these was emitted by a parser, not a model.</p>
+        </figcaption>
+        <div id="predicate-chart"></div>
+      </figure>
+      <figure class="card chartcard">
+        <figcaption>
+          <h3>Symbols by kind</h3>
+          <p class="muted small">What the extractor found in the source tree.</p>
+        </figcaption>
+        <div id="kind-chart"></div>
+      </figure>
+    </div>
+    <div class="card">
+      <h3>Files that did not produce a graph</h3>
+      <p class="muted small">A failed or unsupported file stays visible with its reason.
+        Disappearing would be the bug.</p>
+      <div id="problems"></div>
+    </div>
+    <div class="card">
+      <h3>What was uploaded</h3>
+      <div id="upload-report"></div>
+    </div>
+  </section>
+
+  <!-- graph -->
+  <section id="tab-graph" class="tabpane hidden">
+    <div class="graph-layout">
+      <aside class="side">
+        <label class="field">
+          <span>Find a symbol</span>
+          <input type="search" id="symbol-search" placeholder="send_from_directory" autocomplete="off">
+        </label>
+        <div id="search-results" class="results"><p class="muted small">Search for a
+          function, class or method to open its neighbourhood.</p></div>
+      </aside>
+
+      <div class="graph-main">
+        <div class="graph-controls" id="graph-controls">
+          <span class="muted small">Nothing loaded. Pick a symbol on the left.</span>
+        </div>
+        <div class="graph-frame">
+          <svg id="graph-svg" role="img" aria-label="Local graph neighbourhood"></svg>
+          <div id="graph-tip" class="tip hidden"></div>
+        </div>
+        <div id="graph-legend" class="legend"></div>
+        <p id="graph-note" class="muted small"></p>
+      </div>
+
+      <aside class="side inspector">
+        <div id="inspector"><p class="muted small">Click a node or an edge. An edge opens the
+          claim behind it and the source bytes that prove it.</p></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ask -->
+  <section id="tab-ask" class="tabpane hidden">
+    <form id="ask-form" class="askbar">
+      <input type="text" id="question" placeholder="How does send_from_directory prevent unsafe paths?"
+             autocomplete="off">
+      <button class="primary" type="submit">Ask</button>
+    </form>
+    <p class="muted small" id="ask-hint"></p>
+    <div id="answer"></div>
+  </section>
+</main>
+
+<script type="module" src="/static/app.js"></script>
+</body>
+</html>

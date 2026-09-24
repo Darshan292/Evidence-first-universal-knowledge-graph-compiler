@@ -32,7 +32,7 @@ from kgc.analysis.interface import CodeAnalysis
 from kgc.evidence import make_evidence, verify
 from kgc.ids import claim_id, symbol_id
 from kgc.ir import (Claim, Diagnostic, Establishment, Evidence, Lifecycle,
-                    Resolution, Symbol)
+                    LocatorKind, Resolution, Symbol)
 from kgc.predicates import LITERAL_OBJECT
 
 
@@ -183,8 +183,7 @@ def map_analysis(an: CodeAnalysis, *, artifact_id: str, data: bytes, run_id: str
         parent_sid = index.enclosing(rs.parent_qname, p["byte_start"], p["byte_end"])
         if parent_sid is None:
             continue                      # already diagnosed above
-        quoted = data[p["byte_start"]:p["byte_end"]].decode("utf-8")
-        emit("CONTAINS", parent_sid, sid, None, rs.locator, quoted)
+        emit("CONTAINS", parent_sid, sid, None, rs.locator, quote_for(data, rs.locator))
 
     # references: the subject is the occurrence that encloses the reference site
     for rr in refs_in:
@@ -201,7 +200,7 @@ def map_analysis(an: CodeAnalysis, *, artifact_id: str, data: bytes, run_id: str
                 rl.get("line_start")))
             continue
 
-        quoted = data[rl["byte_start"]:rl["byte_end"]].decode("utf-8")
+        quoted = quote_for(data, rr.locator)
         object_qn = rr.to_qname if rr.resolution in (
             Resolution.DETERMINISTIC, Resolution.HEURISTIC) else None
         object_sid = None
@@ -233,3 +232,21 @@ def map_analysis(an: CodeAnalysis, *, artifact_id: str, data: bytes, run_id: str
         if cid and rr.predicate not in LITERAL_OBJECT:
             refs.append((cid, rr.to_name, resolution, reason))
     return symbols, claims, refs, diagnostics
+
+
+def quote_for(data: bytes, locator) -> str:
+    """The text a claim cites.
+
+    For code that is a slice of the file. For a document unit it is the text the
+    adapter extracted, because the file bytes are a compressed container and
+    slicing them would produce nothing a reader could check.
+    """
+    p = locator.payload
+    if locator.kind is LocatorKind.BYTE_RANGE:
+        return data[p["byte_start"]:p["byte_end"]].decode("utf-8")
+    from kgc.analysis.document import extracted_text
+    suffix = ".pdf" if locator.kind is LocatorKind.PDF_BOX else ".docx"
+    units = extracted_text(data, suffix)
+    if locator.kind is LocatorKind.PDF_BOX:
+        return units.get(p["page"], "")
+    return (units.get((p.get("unit", "paragraph"), p["para"])) or "").strip()

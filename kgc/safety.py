@@ -62,6 +62,12 @@ def classify(path: Path, *, root: Path) -> tuple[bytes | None, Rejection | None]
     if st.st_size > MAX_FILE_BYTES:
         return None, Rejection("OVERSIZE", f"{st.st_size} bytes exceeds {MAX_FILE_BYTES}")
 
+    if real.suffix.lower() in BINARY_DOCUMENT_SUFFIXES:
+        # A document's bytes are a container format. The text-safety checks
+        # below are about parsing bytes AS TEXT, which never happens here: a
+        # document adapter extracts through a pinned library instead.
+        return real.read_bytes(), None
+
     with open(real, "rb") as fh:
         head = fh.read(NULL_BYTE_SCAN)
         if b"\x00" in head:
@@ -86,13 +92,18 @@ LANGUAGE_BY_SUFFIX = {
     ".swift": "swift", ".scala": "scala", ".sh": "shell", ".sql": "sql",
     ".md": "markdown", ".json": "json", ".xml": "xml", ".csv": "csv",
     ".yaml": "yaml", ".yml": "yaml", ".toml": "toml", ".html": "html",
+    ".pdf": "pdf", ".docx": "docx",
 }
 
-ANALYSED_SUFFIXES = (".py",)          # what an analyser exists for today
+# Formats whose bytes are not text and must skip the UTF-8 gate. They are still
+# size-checked, path-checked and symlink-checked like everything else.
+BINARY_DOCUMENT_SUFFIXES = (".pdf", ".docx")
+
+ANALYSED_SUFFIXES = (".py", ".pdf", ".docx")   # what an analyser exists for today
 
 IGNORED_DIRS = {".git", "__pycache__", ".venv", "venv", "node_modules", ".mypy_cache"}
 IGNORED_SUFFIXES = {".pyc", ".pyo", ".so", ".dylib", ".dll", ".o", ".a",
-                    ".zip", ".gz", ".tar", ".whl", ".png", ".jpg", ".pdf",
+                    ".zip", ".gz", ".tar", ".whl", ".png", ".jpg",
                     ".db", ".sqlite", ".lbug", ".wal", ".shm"}
 
 

@@ -37,6 +37,10 @@ their there here me us them explain tell show give help please about between dif
 # A span short enough to be a single call site teaches a reader nothing about
 # behaviour; the function that contains it does.
 MIN_SPAN = 180
+# what counts as a retrievable unit of meaning: a code definition, or a page /
+# paragraph / table of a document
+SPAN_KINDS = ("function", "method", "class", "page", "paragraph", "table")
+SHORT_OK = ("variable", "constant", "page", "paragraph", "table")
 
 
 @dataclass
@@ -169,8 +173,8 @@ class Retriever:
             "  JOIN claim_evidence ce ON ce.claim_id = cl.claim_id"
             "  JOIN evidence e ON e.evidence_id = ce.evidence_id"
             " WHERE cl.predicate='CONTAINS'"
-            "   AND s.kind IN ('function','method','class')"
-            "   AND length(e.quoted_text) >= ?", (MIN_SPAN,)).fetchall()
+            f"   AND s.kind IN ({','.join('?' * len(SPAN_KINDS))})"
+            "   AND length(e.quoted_text) >= 40", SPAN_KINDS).fetchall()
         seen = set()
         for r in rows:
             if r["evidence_id"] in seen:
@@ -275,7 +279,7 @@ class Retriever:
         report = {"scope": scope, "names": [], "ambiguous": []}
         for name in names:
             rows = [s for s in self.symbols_named(name, prefer_src=False)
-                    if s["kind"] in ("class", "function", "method")]
+                    if s["kind"] in ("class", "function", "method", "document")]
             if not rows:
                 continue
             distinct = sorted({s["qualified_name"] for s in rows})
@@ -324,12 +328,12 @@ class Retriever:
         for name in names:
             syms = self.symbols_named(name)
             for s in syms:
-                if s["kind"] in ("function", "method", "class"):
+                if s["kind"] in SPAN_KINDS or s["kind"] == "document":
                     subjects.append({**s, "matched": name})
             for s in syms[:3]:
                 # a value lives in a one-line assignment; the length floor is
                 # there to drop lone call sites, not to hide a constant
-                floor = 0 if s["kind"] in ("variable", "constant") else MIN_SPAN
+                floor = 0 if s["kind"] in SHORT_OK else MIN_SPAN
                 for sp in self.spans_for_symbol(s["symbol_id"]):
                     if sp.evidence_id not in seen and len(sp.text) >= floor:
                         seen.add(sp.evidence_id); spans.append(sp)

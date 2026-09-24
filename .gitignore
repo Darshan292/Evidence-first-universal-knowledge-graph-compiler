@@ -7,3 +7,6 @@ __pycache__/
 *.db-wal
 *.db-shm
 .probe/
+
+# workbench runtime state: uploaded sources, per-workspace databases
+workspaces/

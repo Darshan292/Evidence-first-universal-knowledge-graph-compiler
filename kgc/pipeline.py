@@ -31,7 +31,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from kgc import SOFTWARE_VERSION
-from kgc.analysis import python_backend
+from kgc.analysis import document, python_backend
 from kgc.analysis.mapper import map_analysis
 from kgc.analysis.resolver import (RESOLVER_VERSION, ModuleIndex,
                                    collect_reexports, resolve)
@@ -39,7 +39,7 @@ from kgc.artifact_identity import canonical_path
 from kgc.ids import artifact_id as mk_artifact_id
 from kgc.ids import config_hash, content_sha256, run_id as mk_run_id, source_id as mk_source_id
 from kgc.ir import Artifact, Diagnostic, Modality, ParseStatus
-from kgc.safety import ANALYSED_SUFFIXES, classify, detect_language, walk_corpus
+from kgc.safety import (ANALYSED_SUFFIXES, classify, detect_language, walk_corpus)
 from kgc.store import Store
 
 STAGE = "extract"
@@ -171,17 +171,21 @@ def ingest(store: Store, root: Path, *, resume: bool = True,
 
             sha = content_sha256(data)
             aid = mk_artifact_id(src, rel, sha)
-            an = python_backend.analyze(aid, data, module_name=_module_name(rel, root))
+            an = _analyse(rel, aid, data, root)
 
             store.add_artifact(Artifact(
                 artifact_id=aid, source_id=src, rel_path=rel, sha256=sha,
-                size_bytes=len(data), media_type="text/x-python", modality=Modality.CODE,
+                size_bytes=len(data),
+                media_type=MEDIA_TYPE.get(Path(rel).suffix.lower(), "application/octet-stream"),
+                modality=Modality.CODE,
                 parse_status=an.parse_status, parse_error=an.parse_error,
                 parser_id=an.backend_id, parser_version=an.backend_version), run)
 
             if crash_at and crash_at[0] == "during_entity" and n == crash_at[1]:
                 raise CrashPoint("during_entity")
 
+            # PARTIAL is a real outcome for a document: some pages gave text and
+            # some did not. It keeps whatever it extracted.
             if an.parse_status is ParseStatus.FAILED:
                 rep.failed += 1
                 for d in an.diagnostics:
@@ -249,6 +253,21 @@ def ingest(store: Store, root: Path, *, resume: bool = True,
     return rep
 
 
+def _analyse(rel: str, aid: str, data: bytes, root: Path):
+    """Pick the adapter for this format. The only place that decision is made."""
+    suffix = Path(rel).suffix.lower()
+    if suffix == ".pdf":
+        return document.analyze_pdf(aid, data, _module_name(rel, root))
+    if suffix == ".docx":
+        return document.analyze_docx(aid, data, _module_name(rel, root))
+    return python_backend.analyze(aid, data, module_name=_module_name(rel, root))
+
+
+MEDIA_TYPE = {".py": "text/x-python", ".pdf": "application/pdf",
+              ".docx": "application/vnd.openxmlformats-officedocument"
+                       ".wordprocessingml.document"}
+
+
 def _resolve_item(extract_item: str) -> str:
     return hashlib.sha256(f"{STAGE_RESOLVE}\x1f{extract_item}".encode()).hexdigest()
 
@@ -268,7 +287,7 @@ def _resolve_stage(store: Store, root: Path, src: str, run: str,
         mod = _module_name(rel, root)
         sha = content_sha256(data)
         aid = mk_artifact_id(src, rel, sha)
-        an = python_backend.analyze(aid, data, module_name=mod)
+        an = _analyse(rel, aid, data, root)
         if an.parse_status is not ParseStatus.FAILED:
             analyses[mod] = an
     reexports = collect_reexports(analyses)

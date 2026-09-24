@@ -25,6 +25,8 @@ import json
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from kgc.evidence import EvidenceError, verify
+from kgc.ir import Evidence, Locator, LocatorKind
 from kgc.predicates import completeness_scope, may_falsify_by_absence
 from kgq.contract import normalise, sentences
 
@@ -47,6 +49,8 @@ class EvidenceCheck:
     rel_path: str | None = None
     byte_start: int | None = None
     byte_end: int | None = None
+    locator_kind: str | None = None
+    strength: str | None = None
     error: str | None = None
 
     @property
@@ -123,9 +127,17 @@ class Validator:
 
     # ── evidence ────────────────────────────────────────────────────────
     def check_evidence(self, evidence_id: str, retrieved_ids: set[str]) -> EvidenceCheck:
+        """Re-derive the cited content from the artifact on disk.
+
+        Delegates to `kgc.evidence.verify`, the compiler's own verifier, so code
+        and documents are checked by the same code that wrote them -- a byte
+        comparison for source files, a re-extraction for a PDF page or a DOCX
+        paragraph, whose file bytes carry no reader-visible offsets.
+        """
         c = EvidenceCheck(evidence_id)
         row = self.con.execute(
-            "SELECT e.locator, e.quoted_text, a.rel_path"
+            "SELECT e.locator, e.locator_kind, e.quoted_text, e.artifact_sha256,"
+            "       a.rel_path, a.artifact_id"
             "  FROM evidence e JOIN artifact a ON a.artifact_id = e.artifact_id"
             " WHERE e.evidence_id = ?", (evidence_id,)).fetchone()
         if row is None:
@@ -136,25 +148,31 @@ class Validator:
         if not c.retrieved:
             c.error = "evidence exists but was not retrieved for this question"
             return c
+
         loc = json.loads(row["locator"])
-        c.rel_path, c.byte_start, c.byte_end = row["rel_path"], loc.get("byte_start"), loc.get("byte_end")
+        c.rel_path = row["rel_path"]
+        c.byte_start, c.byte_end = loc.get("byte_start"), loc.get("byte_end")
+        c.locator_kind = row["locator_kind"]
         path = self.root / row["rel_path"]
-        if not path.is_file() or c.byte_start is None:
+        if not path.is_file():
             c.error = "locator does not address a file in this corpus"
             return c
-        data = path.read_bytes()
-        if not (0 <= c.byte_start <= c.byte_end <= len(data)):
-            c.error = f"byte range [{c.byte_start},{c.byte_end}] outside a {len(data)}-byte file"
+        try:
+            kind = LocatorKind(row["locator_kind"])
+            ev = Evidence(evidence_id=evidence_id, artifact_id=row["artifact_id"],
+                          artifact_sha256=row["artifact_sha256"],
+                          locator=Locator(kind, loc), quoted_text=row["quoted_text"])
+        except (ValueError, KeyError) as e:
+            c.error = f"the stored locator is not valid: {e}"
             return c
         c.locator_valid = True
         try:
-            actual = data[c.byte_start:c.byte_end].decode("utf-8")
-        except UnicodeDecodeError as e:
-            c.error = f"cited bytes are not UTF-8: {e}"
+            verified = verify(ev, path.read_bytes())
+        except EvidenceError as e:
+            c.error = str(e)
             return c
-        c.bytes_match = actual == row["quoted_text"]
-        if not c.bytes_match:
-            c.error = "stored quotation no longer matches the source at that range"
+        c.bytes_match = True
+        c.strength = verified.verification_strength.value if verified.verification_strength else None
         return c
 
     # ── structural assertions ───────────────────────────────────────────

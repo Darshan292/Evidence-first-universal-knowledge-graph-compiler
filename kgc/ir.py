@@ -33,9 +33,8 @@ class LocatorKind(str, Enum):
     AST_NODE = "ast_node"         # code: structural identity, survives reformatting
     JSON_POINTER = "json_pointer"  # RFC 6901
     XML_PATH = "xml_path"         # restricted subset, non-evaluating parser
-    # M2, defined but never emitted in Gate 1:
-    PDF_BOX = "pdf_box"
-    DOCX_PARA = "docx_para"
+    PDF_BOX = "pdf_box"           # documents: page + offsets into extracted text
+    DOCX_PARA = "docx_para"       # documents: paragraph/table index + offsets
     IMAGE_BOX = "image_box"
     AUDIO_SPAN = "audio_span"
 
@@ -99,13 +98,20 @@ class Locator:
             LocatorKind.AST_NODE: {"path", "node_type"},
             LocatorKind.JSON_POINTER: {"pointer"},
             LocatorKind.XML_PATH: {"path"},
+            # Documents. `page` / `para` is the unit a reader can actually find.
+            # byte_start/byte_end index the EXTRACTED TEXT, not the file bytes --
+            # a PDF's file bytes are compressed and have no reader-visible
+            # offsets. The verifier re-extracts and compares, so the strength is
+            # REPRODUCIBLE, never EXACT.
+            LocatorKind.PDF_BOX: {"page", "byte_start", "byte_end"},
+            LocatorKind.DOCX_PARA: {"para", "byte_start", "byte_end"},
         }.get(self.kind)
         if required is None:
             raise ValueError(f"locator kind {self.kind} is declared but not emitted in Gate 1")
         missing = required - set(self.payload)
         if missing:
             raise ValueError(f"{self.kind.value} locator missing fields: {sorted(missing)}")
-        if self.kind is LocatorKind.BYTE_RANGE:
+        if self.kind in (LocatorKind.BYTE_RANGE, LocatorKind.PDF_BOX, LocatorKind.DOCX_PARA):
             if self.payload["byte_start"] > self.payload["byte_end"]:
                 raise ValueError("byte_start > byte_end")
 

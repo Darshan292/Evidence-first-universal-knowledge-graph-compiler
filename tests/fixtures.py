@@ -67,3 +67,65 @@ def build(root: Path, *, include_malformed=True, include_hostile=True) -> Path:
         for name, body in group.items():
             (root / name).write_text(body, encoding="utf-8")
     return root
+
+
+# ── document fixtures (Demo 0.2) ────────────────────────────────────────
+# Built with the same libraries a real user's file came out of, so the
+# extractors are exercised against real container formats, not mock bytes.
+
+PDF_LINES = [
+    ["Payment Service Operations", "",
+     "The charge endpoint retries a failed authorisation three times.",
+     "A timeout of thirty seconds applies to every attempt."],
+    ["Escalation", "",
+     "A card refused twice is reported to the fraud desk before the third try."],
+]
+
+DOCX_PARAS = [
+    "Retention Policy",
+    "Transaction records are retained for seven years.",
+    "Card numbers are never written to the application log.",
+]
+
+
+def make_pdf(path, pages=None) -> "Path":
+    """A real, text-bearing PDF. No OCR is involved anywhere in this project."""
+    from reportlab.lib.pagesizes import LETTER
+    from reportlab.pdfgen import canvas
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    c = canvas.Canvas(str(path), pagesize=LETTER)
+    for page in (pages if pages is not None else PDF_LINES):
+        y = 720
+        for line in page:
+            c.drawString(72, y, line)
+            y -= 18
+        c.showPage()
+    c.save()
+    return path
+
+
+def make_docx(path, paragraphs=None) -> "Path":
+    from docx import Document
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    d = Document()
+    for p in (paragraphs if paragraphs is not None else DOCX_PARAS):
+        d.add_paragraph(p)
+    d.save(str(path))
+    return path
+
+
+def make_zip(members: dict, *, symlinks: dict | None = None) -> bytes:
+    """An in-memory archive. `members` maps arcname -> bytes or str."""
+    import io, zipfile
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
+        for name, body in members.items():
+            z.writestr(name, body if isinstance(body, bytes) else body.encode("utf-8"))
+        for name, target in (symlinks or {}).items():
+            info = zipfile.ZipInfo(name)
+            info.create_system = 3                      # unix
+            info.external_attr = (0xA1FF << 16)         # symlink mode bits
+            z.writestr(info, target)
+    return buf.getvalue()

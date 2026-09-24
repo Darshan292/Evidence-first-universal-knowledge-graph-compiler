@@ -4,4 +4,4 @@
 `kgq/` answers questions about it. The split is the trust boundary: nothing here
 may write a structural claim, mint an evidence id, or invent a locator.
 """
-DEMO_VERSION = "0.1.0"
+DEMO_VERSION = "0.2.0"

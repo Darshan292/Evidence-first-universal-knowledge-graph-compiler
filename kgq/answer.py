@@ -146,8 +146,8 @@ def ask(question: str, *, db_path: str, corpus_root: str, provider=None,
             return _finish(r, provider, t0)
         if provider is None:
             r.abstain_reason = ("no model configured, so no semantic answer was attempted. "
-                                "The deterministic evidence and structural facts above were "
-                                "produced without one.")
+                                "The deterministic evidence and structural facts alongside "
+                                "this were produced without one.")
             return _finish(r, provider, t0)
 
         retrieved_ids = {sp.evidence_id for sp in spans}

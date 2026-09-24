@@ -154,11 +154,46 @@ def _verify_xml_path(ev: Evidence, data: bytes):
     return VerificationStrength.EXACT, "xml_hardened/1"
 
 
+def _verify_document(ev: Evidence, data: bytes):
+    """Re-extract the unit with the pinned library and compare its text.
+
+    This is REPRODUCIBLE, never EXACT. A PDF's file bytes are compressed and
+    carry no reader-visible offsets, so nothing is byte-compared here; what is
+    proven is that running the same extractor over the same artifact yields the
+    same text for the same page. Claiming EXACT would assert a comparison that
+    did not happen.
+    """
+    from kgc.analysis.document import extracted_text
+    p = ev.locator.payload
+    suffix = ".pdf" if ev.locator.kind is LocatorKind.PDF_BOX else ".docx"
+    try:
+        units = extracted_text(data, suffix)
+    except ImportError as exc:
+        raise EvidenceError(f"the {suffix} adapter is unavailable: {exc}") from None
+    except Exception as exc:
+        raise EvidenceError(f"artifact no longer extracts: {type(exc).__name__}: {exc}") from None
+
+    if ev.locator.kind is LocatorKind.PDF_BOX:
+        key, where = p["page"], f"page {p['page']}"
+    else:
+        key, where = (p.get("unit", "paragraph"), p["para"]), f"{p.get('unit')} {p['para']}"
+    if key not in units:
+        raise EvidenceError(f"{where} is no longer present in the document")
+    actual = units[key] if suffix == ".pdf" else (units[key] or "").strip()
+    if actual != ev.quoted_text:
+        raise EvidenceError(
+            f"re-extracted text for {where} differs from the stored quotation: "
+            f"expected {ev.quoted_text[:40]!r}, found {actual[:40]!r}")
+    return VerificationStrength.REPRODUCIBLE, f"{suffix.lstrip('.')}_reextract/1"
+
+
 _VERIFIERS = {
     LocatorKind.BYTE_RANGE: _verify_byte_range,
     LocatorKind.AST_NODE: _verify_ast_node,
     LocatorKind.JSON_POINTER: _verify_json_pointer,
     LocatorKind.XML_PATH: _verify_xml_path,
-    # PDF_BOX / IMAGE_BOX / AUDIO_SPAN deliberately absent: no verifier means
-    # verify() refuses rather than asserting a strength it cannot support.
+    LocatorKind.PDF_BOX: _verify_document,
+    LocatorKind.DOCX_PARA: _verify_document,
+    # IMAGE_BOX / AUDIO_SPAN deliberately absent: no verifier means verify()
+    # refuses rather than asserting a strength it cannot support.
 }

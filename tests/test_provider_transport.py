@@ -35,7 +35,8 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         body = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
         STATE["requests"].append({"path": self.path, "body": body,
-                                  "auth": self.headers.get("Authorization")})
+                                  "auth": self.headers.get("Authorization"),
+                                  "user_agent": self.headers.get("User-Agent")})
         if STATE["status"] != 200:
             self.send_response(STATE["status"]); self.end_headers()
             self.wfile.write(b'{"error":"upstream said no"}')
@@ -191,6 +192,23 @@ class TestProviderTransport(unittest.TestCase):
                 else:
                     os.environ[k] = v
 
+
+
+    def test_request_identifies_the_client(self):
+        """DEFECT-001: urllib's default User-Agent is rejected by real CDNs.
+
+        Groq's edge answers "Python-urllib/3.11" with Cloudflare 1010, which
+        reaches a user as an unexplained 403 and a silent abstention. A local
+        test server accepts anything, so only an explicit assertion catches it.
+        """
+        from kgq.provider import USER_AGENT
+        STATE["reply"] = '{"answer": "a", "claims": []}'
+        p = Provider(f"http://127.0.0.1:{self.port}/v1", "m", None)
+        p.chat([{"role": "user", "content": "hi"}])
+        ua = STATE["requests"][-1]["user_agent"]
+        self.assertEqual(ua, USER_AGENT)
+        self.assertNotIn("Python-urllib", ua)
+        self.assertTrue(ua.startswith("evidence-first-kg/"), ua)
 
 if __name__ == "__main__":
     unittest.main()

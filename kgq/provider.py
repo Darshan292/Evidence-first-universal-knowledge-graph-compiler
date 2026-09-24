@@ -26,9 +26,14 @@ import urllib.request
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from kgq import DEMO_VERSION
+
 
 class ProviderError(RuntimeError):
     """The model could not be reached or returned something unusable."""
+
+
+USER_AGENT = f"evidence-first-kg/{DEMO_VERSION}"
 
 
 @dataclass
@@ -106,7 +111,11 @@ class Provider:
         payload = json.dumps({"model": self.model, "messages": messages,
                               "temperature": temperature,
                               "max_tokens": max_tokens}).encode()
-        headers = {"Content-Type": "application/json"}
+        # Identify the client honestly. urllib's default "Python-urllib/x.y" is
+        # rejected outright by some providers' CDNs (Groq's edge answers it with
+        # Cloudflare 1010), which surfaces as an unexplained 403 and an
+        # abstention. See eval/j2/DEFECT_001_user_agent.md.
+        headers = {"Content-Type": "application/json", "User-Agent": USER_AGENT}
         if self.api_key:
             headers["Authorization"] = f"Bearer {self.api_key}"
         req = urllib.request.Request(f"{self.base_url}/chat/completions",

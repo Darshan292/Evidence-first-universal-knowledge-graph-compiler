@@ -233,7 +233,9 @@ component library, and a second answering path.
    stated in the UI, not only here.
 2. **No live hosted-model test.** This environment's network policy blocks every
    OpenAI-compatible host tried. The transport is proven against a local server
-   (11 tests in `test_provider_transport.py`); the screenshots of the ANSWER
+   (12 tests in `test_provider_transport.py` — which proves the protocol, NOT
+   reachability: J-2 later found a real provider's CDN rejecting the request on
+   its User-Agent, see `eval/j2/DEFECT_001_user_agent.md`); the screenshots of the ANSWER
    view in `DEMO_0_2.md` were produced against a **scripted local stand-in that
    is not a language model**. Nothing here measures model quality.
 3. **Neighbourhood truncation is announced but crude** — the cap is on nodes,

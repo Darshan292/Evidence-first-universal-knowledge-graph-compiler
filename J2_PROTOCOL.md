@@ -17,11 +17,19 @@ evidence verifier (`kgc/evidence.py`), the deterministic structural checks, the
 identity rules (`kgq/retrieval.resolve_identity`), retrieval, or claim semantics
 (`kgc/predicates.py`).
 
-**One change was made**, under the §1 exception, and it is recorded separately in
+**Two changes were made outside the system's measured behaviour.** The first,
+under the §1 exception, is recorded separately in
 `eval/j2/DEFECT_001_user_agent.md` **before** it was applied: `kgq/provider.py`
 sent urllib's default `User-Agent`, which Groq's edge rejects with Cloudflare
 1010 → HTTP 403. That defect made the first run abstain 48/48 without reaching
-the model. It touches transport only. Run 1 was discarded, not reported.
+the model. It touches transport only. That run was discarded, not reported.
+The second is the harness checkpointing described in §9a, which is execution
+durability in the runner and touches nothing the system does.
+
+Two earlier runs are discarded and must not be used: the 403 User-Agent run,
+and `eval/j2/DISCARDED_run_429_rate_limited.json`, in which 43 of 48 questions
+abstained because Groq returned HTTP 429. Neither is merged into any reported
+result.
 
 ## 2. Corpus — fresh database
 
@@ -147,6 +155,40 @@ at temperature 0, is reported rather than hidden.
 `eval/j2/J2_DEMO_TARGETS.json` holds the Demo 0.1/0.2 target questions,
 including the flagship. The system was developed against them, so they measure
 regression, not generalisation. They run separately and are reported separately.
+
+## 9a. Harness amendment — per-question atomic checkpointing
+
+**Execution durability only. No system-under-test behaviour changed. No frozen
+evaluation input changed.**
+
+The runner originally wrote its result file once, after all 48 questions. An
+interruption therefore lost every completed in-memory result — a harness
+reliability problem, not a system result.
+
+`eval/j2/run_j2.py` now persists a checkpoint after **every** completed
+question, via write-to-temp → `fsync` → `os.replace`, so a killed process can
+never publish a half-written file. Each checkpoint carries the run label, the
+query/gold/corpus SHA-256s, the provider and model configuration, the frozen
+system-under-test identifier (compiler commit, schema version, demo version),
+the completed question ids, their results, cumulative usage, pacing seconds,
+rate-limit retries and a timestamp.
+
+`--resume` reloads a checkpoint and **refuses** unless the run label, query
+hash, gold hash, corpus hash, database, provider, model, temperature, budget
+and system-under-test identifier all match; it then skips completed ids and
+continues. Running over an existing checkpoint *without* `--resume` refuses
+rather than silently restarting from question 1. Completed results are never
+recomputed or altered on resume, and the final artifact holds all 48 results
+exactly once, in frozen query order.
+
+The database file's own hash is deliberately not a resume gate: the retriever
+builds its FTS index on first use, so the file legitimately changes during a
+run. The corpus content hash is what pins what was compiled.
+
+Verified by `eval/j2/test_harness_resume.py` against a deterministic **mock
+transport** — 32 checks covering survival of `SIGKILL`, both refusal paths, no
+re-asking, no alteration of completed results, and exactly 48 unique results.
+**That mock run is harness testing and is not a J-2 result.**
 
 ## 10. No tuning on test — §18
 

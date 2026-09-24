@@ -4,7 +4,7 @@
   "gold_sha256": "4e6b39b36a2ce1719d674e038e04fa0f0591425d36d4270c9091b7cfd7cb873a",
   "corpus_content_sha256": "19f4028a0a9f15b4e77d41ad489ee3368b72b309c9ac2836b1d34941fc32d35f",
   "database": "eval/j2/j2_run1.sqlite",
-  "database_sha256": "62137f53a4abfb35cdfcfad7e2335d286ecd06906f6460f8f2920fab159dac30",
+  "database_sha256": "9c66f91b58fdbbf88565458f6361e4f05b0b4af833ad1cee19bac16b20564ac3",
   "provider": {
     "base_url": "https://api.groq.com/openai/v1",
     "model": "openai/gpt-oss-120b",
@@ -17,24 +17,27 @@
     "max_context_chars": 24000,
     "max_spans": 6
   },
-  "started": "2026-09-24T05:29:32Z",
-  "total_seconds": 16.59,
+  "started": "2026-09-24T05:32:15Z",
+  "total_seconds": 37.53,
   "results": [
     {
       "question": "How do I hash a password with Werkzeug, and which algorithm does it pick if I don't specify one?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "the candidate answer failed deterministic validation 2 times and was not shown. Last reason: your reply did not satisfy the output contract: reply was not valid JSON: Expecting ',' delimiter: line 13 column 6 (char 884)",
       "intent": {
         "subject": "Werkzeug",
-        "requested_fact": "How do I hash a password with Werkzeug, and which algorithm does it pick if I don't specify one?",
-        "answer_type": "unknown",
+        "requested_fact": "how to hash a password and default algorithm used",
+        "answer_type": "behaviour",
         "scope": null,
         "ambiguous": false,
         "search_terms": [
-          "Werkzeug"
+          "Werkzeug",
+          "hash password",
+          "generate_password_hash",
+          "default algorithm"
         ],
-        "source": "deterministic"
+        "source": "model"
       },
       "subjects": [],
       "evidence": [
@@ -112,17 +115,47 @@
         }
       ],
       "structural_facts": [],
-      "claims": [],
-      "validation": {},
-      "attempts": 1,
-      "regenerations": 0,
+      "claims": [
+        {
+          "text": "To hash a password with Werkzeug, call werkzeug.security.generate_password_hash with the plaintext password.",
+          "evidence_ids": [
+            "3ad8d2f5689ad4e32b407e4b8a2511a9"
+          ],
+          "quote": "def generate_password_hash(\n    password: str, method: str = \"scrypt\", salt_length: int = 16\n) -> str:",
+          "structural_dependencies": []
+        },
+        {
+          "text": "The function returns a string containing the method, a salt, and the hash, separated by \"$\".",
+          "evidence_ids": [
+            "3ad8d2f5689ad4e32b407e4b8a2511a9"
+          ],
+          "quote": "return f\"{actual_method}\\${salt}\\${h}\"",
+          "structural_dependencies": []
+        },
+        {
+          "text": "If you do not specify a method, it defaults to the \"scrypt\" algorithm (using parameters 32768:8:1).",
+          "evidence_ids": [
+            "3ad8d2f5689ad4e32b407e4b8a2511a9",
+            "e34271a3b1f0e99c454df206ec672439"
+          ],
+          "quote": "def generate_password_hash(\n    password: str, method: str = \"scrypt\", salt_length: int = 16\n) -> str:",
+          "structural_dependencies": []
+        }
+      ],
+      "validation": {
+        "outcome": "REJECTED",
+        "reason": "your reply did not satisfy the output contract: reply was not valid JSON: Expecting ',' delimiter: line 13 column 6 (char 884)",
+        "claims": []
+      },
+      "attempts": 2,
+      "regenerations": 1,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 3,
+        "input_tokens": 4797,
+        "output_tokens": 2452,
         "cache_hits": 0,
-        "seconds": 0.0,
-        "regenerations": 0
+        "seconds": 6.709,
+        "regenerations": 1
       },
       "budget": {
         "interpretation_attempts": 1,
@@ -130,9 +163,9 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.895,
+      "latency_seconds": 6.822,
       "establishment": "PROPOSED",
-      "structural_status": "",
+      "structural_status": "NOT_APPLICABLE",
       "identity": {
         "scope": null,
         "names": [],
@@ -142,30 +175,34 @@
       "is_answer": false,
       "error": null,
       "id": "J2-001",
-      "wall_seconds": 0.921,
+      "wall_seconds": 6.837,
       "usage_delta": {
-        "input_tokens": 0,
-        "seconds": 0.0,
+        "llm_calls": 3,
+        "input_tokens": 4797,
+        "seconds": 6.709,
         "cache_hits": 0,
-        "llm_calls": 0,
-        "output_tokens": 0
+        "output_tokens": 2452
       }
     },
     {
       "question": "What exactly does safe_join reject, and does it care whether the file actually exists?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6756, Req'",
       "intent": {
         "subject": "safe_join",
-        "requested_fact": "What exactly does safe_join reject, and does it care whether the file actually exists?",
-        "answer_type": "unknown",
+        "requested_fact": "what conditions cause safe_join to reject and whether it checks file existence",
+        "answer_type": "behaviour",
         "scope": null,
-        "ambiguous": false,
+        "ambiguous": true,
         "search_terms": [
-          "safe_join"
+          "safe_join",
+          "reject",
+          "file existence",
+          "Flask",
+          "Django"
         ],
-        "source": "deterministic"
+        "source": "model"
       },
       "subjects": [
         {
@@ -372,11 +409,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 4,
+        "input_tokens": 5037,
+        "output_tokens": 2742,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 7.721,
         "regenerations": 0
       },
       "budget": {
@@ -385,7 +422,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.349,
+      "latency_seconds": 1.277,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -405,20 +442,20 @@
       "is_answer": false,
       "error": null,
       "id": "J2-002",
-      "wall_seconds": 0.349,
+      "wall_seconds": 1.278,
       "usage_delta": {
-        "input_tokens": 0,
-        "seconds": 0.0,
+        "llm_calls": 1,
+        "input_tokens": 240,
+        "seconds": 1.0120000000000005,
         "cache_hits": 0,
-        "llm_calls": 0,
-        "output_tokens": 0
+        "output_tokens": 290
       }
     },
     {
       "question": "redirect() gives me a 303 now where it used to give 302. What's the reasoning behind that change?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7139, Req'",
       "intent": {
         "subject": null,
         "requested_fact": "redirect() gives me a 303 now where it used to give 302. What's the reasoning behind that change?",
@@ -509,11 +546,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 5,
+        "input_tokens": 5283,
+        "output_tokens": 3042,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 8.684,
         "regenerations": 0
       },
       "budget": {
@@ -522,7 +559,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.329,
+      "latency_seconds": 1.223,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -534,28 +571,33 @@
       "is_answer": false,
       "error": null,
       "id": "J2-003",
-      "wall_seconds": 0.329,
+      "wall_seconds": 1.224,
       "usage_delta": {
-        "input_tokens": 0,
-        "seconds": 0.0,
+        "llm_calls": 1,
+        "input_tokens": 246,
+        "seconds": 0.9629999999999992,
         "cache_hits": 0,
-        "llm_calls": 0,
-        "output_tokens": 0
+        "output_tokens": 300
       }
     },
     {
       "question": "If I need the client to repeat a POST against the new location instead of switching to GET, which redirect status should I use?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7494, Req'",
       "intent": {
-        "subject": null,
-        "requested_fact": "If I need the client to repeat a POST against the new location instead of switching to GET, which redirect status should I use?",
-        "answer_type": "unknown",
+        "subject": "redirect status",
+        "requested_fact": "which redirect status to use to repeat POST instead of switching to GET",
+        "answer_type": "value",
         "scope": null,
         "ambiguous": false,
-        "search_terms": [],
-        "source": "deterministic"
+        "search_terms": [
+          "HTTP redirect status POST repeat",
+          "307 Temporary Redirect",
+          "308 Permanent Redirect",
+          "POST redirect status code"
+        ],
+        "source": "model"
       },
       "subjects": [],
       "evidence": [
@@ -638,11 +680,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 6,
+        "input_tokens": 5532,
+        "output_tokens": 3307,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 9.681,
         "regenerations": 0
       },
       "budget": {
@@ -651,7 +693,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.333,
+      "latency_seconds": 1.279,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -663,31 +705,34 @@
       "is_answer": false,
       "error": null,
       "id": "J2-004",
-      "wall_seconds": 0.334,
+      "wall_seconds": 1.28,
       "usage_delta": {
-        "input_tokens": 0,
-        "seconds": 0.0,
+        "llm_calls": 1,
+        "input_tokens": 249,
+        "seconds": 0.9969999999999999,
         "cache_hits": 0,
-        "llm_calls": 0,
-        "output_tokens": 0
+        "output_tokens": 265
       }
     },
     {
       "question": "what's the difference between strict_slashes and merge_slashes",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7815, Req'",
       "intent": {
         "subject": "strict_slashes",
-        "requested_fact": "what's the difference between strict_slashes and merge_slashes",
-        "answer_type": "unknown",
+        "requested_fact": "difference between strict_slashes and merge_slashes",
+        "answer_type": "definition",
         "scope": null,
         "ambiguous": false,
         "search_terms": [
           "strict_slashes",
-          "merge_slashes"
+          "merge_slashes",
+          "Flask",
+          "Werkzeug",
+          "routing"
         ],
-        "source": "deterministic"
+        "source": "model"
       },
       "subjects": [
         {
@@ -781,11 +826,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 7,
+        "input_tokens": 5766,
+        "output_tokens": 3554,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 10.557,
         "regenerations": 0
       },
       "budget": {
@@ -794,7 +839,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.354,
+      "latency_seconds": 1.166,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -814,20 +859,20 @@
       "is_answer": false,
       "error": null,
       "id": "J2-005",
-      "wall_seconds": 0.355,
+      "wall_seconds": 1.167,
       "usage_delta": {
-        "input_tokens": 0,
-        "seconds": 0.0,
+        "llm_calls": 1,
+        "input_tokens": 234,
+        "seconds": 0.8760000000000012,
         "cache_hits": 0,
-        "llm_calls": 0,
-        "output_tokens": 0
+        "output_tokens": 247
       }
     },
     {
       "question": "If I accidentally add the same rule to a Map twice, does anything complain or does one of them just silently never match?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7744, Req'",
       "intent": {
         "subject": "Map",
         "requested_fact": "If I accidentally add the same rule to a Map twice, does anything complain or does one of them just silently never match?",
@@ -890,11 +935,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 7,
+        "input_tokens": 5766,
+        "output_tokens": 3554,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 10.557,
         "regenerations": 0
       },
       "budget": {
@@ -903,7 +948,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.366,
+      "latency_seconds": 0.488,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -923,12 +968,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-006",
-      "wall_seconds": 0.366,
+      "wall_seconds": 0.489,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -936,7 +981,7 @@
       "question": "When two rules could both match the same path, how does the router decide which one wins?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7655, Req'",
       "intent": {
         "subject": null,
         "requested_fact": "When two rules could both match the same path, how does the router decide which one wins?",
@@ -1027,11 +1072,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 7,
+        "input_tokens": 5766,
+        "output_tokens": 3554,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 10.557,
         "regenerations": 0
       },
       "budget": {
@@ -1040,7 +1085,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.316,
+      "latency_seconds": 0.67,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -1052,12 +1097,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-007",
-      "wall_seconds": 0.316,
+      "wall_seconds": 0.671,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -1065,7 +1110,7 @@
       "question": "I want a URL converter that can match a value containing slashes. How do I write one, and what does part_isolating have to do with it?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7562, Req'",
       "intent": {
         "subject": "part_isolating",
         "requested_fact": "I want a URL converter that can match a value containing slashes. How do I write one, and what does part_isolating have to do with it?",
@@ -1110,11 +1155,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 7,
+        "input_tokens": 5766,
+        "output_tokens": 3554,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 10.557,
         "regenerations": 0
       },
       "budget": {
@@ -1123,7 +1168,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.351,
+      "latency_seconds": 0.697,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -1135,12 +1180,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-008",
-      "wall_seconds": 0.352,
+      "wall_seconds": 0.698,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -1148,7 +1193,7 @@
       "question": "Why does the int converter refuse non-ASCII digits?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7508, Req'",
       "intent": {
         "subject": null,
         "requested_fact": "Why does the int converter refuse non-ASCII digits?",
@@ -1239,11 +1284,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 7,
+        "input_tokens": 5766,
+        "output_tokens": 3554,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 10.557,
         "regenerations": 0
       },
       "budget": {
@@ -1252,7 +1297,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.314,
+      "latency_seconds": 0.405,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -1264,12 +1309,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-009",
-      "wall_seconds": 0.315,
+      "wall_seconds": 0.406,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -1277,7 +1322,7 @@
       "question": "Sometimes build() returns just a path and sometimes a full URL with scheme and host. What decides that?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7881, Req'",
       "intent": {
         "subject": "Sometimes",
         "requested_fact": "Sometimes build() returns just a path and sometimes a full URL with scheme and host. What decides that?",
@@ -1358,11 +1403,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 8,
+        "input_tokens": 6010,
+        "output_tokens": 3854,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 11.53,
         "regenerations": 0
       },
       "budget": {
@@ -1371,7 +1416,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.327,
+      "latency_seconds": 1.286,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -1383,20 +1428,20 @@
       "is_answer": false,
       "error": null,
       "id": "J2-010",
-      "wall_seconds": 0.328,
+      "wall_seconds": 1.287,
       "usage_delta": {
-        "input_tokens": 0,
-        "seconds": 0.0,
+        "llm_calls": 1,
+        "input_tokens": 244,
+        "seconds": 0.972999999999999,
         "cache_hits": 0,
-        "llm_calls": 0,
-        "output_tokens": 0
+        "output_tokens": 300
       }
     },
     {
       "question": "Where does the \"Did you mean ... instead?\" text in a BuildError come from?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7811, Req'",
       "intent": {
         "subject": "Did",
         "requested_fact": "Where does the \"Did you mean ... instead?\" text in a BuildError come from?",
@@ -1523,11 +1568,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 8,
+        "input_tokens": 6010,
+        "output_tokens": 3854,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 11.53,
         "regenerations": 0
       },
       "budget": {
@@ -1536,7 +1581,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.394,
+      "latency_seconds": 0.518,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -1556,12 +1601,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-011",
-      "wall_seconds": 0.395,
+      "wall_seconds": 0.519,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -1569,7 +1614,7 @@
       "question": "Can I have host matching and subdomain matching switched on at the same time?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7762, Req'",
       "intent": {
         "subject": null,
         "requested_fact": "Can I have host matching and subdomain matching switched on at the same time?",
@@ -1648,11 +1693,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 8,
+        "input_tokens": 6010,
+        "output_tokens": 3854,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 11.53,
         "regenerations": 0
       },
       "budget": {
@@ -1661,7 +1706,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.331,
+      "latency_seconds": 0.418,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -1673,12 +1718,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-012",
-      "wall_seconds": 0.332,
+      "wall_seconds": 0.419,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -1686,7 +1731,7 @@
       "question": "There are several things called match in the routing package. Which one is the one that actually walks the rules and extracts the values?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7703, Req'",
       "intent": {
         "subject": null,
         "requested_fact": "There are several things called match in the routing package. Which one is the one that actually walks the rules and extracts the values?",
@@ -1777,11 +1822,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 8,
+        "input_tokens": 6010,
+        "output_tokens": 3854,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 11.53,
         "regenerations": 0
       },
       "budget": {
@@ -1790,7 +1835,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.33,
+      "latency_seconds": 0.438,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -1802,12 +1847,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-013",
-      "wall_seconds": 0.331,
+      "wall_seconds": 0.439,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -1815,7 +1860,7 @@
       "question": "What happens when the Host header of a request isn't a suffix of the server_name I passed to bind_to_environ?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7629, Req'",
       "intent": {
         "subject": "Host",
         "requested_fact": "What happens when the Host header of a request isn't a suffix of the server_name I passed to bind_to_environ?",
@@ -2118,11 +2163,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 8,
+        "input_tokens": 6010,
+        "output_tokens": 3854,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 11.53,
         "regenerations": 0
       },
       "budget": {
@@ -2131,7 +2176,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.462,
+      "latency_seconds": 0.513,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -2158,12 +2203,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-014",
-      "wall_seconds": 0.463,
+      "wall_seconds": 0.514,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -2171,7 +2216,7 @@
       "question": "What's the right way to stop a client sending me a request body that's too big to handle?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7571, Req'",
       "intent": {
         "subject": null,
         "requested_fact": "What's the right way to stop a client sending me a request body that's too big to handle?",
@@ -2262,11 +2307,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 8,
+        "input_tokens": 6010,
+        "output_tokens": 3854,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 11.53,
         "regenerations": 0
       },
       "budget": {
@@ -2275,7 +2320,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.317,
+      "latency_seconds": 0.432,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -2287,12 +2332,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-015",
-      "wall_seconds": 0.318,
+      "wall_seconds": 0.432,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -2300,7 +2345,7 @@
       "question": "max_content_length, max_form_memory_size, max_form_parts \u2014 do I really need all three, and what does each one actually stop?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7509, Req'",
       "intent": {
         "subject": "max_content_length",
         "requested_fact": "max_content_length, max_form_memory_size, max_form_parts \u2014 do I really need all three, and what does each one actually stop?",
@@ -2359,11 +2404,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 8,
+        "input_tokens": 6010,
+        "output_tokens": 3854,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 11.53,
         "regenerations": 0
       },
       "budget": {
@@ -2372,7 +2417,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.396,
+      "latency_seconds": 0.465,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -2384,12 +2429,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-016",
-      "wall_seconds": 0.396,
+      "wall_seconds": 0.466,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -2397,7 +2442,7 @@
       "question": "When someone uploads a file, is it buffered in memory or written to a temp file, and at what point does it switch?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7448, Req'",
       "intent": {
         "subject": null,
         "requested_fact": "When someone uploads a file, is it buffered in memory or written to a temp file, and at what point does it switch?",
@@ -2488,11 +2533,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 8,
+        "input_tokens": 6010,
+        "output_tokens": 3854,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 11.53,
         "regenerations": 0
       },
       "budget": {
@@ -2501,7 +2546,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.318,
+      "latency_seconds": 0.47,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -2513,12 +2558,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-017",
-      "wall_seconds": 0.319,
+      "wall_seconds": 0.471,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -2528,16 +2573,19 @@
       "answer": "",
       "abstain_reason": "'request.stream' resolves to 2 symbols (werkzeug.wrappers.request.Request.stream, werkzeug.wrappers.response.Response.stream) and nothing in the question picks one. Name it in full, or add the file it is in.",
       "intent": {
-        "subject": "request.stream",
-        "requested_fact": "I read from request.stream and afterwards request.form came back empty. Why?",
-        "answer_type": "unknown",
+        "subject": "request",
+        "requested_fact": "reading request.stream clears request.form",
+        "answer_type": "behaviour",
         "scope": null,
         "ambiguous": false,
         "search_terms": [
           "request.stream",
-          "request.form"
+          "request.form",
+          "empty",
+          "read",
+          "why"
         ],
-        "source": "deterministic"
+        "source": "model"
       },
       "subjects": [],
       "evidence": [],
@@ -2547,11 +2595,11 @@
       "attempts": 0,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 9,
+        "input_tokens": 6248,
+        "output_tokens": 4107,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 12.452,
         "regenerations": 0
       },
       "budget": {
@@ -2560,7 +2608,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.159,
+      "latency_seconds": 0.929,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -2606,20 +2654,20 @@
       "is_answer": false,
       "error": null,
       "id": "J2-018",
-      "wall_seconds": 0.159,
+      "wall_seconds": 0.929,
       "usage_delta": {
-        "input_tokens": 0,
-        "seconds": 0.0,
+        "llm_calls": 1,
+        "input_tokens": 238,
+        "seconds": 0.9220000000000006,
         "cache_hits": 0,
-        "llm_calls": 0,
-        "output_tokens": 0
+        "output_tokens": 253
       }
     },
     {
       "question": "What actually raises ClientDisconnected, and can I rely on it?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7754, Req'",
       "intent": {
         "subject": "ClientDisconnected",
         "requested_fact": "What actually raises ClientDisconnected, and can I rely on it?",
@@ -2732,11 +2780,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 9,
+        "input_tokens": 6248,
+        "output_tokens": 4107,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 12.452,
         "regenerations": 0
       },
       "budget": {
@@ -2745,7 +2793,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.343,
+      "latency_seconds": 0.449,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -2765,12 +2813,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-019",
-      "wall_seconds": 0.344,
+      "wall_seconds": 0.45,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -2778,7 +2826,7 @@
       "question": "Why does the development server read and discard whatever is left on the socket after the application has finished?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7697, Req'",
       "intent": {
         "subject": null,
         "requested_fact": "Why does the development server read and discard whatever is left on the socket after the application has finished?",
@@ -2869,11 +2917,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 9,
+        "input_tokens": 6248,
+        "output_tokens": 4107,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 12.452,
         "regenerations": 0
       },
       "budget": {
@@ -2882,7 +2930,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.324,
+      "latency_seconds": 0.427,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -2894,12 +2942,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-020",
-      "wall_seconds": 0.325,
+      "wall_seconds": 0.428,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -2907,7 +2955,7 @@
       "question": "Does the built-in development server support HTTP/1.1 keep-alive?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7645, Req'",
       "intent": {
         "subject": null,
         "requested_fact": "Does the built-in development server support HTTP/1.1 keep-alive?",
@@ -2998,11 +3046,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 9,
+        "input_tokens": 6248,
+        "output_tokens": 4107,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 12.452,
         "regenerations": 0
       },
       "budget": {
@@ -3011,7 +3059,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.317,
+      "latency_seconds": 0.391,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -3023,12 +3071,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-021",
-      "wall_seconds": 0.317,
+      "wall_seconds": 0.392,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -3036,7 +3084,7 @@
       "question": "How does the dev server handle a request sent with Transfer-Encoding: chunked?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7580, Req'",
       "intent": {
         "subject": "Transfer",
         "requested_fact": "How does the dev server handle a request sent with Transfer-Encoding: chunked?",
@@ -3130,11 +3178,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 9,
+        "input_tokens": 6248,
+        "output_tokens": 4107,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 12.452,
         "regenerations": 0
       },
       "budget": {
@@ -3143,7 +3191,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.321,
+      "latency_seconds": 0.482,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -3155,12 +3203,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-022",
-      "wall_seconds": 0.321,
+      "wall_seconds": 0.484,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -3168,7 +3216,7 @@
       "question": "Where does the debugger PIN come from, is it stable across restarts, and can I turn it off?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7518, Req'",
       "intent": {
         "subject": null,
         "requested_fact": "Where does the debugger PIN come from, is it stable across restarts, and can I turn it off?",
@@ -3259,11 +3307,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 9,
+        "input_tokens": 6248,
+        "output_tokens": 4107,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 12.452,
         "regenerations": 0
       },
       "budget": {
@@ -3272,7 +3320,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.322,
+      "latency_seconds": 0.468,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -3284,12 +3332,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-023",
-      "wall_seconds": 0.323,
+      "wall_seconds": 0.469,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -3297,15 +3345,20 @@
       "question": "Can I open the interactive debugger console from a machine other than the one running the server?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7839, Req'",
       "intent": {
-        "subject": null,
-        "requested_fact": "Can I open the interactive debugger console from a machine other than the one running the server?",
-        "answer_type": "unknown",
+        "subject": "interactive debugger console",
+        "requested_fact": "whether it can be opened from a remote machine",
+        "answer_type": "behaviour",
         "scope": null,
-        "ambiguous": false,
-        "search_terms": [],
-        "source": "deterministic"
+        "ambiguous": true,
+        "search_terms": [
+          "interactive debugger console remote access",
+          "open debugger console from another machine",
+          "remote debugging console",
+          "debugger console network access"
+        ],
+        "source": "model"
       },
       "subjects": [],
       "evidence": [
@@ -3388,11 +3441,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 10,
+        "input_tokens": 6489,
+        "output_tokens": 4349,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 13.404,
         "regenerations": 0
       },
       "budget": {
@@ -3401,7 +3454,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.341,
+      "latency_seconds": 1.223,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -3413,20 +3466,20 @@
       "is_answer": false,
       "error": null,
       "id": "J2-024",
-      "wall_seconds": 0.342,
+      "wall_seconds": 1.224,
       "usage_delta": {
-        "input_tokens": 0,
-        "seconds": 0.0,
+        "llm_calls": 1,
+        "input_tokens": 241,
+        "seconds": 0.952,
         "cache_hits": 0,
-        "llm_calls": 0,
-        "output_tokens": 0
+        "output_tokens": 242
       }
     },
     {
       "question": "Why doesn't the interactive debugger work with a forking server?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7782, Req'",
       "intent": {
         "subject": null,
         "requested_fact": "Why doesn't the interactive debugger work with a forking server?",
@@ -3517,11 +3570,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 10,
+        "input_tokens": 6489,
+        "output_tokens": 4349,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 13.404,
         "regenerations": 0
       },
       "budget": {
@@ -3530,7 +3583,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.311,
+      "latency_seconds": 0.426,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -3542,12 +3595,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-025",
-      "wall_seconds": 0.312,
+      "wall_seconds": 0.427,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -3555,7 +3608,7 @@
       "question": "Which reloader backend gets used by default, and how do I force it to use watchdog?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7722, Req'",
       "intent": {
         "subject": null,
         "requested_fact": "Which reloader backend gets used by default, and how do I force it to use watchdog?",
@@ -3646,11 +3699,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 10,
+        "input_tokens": 6489,
+        "output_tokens": 4349,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 13.404,
         "regenerations": 0
       },
       "budget": {
@@ -3659,7 +3712,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.331,
+      "latency_seconds": 0.448,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -3671,12 +3724,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-026",
-      "wall_seconds": 0.331,
+      "wall_seconds": 0.449,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -3684,7 +3737,7 @@
       "question": "Will the reloader notice changes to files that aren't Python, like a Jinja template or a config.yaml?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7652, Req'",
       "intent": {
         "subject": "Will",
         "requested_fact": "Will the reloader notice changes to files that aren't Python, like a Jinja template or a config.yaml?",
@@ -3780,11 +3833,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 10,
+        "input_tokens": 6489,
+        "output_tokens": 4349,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 13.404,
         "regenerations": 0
       },
       "budget": {
@@ -3793,7 +3846,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.35,
+      "latency_seconds": 0.526,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -3805,12 +3858,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-027",
-      "wall_seconds": 0.351,
+      "wall_seconds": 0.527,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -3818,7 +3871,7 @@
       "question": "Roughly how much CPU does the stat reloader burn on a project with a few thousand files compared to watchdog?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7590, Req'",
       "intent": {
         "subject": "Roughly",
         "requested_fact": "Roughly how much CPU does the stat reloader burn on a project with a few thousand files compared to watchdog?",
@@ -3911,11 +3964,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 10,
+        "input_tokens": 6489,
+        "output_tokens": 4349,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 13.404,
         "regenerations": 0
       },
       "budget": {
@@ -3924,7 +3977,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.354,
+      "latency_seconds": 0.459,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -3936,12 +3989,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-028",
-      "wall_seconds": 0.355,
+      "wall_seconds": 0.46,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -3949,7 +4002,7 @@
       "question": "Would it be reasonable to run run_simple with threaded=True for a small internal tool sitting behind nginx?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7513, Req'",
       "intent": {
         "subject": "Would",
         "requested_fact": "Would it be reasonable to run run_simple with threaded=True for a small internal tool sitting behind nginx?",
@@ -4287,11 +4340,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 10,
+        "input_tokens": 6489,
+        "output_tokens": 4349,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 13.404,
         "regenerations": 0
       },
       "budget": {
@@ -4300,7 +4353,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.448,
+      "latency_seconds": 0.584,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -4320,12 +4373,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-029",
-      "wall_seconds": 0.449,
+      "wall_seconds": 0.585,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -4333,7 +4386,7 @@
       "question": "What is a LocalProxy for, and when do I have to reach for _get_current_object()?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7444, Req'",
       "intent": {
         "subject": "LocalProxy",
         "requested_fact": "What is a LocalProxy for, and when do I have to reach for _get_current_object()?",
@@ -4558,11 +4611,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 10,
+        "input_tokens": 6489,
+        "output_tokens": 4349,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 13.404,
         "regenerations": 0
       },
       "budget": {
@@ -4571,7 +4624,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.431,
+      "latency_seconds": 0.574,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -4598,12 +4651,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-030",
-      "wall_seconds": 0.431,
+      "wall_seconds": 0.575,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -4611,18 +4664,21 @@
       "question": "isinstance(user, User) returns True even though user is a proxy. How is that pulled off?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7780, Req'",
       "intent": {
         "subject": "User",
-        "requested_fact": "isinstance(user, User) returns True even though user is a proxy. How is that pulled off?",
-        "answer_type": "unknown",
+        "requested_fact": "how isinstance returns True for a proxy object",
+        "answer_type": "behaviour",
         "scope": null,
         "ambiguous": false,
         "search_terms": [
-          "User",
-          "True"
+          "isinstance",
+          "proxy object",
+          "User class",
+          "Python isinstance proxy",
+          "type checking proxy"
         ],
-        "source": "deterministic"
+        "source": "model"
       },
       "subjects": [],
       "evidence": [
@@ -4705,11 +4761,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 11,
+        "input_tokens": 6732,
+        "output_tokens": 4593,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 14.206,
         "regenerations": 0
       },
       "budget": {
@@ -4718,7 +4774,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.342,
+      "latency_seconds": 1.068,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -4730,20 +4786,20 @@
       "is_answer": false,
       "error": null,
       "id": "J2-031",
-      "wall_seconds": 0.342,
+      "wall_seconds": 1.069,
       "usage_delta": {
-        "input_tokens": 0,
-        "seconds": 0.0,
+        "llm_calls": 1,
+        "input_tokens": 243,
+        "seconds": 0.8019999999999996,
         "cache_hits": 0,
-        "llm_calls": 0,
-        "output_tokens": 0
+        "output_tokens": 244
       }
     },
     {
       "question": "Is Local per-thread or per-context? I need to know whether it survives an await.",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7718, Req'",
       "intent": {
         "subject": "Local",
         "requested_fact": "Is Local per-thread or per-context? I need to know whether it survives an await.",
@@ -4842,11 +4898,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 11,
+        "input_tokens": 6732,
+        "output_tokens": 4593,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 14.206,
         "regenerations": 0
       },
       "budget": {
@@ -4855,7 +4911,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.351,
+      "latency_seconds": 0.47,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -4875,12 +4931,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-032",
-      "wall_seconds": 0.352,
+      "wall_seconds": 0.471,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -4888,7 +4944,7 @@
       "question": "The Local docstring mentions a performance penalty from copying. What's it copying and why?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7619, Req'",
       "intent": {
         "subject": "Local",
         "requested_fact": "The Local docstring mentions a performance penalty from copying. What's it copying and why?",
@@ -4987,11 +5043,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 11,
+        "input_tokens": 6732,
+        "output_tokens": 4593,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 14.206,
         "regenerations": 0
       },
       "budget": {
@@ -5000,7 +5056,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.324,
+      "latency_seconds": 0.738,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -5020,12 +5076,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-033",
-      "wall_seconds": 0.325,
+      "wall_seconds": 0.74,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -5033,7 +5089,7 @@
       "question": "Why is there a MultiDict at all instead of just a plain dict of lists, and when does getlist actually matter?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7552, Req'",
       "intent": {
         "subject": "MultiDict",
         "requested_fact": "Why is there a MultiDict at all instead of just a plain dict of lists, and when does getlist actually matter?",
@@ -5120,11 +5176,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 11,
+        "input_tokens": 6732,
+        "output_tokens": 4593,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 14.206,
         "regenerations": 0
       },
       "budget": {
@@ -5133,7 +5189,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.35,
+      "latency_seconds": 0.5,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -5153,12 +5209,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-034",
-      "wall_seconds": 0.351,
+      "wall_seconds": 0.501,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -5166,7 +5222,7 @@
       "question": "The class is called Accept but its docstring talks about Accept-Encoding. Which header is it for?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7457, Req'",
       "intent": {
         "subject": "Accept",
         "requested_fact": "The class is called Accept but its docstring talks about Accept-Encoding. Which header is it for?",
@@ -5266,11 +5322,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 11,
+        "input_tokens": 6732,
+        "output_tokens": 4593,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 14.206,
         "regenerations": 0
       },
       "budget": {
@@ -5279,7 +5335,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.364,
+      "latency_seconds": 0.713,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -5299,12 +5355,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-035",
-      "wall_seconds": 0.365,
+      "wall_seconds": 0.714,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -5312,17 +5368,21 @@
       "question": "How do I set a SameSite cookie, and what values will it let me use?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7736, Req'",
       "intent": {
-        "subject": "SameSite",
-        "requested_fact": "How do I set a SameSite cookie, and what values will it let me use?",
-        "answer_type": "unknown",
+        "subject": "SameSite cookie",
+        "requested_fact": "how to set a SameSite cookie and what values are allowed",
+        "answer_type": "behaviour",
         "scope": null,
         "ambiguous": false,
         "search_terms": [
-          "SameSite"
+          "SameSite",
+          "cookie",
+          "set SameSite attribute",
+          "allowed SameSite values",
+          "SameSite cookie values"
         ],
-        "source": "deterministic"
+        "source": "model"
       },
       "subjects": [],
       "evidence": [
@@ -5405,11 +5465,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 12,
+        "input_tokens": 6973,
+        "output_tokens": 4849,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 15.387,
         "regenerations": 0
       },
       "budget": {
@@ -5418,7 +5478,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.359,
+      "latency_seconds": 1.638,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -5430,20 +5490,20 @@
       "is_answer": false,
       "error": null,
       "id": "J2-036",
-      "wall_seconds": 0.36,
+      "wall_seconds": 1.639,
       "usage_delta": {
-        "input_tokens": 0,
-        "seconds": 0.0,
+        "llm_calls": 1,
+        "input_tokens": 241,
+        "seconds": 1.181000000000001,
         "cache_hits": 0,
-        "llm_calls": 0,
-        "output_tokens": 0
+        "output_tokens": 256
       }
     },
     {
       "question": "Why do some of my cookie values come back with backslash-octal escapes in them?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7682, Req'",
       "intent": {
         "subject": null,
         "requested_fact": "Why do some of my cookie values come back with backslash-octal escapes in them?",
@@ -5534,11 +5594,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 12,
+        "input_tokens": 6973,
+        "output_tokens": 4849,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 15.387,
         "regenerations": 0
       },
       "budget": {
@@ -5547,7 +5607,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.334,
+      "latency_seconds": 0.459,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -5559,12 +5619,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-037",
-      "wall_seconds": 0.335,
+      "wall_seconds": 0.46,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -5572,7 +5632,7 @@
       "question": "Werkzeug warned me that a cookie is too large. Where does that size limit come from, and does the cookie still get sent?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7610, Req'",
       "intent": {
         "subject": "Werkzeug",
         "requested_fact": "Werkzeug warned me that a cookie is too large. Where does that size limit come from, and does the cookie still get sent?",
@@ -5665,11 +5725,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 12,
+        "input_tokens": 6973,
+        "output_tokens": 4849,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 15.387,
         "regenerations": 0
       },
       "budget": {
@@ -5678,7 +5738,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.322,
+      "latency_seconds": 0.483,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -5690,12 +5750,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-038",
-      "wall_seconds": 0.323,
+      "wall_seconds": 0.484,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -5703,7 +5763,7 @@
       "question": "What does ProxyFix actually rewrite in the environ, and why do I have to give it a count for each header rather than just switching it on?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7532, Req'",
       "intent": {
         "subject": "ProxyFix",
         "requested_fact": "What does ProxyFix actually rewrite in the environ, and why do I have to give it a count for each header rather than just switching it on?",
@@ -5802,11 +5862,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 12,
+        "input_tokens": 6973,
+        "output_tokens": 4849,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 15.387,
         "regenerations": 0
       },
       "budget": {
@@ -5815,7 +5875,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.357,
+      "latency_seconds": 0.581,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -5835,12 +5895,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-039",
-      "wall_seconds": 0.358,
+      "wall_seconds": 0.582,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -5848,7 +5908,7 @@
       "question": "make_conditional \u2014 how does it decide between sending a 304 and a 412?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7461, Req'",
       "intent": {
         "subject": "make_conditional",
         "requested_fact": "make_conditional \u2014 how does it decide between sending a 304 and a 412?",
@@ -6053,11 +6113,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 12,
+        "input_tokens": 6973,
+        "output_tokens": 4849,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 15.387,
         "regenerations": 0
       },
       "budget": {
@@ -6066,7 +6126,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.407,
+      "latency_seconds": 0.528,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -6086,12 +6146,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-040",
-      "wall_seconds": 0.408,
+      "wall_seconds": 0.529,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -6102,14 +6162,18 @@
       "abstain_reason": "'generate_etag' resolves to 2 symbols (werkzeug.http.generate_etag, werkzeug.middleware.shared_data.SharedDataMiddleware.generate_etag) and nothing in the question picks one. Name it in full, or add the file it is in.",
       "intent": {
         "subject": "generate_etag",
-        "requested_fact": "Which hash does generate_etag use, and why not MD5 or SHA-1?",
-        "answer_type": "unknown",
+        "requested_fact": "hash algorithm used and reason for not using MD5 or SHA-1",
+        "answer_type": "behaviour",
         "scope": null,
         "ambiguous": false,
         "search_terms": [
-          "generate_etag"
+          "generate_etag",
+          "hash",
+          "MD5",
+          "SHA-1",
+          "etag"
         ],
-        "source": "deterministic"
+        "source": "model"
       },
       "subjects": [],
       "evidence": [],
@@ -6119,11 +6183,11 @@
       "attempts": 0,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 13,
+        "input_tokens": 7214,
+        "output_tokens": 5065,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 16.334,
         "regenerations": 0
       },
       "budget": {
@@ -6132,7 +6196,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.16,
+      "latency_seconds": 0.951,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -6162,13 +6226,13 @@
       "is_answer": false,
       "error": null,
       "id": "J2-041",
-      "wall_seconds": 0.16,
+      "wall_seconds": 0.951,
       "usage_delta": {
-        "input_tokens": 0,
-        "seconds": 0.0,
+        "llm_calls": 1,
+        "input_tokens": 241,
+        "seconds": 0.9469999999999992,
         "cache_hits": 0,
-        "llm_calls": 0,
-        "output_tokens": 0
+        "output_tokens": 216
       }
     },
     {
@@ -6197,11 +6261,11 @@
       "attempts": 0,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 13,
+        "input_tokens": 7214,
+        "output_tokens": 5065,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 16.334,
         "regenerations": 0
       },
       "budget": {
@@ -6210,7 +6274,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.161,
+      "latency_seconds": 0.198,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -6248,12 +6312,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-042",
-      "wall_seconds": 0.162,
+      "wall_seconds": 0.198,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -6261,7 +6325,7 @@
       "question": "Is there a shortcut for posting JSON with the test client instead of serialising the body myself?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7699, Req'",
       "intent": {
         "subject": null,
         "requested_fact": "Is there a shortcut for posting JSON with the test client instead of serialising the body myself?",
@@ -6352,11 +6416,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 13,
+        "input_tokens": 7214,
+        "output_tokens": 5065,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 16.334,
         "regenerations": 0
       },
       "budget": {
@@ -6365,7 +6429,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.325,
+      "latency_seconds": 0.505,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -6377,12 +6441,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-043",
-      "wall_seconds": 0.326,
+      "wall_seconds": 0.506,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -6390,7 +6454,7 @@
       "question": "Does the test client hold on to cookies between requests, and can I look at what it has stored?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7639, Req'",
       "intent": {
         "subject": null,
         "requested_fact": "Does the test client hold on to cookies between requests, and can I look at what it has stored?",
@@ -6481,11 +6545,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 13,
+        "input_tokens": 7214,
+        "output_tokens": 5065,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 16.334,
         "regenerations": 0
       },
       "budget": {
@@ -6494,7 +6558,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.339,
+      "latency_seconds": 0.457,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -6506,12 +6570,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-044",
-      "wall_seconds": 0.339,
+      "wall_seconds": 0.458,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -6519,7 +6583,7 @@
       "question": "Can the test client follow a redirect that points at a different host?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7577, Req'",
       "intent": {
         "subject": null,
         "requested_fact": "Can the test client follow a redirect that points at a different host?",
@@ -6610,11 +6674,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 13,
+        "input_tokens": 7214,
+        "output_tokens": 5065,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 16.334,
         "regenerations": 0
       },
       "budget": {
@@ -6623,7 +6687,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.326,
+      "latency_seconds": 0.455,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -6635,12 +6699,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-045",
-      "wall_seconds": 0.327,
+      "wall_seconds": 0.456,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -6648,7 +6712,7 @@
       "question": "There's a whole pile of things marked deprecated in 3.2 and due for removal in 3.3. What's the overall direction of that cleanup?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7529, Req'",
       "intent": {
         "subject": null,
         "requested_fact": "There's a whole pile of things marked deprecated in 3.2 and due for removal in 3.3. What's the overall direction of that cleanup?",
@@ -6739,11 +6803,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 13,
+        "input_tokens": 7214,
+        "output_tokens": 5065,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 16.334,
         "regenerations": 0
       },
       "budget": {
@@ -6752,7 +6816,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.314,
+      "latency_seconds": 0.405,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -6764,12 +6828,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-046",
-      "wall_seconds": 0.315,
+      "wall_seconds": 0.406,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     },
@@ -6780,14 +6844,17 @@
       "abstain_reason": "'Request' resolves to 5 symbols (coolmagic.utils.Request, i18nurls.application.Request, simplewiki.utils.Request...) and nothing in the question picks one. Name it in full, or add the file it is in.",
       "intent": {
         "subject": "Request",
-        "requested_fact": "Why are there two Request classes, one under sansio and one under wrappers, and which one am I supposed to subclass?",
-        "answer_type": "unknown",
+        "requested_fact": "difference between sansio.Request and wrappers.Request and which to subclass",
+        "answer_type": "relationship",
         "scope": null,
         "ambiguous": false,
         "search_terms": [
-          "Request"
+          "sansio Request",
+          "wrappers Request",
+          "subclass Request",
+          "two Request classes"
         ],
-        "source": "deterministic"
+        "source": "model"
       },
       "subjects": [],
       "evidence": [],
@@ -6797,11 +6864,11 @@
       "attempts": 0,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 14,
+        "input_tokens": 7462,
+        "output_tokens": 5317,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 17.217,
         "regenerations": 0
       },
       "budget": {
@@ -6810,7 +6877,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.165,
+      "latency_seconds": 0.886,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -6846,20 +6913,20 @@
       "is_answer": false,
       "error": null,
       "id": "J2-047",
-      "wall_seconds": 0.165,
+      "wall_seconds": 0.886,
       "usage_delta": {
-        "input_tokens": 0,
-        "seconds": 0.0,
+        "llm_calls": 1,
+        "input_tokens": 248,
+        "seconds": 0.8829999999999991,
         "cache_hits": 0,
-        "llm_calls": 0,
-        "output_tokens": 0
+        "output_tokens": 252
       }
     },
     {
       "question": "What is the werkzeug.socket key in the environ used for?",
       "status": "ABSTAIN",
       "answer": "",
-      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 403 b'error code: 1010\\n'",
+      "abstain_reason": "model unavailable: https://api.groq.com/openai/v1: HTTP 429 b'{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01khkf68pfefpvcb9mn0fccezs` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7848, Req'",
       "intent": {
         "subject": "werkzeug.socket",
         "requested_fact": "What is the werkzeug.socket key in the environ used for?",
@@ -6952,11 +7019,11 @@
       "attempts": 1,
       "regenerations": 0,
       "usage": {
-        "llm_calls": 0,
-        "input_tokens": 0,
-        "output_tokens": 0,
+        "llm_calls": 14,
+        "input_tokens": 7462,
+        "output_tokens": 5317,
         "cache_hits": 0,
-        "seconds": 0.0,
+        "seconds": 17.217,
         "regenerations": 0
       },
       "budget": {
@@ -6965,7 +7032,7 @@
         "max_context_chars": 24000,
         "max_spans": 6
       },
-      "latency_seconds": 0.344,
+      "latency_seconds": 0.436,
       "establishment": "PROPOSED",
       "structural_status": "",
       "identity": {
@@ -6977,12 +7044,12 @@
       "is_answer": false,
       "error": null,
       "id": "J2-048",
-      "wall_seconds": 0.345,
+      "wall_seconds": 0.437,
       "usage_delta": {
+        "llm_calls": 0,
         "input_tokens": 0,
         "seconds": 0.0,
         "cache_hits": 0,
-        "llm_calls": 0,
         "output_tokens": 0
       }
     }

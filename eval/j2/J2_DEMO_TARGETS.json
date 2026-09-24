@@ -1,0 +1,12 @@
+{
+  "note": "§15 demo regression set. These are KNOWN test cases: the system was developed and demonstrated against them, so they measure regression, not generalisation. They are reported separately and are NEVER merged into the primary J-2 denominator.",
+  "count": 3,
+  "questions": [
+    {"id": "DEMO-1", "question": "How does send_from_directory prevent unsafe paths?",
+     "provenance": "Demo 0.1 flagship; also the subject of J1-009 and J1-047"},
+    {"id": "DEMO-2", "question": "How does safe_join stop an unsafe path?",
+     "provenance": "Demo 0.1 target"},
+    {"id": "DEMO-3", "question": "How does build construct a URL?",
+     "provenance": "Demo 0.1 target; also the subject of J1-054"}
+  ]
+}

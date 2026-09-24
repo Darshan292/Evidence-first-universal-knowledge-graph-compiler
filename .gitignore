@@ -10,3 +10,8 @@ __pycache__/
 
 # workbench runtime state: uploaded sources, per-workspace databases
 workspaces/
+
+# J-2 run checkpoints: transient resume state, rewritten after every question.
+# The FINAL artifact (eval/j2/J2_RUN*.json) is committed; a partial checkpoint
+# is not a result and must never look like one.
+*.ckpt.json

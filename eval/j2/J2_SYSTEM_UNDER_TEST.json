@@ -1,0 +1,43 @@
+{
+  "compiler_commit": "7bc625319922393bd62313c2a47b845d1aa94616",
+  "compiler_dirty": false,
+  "schema_version": "1",
+  "demo_version": "0.2.0",
+  "corpus_repository": "https://github.com/pallets/werkzeug",
+  "corpus_commit": "6048fa48753c7b61e35cc34537667809dee8fa35",
+  "corpus_commit_required_by_j2": "6048fa48753c7b61e35cc34537667809dee8fa35",
+  "corpus_commit_matches": true,
+  "corpus_content_sha256": "19f4028a0a9f15b4e77d41ad489ee3368b72b309c9ac2836b1d34941fc32d35f",
+  "database": "eval/j2/j2_run1.sqlite",
+  "database_sha256": "0b74e7026c8d48b2a27ae8bcb67c498f017c662fec20f29084f255f087e6d609",
+  "fresh_database": true,
+  "compile_seconds": 6.3,
+  "artifact_count": 225,
+  "symbol_count": 6102,
+  "claim_count": 16244,
+  "evidence_count": 16066,
+  "parse_status": {
+    "ok": 140,
+    "partial": 0,
+    "failed": 0,
+    "unsupported": 85,
+    "skipped": 0
+  },
+  "predicates": {
+    "CALLS": 8375,
+    "CONTAINS": 5962,
+    "IMPORTS": 1582,
+    "EXTENDS": 163,
+    "HAS_VALUE": 162
+  },
+  "invariant_violations": [],
+  "ingest_report": {
+    "seen": 225,
+    "parsed": 140,
+    "failed": 0,
+    "unsupported": 85,
+    "skipped": 0,
+    "absent": [],
+    "extraction_failed": 0
+  }
+}

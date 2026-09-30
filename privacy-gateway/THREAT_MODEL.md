@@ -67,6 +67,7 @@ Test IDs are suites in EVALUATION_PLAN.md: E-DET, E-ADV, E-FMT, E-UTIL, E-STREAM
 | T18 | DoS: huge payloads or adversarial text inflate NER cost | D | A2, A5 | Size limits, per-class detection deadline, fail closed (ADR-0005/0007); NER pool separate | Attacker can cause AI downtime for RESTRICTED by design; needs rate limits per app | E-PERF |
 | T19 | Cross-tenant leakage via shared cache/process | I | A2, bug | Per-tenant cache HMAC key, no cross-tenant cache (DESIGN 8); values not stored in cache (ADR-0005) | P1 may share one process across tenants; memory not isolated; dedicated pods optional | E-CANARY, E-EGRESS-FUZZ |
 | T20 | False sense of security: egress invariant only covers what WAS detected | I | all | Stated in DESIGN 9 and here; invariant is a bug detector, not a recall control; E-DET publishes recall | Users may treat "invariant passed" as "no PII sent" | E-DET, E-CANARY |
+| T21 | Re-ingestion of restored output: client truncates history, re-sends an assistant message containing a value the gateway restored; only occurrence left is in text a detector may miss | I | bug, A2 | Restore ledger: keyed-hash record of every restored value per conversation, matched by D3b before other detectors; conversation id mandatory for multi-turn restore; fail closed if ledger unavailable (ADR-0010) | Values the *user* re-types in altered form still depend on normal detection; with `k_tenant_rl`, low-entropy values confirmable (as T17) | E-STREAM-T21, E-CANARY |
 
 ## 5. Residual risks we accept and must disclose
 

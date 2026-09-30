@@ -3,17 +3,16 @@
 A policy-driven privacy gateway between ESU applications (HRIS/ERP) and LLM
 providers. **Phase 0: design only, no code.**
 
-> This folder is independent of the knowledge-graph compiler in the repository
-> root. It should move to its own repository before implementation starts.
+> Extracted from the `Evidence-first-universal-knowledge-graph-compiler` repository with its history; this is now the project's home.
 
 ## Read in this order
 
 1. [DESIGN.md](DESIGN.md) — the system: requirements, boundary, lifecycle,
    components, entity taxonomy, keys, deployment, limitations.
-2. [ADR/](ADR/) — the nine decisions and what was rejected:
+2. [ADR/](ADR/) — the ten decisions and what was rejected:
    0001 boundary · 0002 aliases · 0003 ephemeral mapping · 0004 purpose ·
    0005 detection · 0006 policy · 0007 egress invariant · 0008 streaming ·
-   0009 tools & RAG.
+   0009 tools & RAG · 0010 restore ledger.
 3. [THREAT_MODEL.md](THREAT_MODEL.md) — adversaries, threats, controls, residual risk.
 4. [EVALUATION_PLAN.md](EVALUATION_PLAN.md) — pre-registered gates.
 5. [ROADMAP.md](ROADMAP.md) — phases and exit gates.
@@ -34,5 +33,6 @@ providers. **Phase 0: design only, no code.**
 | Response DLP | Gate on aliased text *before* restore; bounded incremental streaming | Everyone else either buffers the whole stream or leaks (ADR-0008) |
 | (absent) | Egress invariant on the exact outbound bytes | Bugs, not models, cause the embarrassing leaks (ADR-0007) |
 | (absent) | Detection cache; NER only on free text | NER on re-sent history is O(n²) and seconds per turn on CPU (ADR-0005) |
+| (absent) | Keyed-hash restore ledger per conversation | Restored values re-sent in truncated history would otherwise depend on NER recall (ADR-0010) |
 | Recommends `guardrails_pii`, cites `microsoft/presidio` | Archived; Presidio moved to `data-privacy-stack` | research/OSS_COMPONENTS.md |
 | Phases 1–6 incl. RAG, agents, console | Phase 1 is deterministic core only, gated | R-01 scope creep is the top risk |

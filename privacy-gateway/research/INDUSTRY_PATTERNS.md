@@ -1,6 +1,8 @@
 # How industry does it: LLM privacy layers (research notes, 2026-09-30)
 
 ## 1. Sourcing caveat
+**Update 2026-09-30 (second pass):** Cloudflare and SAP rows re-verified against primary doc sources on GitHub (cloudflare-docs, SAP-docs); Google Model Armor proto confirms StreamSanitizeUserPrompt/StreamSanitizeModelResponse RPCs but no tool-call field. No vendor publishes PII-masking latency. Full evidence: `VERIFICATION_2026-09-30.md`.
+
 WebFetch was egress-blocked for the primary pages (help.salesforce.com, developers.cloudflare.com, docs.aws.amazon.com, help.sap.com). Everything below comes from WebSearch result summaries that quote or cite those pages, so it is secondhand. Re-verify specifics against the linked URLs. Anything not sourced is marked UNVERIFIED. Almost no vendor-documented latency numbers were found.
 
 ## 2. Comparison
@@ -8,12 +10,13 @@ WebFetch was egress-blocked for the primary pages (help.salesforce.com, develope
 | Vendor | Where masking sits | Reversible? | Streaming behaviour | Tool-call coverage | Documented limitation |
 |---|---|---|---|---|---|
 | Salesforce Einstein Trust Layer | Gateway between grounding and LLM | Yes (stored placeholder map) | UNVERIFIED | Masking disabled for agents | Limited entities/languages for pattern masking; no 100% accuracy; quality loss |
-| Cloudflare AI Gateway DLP | Gateway, request and response scan | No masking found (flag/block) | Full response buffered when response scanning is on | UNVERIFIED (docs issue #28325) | Higher time-to-first-token |
+| Cloudflare AI Gateway DLP | Gateway, request and response scan | No: pass/flag/block only, no redaction (primary) | Full response buffered before inspection when response scanning is on; request-only DLP does not buffer (primary) | Tool args/results scanned only as text in the JSON body (primary) | TTFT grows with generation time |
+| Cloudflare AI Gateway Guardrails (separate feature) | Gateway | n/a (content safety) | REST endpoints: streamed response logged, not enforced; gateway endpoints: full buffer, returned non-streamed (primary) | UNVERIFIED | Streaming enforcement gap |
 | AWS Bedrock Guardrails | Model-boundary guardrail | Tags only (`[NAME-1]`), one-way | Sync buffers; async cannot mask | Not checked by default | Async can leak unfiltered chunks |
 | Google Model Armor + SDP | De-identify template on prompt/response | Yes with key (AES-SIV/FPE) | UNVERIFIED | UNVERIFIED | Latency UNVERIFIED |
-| Microsoft (Presidio, PII Shield) | Proxy before LLM call | Placeholders (PII Shield) | UNVERIFIED | UNVERIFIED | Content Safety/Purview UNVERIFIED |
+| Microsoft (Presidio, PII Shield) | Proxy before LLM call | Placeholders (PII Shield) | UNVERIFIED | UNVERIFIED | Purview DSPM for AI detects/classifies/blocks; no evidence it masks prompts. Content Safety PII masking UNVERIFIED |
 | Skyflow | Vault, tokenize before LLM | Yes (policy-gated detokenize) | UNVERIFIED | UNVERIFIED | Vendor claims only |
-| SAP AI Core orchestration | Optional module in orchestration workflow (SAP DPI) | Pseudonymization yes; anonymization no | UNVERIFIED | UNVERIFIED | Entity list/latency UNVERIFIED |
+| SAP AI Core orchestration | Optional module in orchestration workflow (SAP DPI) | Pseudonymization yes; anonymization no | Streaming unmasking works; a `MASKED_ENTITY_x` tag split across chunks is carried whole into the next chunk; SAP states small chunks reduce unmasking accuracy (primary) | Tool-call args unmasked outbound and re-masked inbound, pseudonymization only (primary) | 27 entity types, many locale-limited (person names English-only, addresses US-only); no latency published |
 | Uber GenAI Gateway | Gateway redactor before third-party vendors | Yes (mapping used to un-redact) | UNVERIFIED | UNVERIFIED | Latency, quality loss, caching/RAG breakage |
 
 ## 3. Per-vendor notes

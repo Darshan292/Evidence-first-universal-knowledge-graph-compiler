@@ -24,7 +24,7 @@ Sources: GitHub pages, PyPI JSON, search snippets. Egress-blocked: GitHub API, h
 **1. Presidio**
 - Move to `data-privacy-stack/presidio` confirmed (repo banner; PyPI homepage). Stays MIT. Docker images moved from `mcr.microsoft.com/presidio-*` to `ghcr.io/data-privacy-stack/presidio-*`; legacy MCR images are no longer updated. Source: https://github.com/data-privacy-stack/presidio/blob/main/docs/project_transition.md
 - PyPI extras: gliner, transformers, stanza, langextract, azure-ai-language, server, ahds. GLiNER and transformers recognizers supported; ONNX backend for GLiNERRecognizer in 2.2.362. Python 3.10-3.14. https://pypi.org/project/presidio-analyzer/
-- Batch: REST batch processing and batch deanonymization added in 2.2.361. True async: UNVERIFIED.
+- Batch: REST batch processing and batch deanonymization added in 2.2.361. No native async API (PyPI description; NeMo Guardrails PR #2400 wraps it to avoid blocking the event loop) → run in a thread/process executor.
 - Releases page showed 2.2.364 with a 2024 date; PyPI says 22 Jul 2026. PyPI trusted.
 
 **2. presidio-research.** Under new org; no evidence microsoft/presidio-research redirects. Evaluation data generation and notebooks.
@@ -32,8 +32,8 @@ Sources: GitHub pages, PyPI JSON, search snippets. Egress-blocked: GitHub API, h
 **3. llm-guard.** Banner: "THIS PROJECT HAS BEEN ARCHIVED... no longer under active development or maintained"; read-only; HF models unmaintained.
 
 **4. GLiNER PII models** (HF blocked; from search snippets)
-- urchade/gliner_multi_pii-v1: Apache-2.0 (snippet); EN/FR/ES/DE/IT/PT; F1/latency UNVERIFIED.
-- knowledgator/gliner-pii-{edge,small,base,large}-v1.0: license UNVERIFIED. Snippet F1: 75.50 / 76.84 / 80.99 / 83.25. CPU latency UNVERIFIED (only "gline-rs 4x faster than Python on CPU").
+- urchade/gliner_multi_pii-v1: Apache-2.0; a third-party benchmark (arXiv 2605.09973, secondary) reports F1 ≈ 0.38 on SPY with low recall — treat with caution; EN/FR/ES/DE/IT/PT; own-card F1 and latency UNVERIFIED.
+- knowledgator/gliner-pii-{edge,small,base,large}-v1.0: Apache-2.0 (model card front-matter). Snippet F1: 75.50 / 76.84 / 80.99 / 83.25. CPU latency UNVERIFIED (only "gline-rs 4x faster than Python on CPU").
 - nvidia/gliner-PII: license "other", NVIDIA Open Model License (not Apache). Benchmarks UNVERIFIED.
 - GLiNER2-PII (arXiv 2605.09973, Fastino): reported Apache-2.0 (snippet). GLiNER library: Apache-2.0.
 - URLs: https://github.com/urchade/GLiNER, https://huggingface.co/knowledgator/gliner-pii-large-v1.0, https://huggingface.co/nvidia/gliner-PII, https://fastino.ai/blog/gliner2-pii-open-source-privacy-filtering-with-pii-detection
@@ -79,7 +79,7 @@ Sources: GitHub pages, PyPI JSON, search snippets. Egress-blocked: GitHub API, h
 | Component | Decision | Reason |
 |---|---|---|
 | Presidio | ADOPT | Analyzer as one detector; pin version; use ghcr images. |
-| GLiNER library | ADOPT | Model choice pending license verification + E-DET benchmark. Prefer Apache: urchade/gliner_multi_pii-v1, knowledgator if Apache, GLiNER2-PII. |
+| GLiNER library | ADOPT | Model choice pending license verification + E-DET benchmark. Prefer Apache: knowledgator gliner-pii (Apache-2.0, published F1), GLiNER2-PII; urchade/gliner_multi_pii-v1 only if it survives E-DET (weak third-party recall). |
 | cryptography AESSIV | ADOPT | Present since 37.0.0; deterministic tokens (equality leak noted). |
 | OPA | REFERENCE ONLY | Phase 1 per ADR-0006 (in-process decision tables); revisit for tool-gateway authorisation in Phase 5. |
 | LiteLLM | REJECT in front of core | Allowed behind core as provider router only after supply-chain review; de-masking bugs. |

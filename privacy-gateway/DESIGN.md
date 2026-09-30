@@ -3,7 +3,7 @@
 - **Status:** Proposed (Phase 0 — design, no code)
 - **Date:** 2026-09-30
 - **Inputs:** `ESU_Privacy_Preserving_LLM_Security_Gateway_Report.md` (survey),
-  `research/*.md` (verification of that survey), ADR-0001…0009.
+  `research/*.md` (verification of that survey), ADR-0001…0010.
 
 ---
 
@@ -84,13 +84,13 @@ contracts with LLM providers.
 3. **Parse** the provider body into the message IR. Unknown fields in content
    positions → 400 (never forwarded un-inspected).
 4. **Normalise** each content segment (D0) keeping an offset map.
-5. **Detect** (D1–D5) using the detection cache for previously-seen messages.
+5. **Detect** (D1–D5) using the detection cache for previously-seen messages. Assistant-role messages are first matched against the conversation's restore ledger (D3b, ADR-0010).
 6. **Resolve** entities (canonical grouping); **decide** action per entity.
 7. If any BLOCK_REQUEST / DENY_ROUTE_LOCAL → 422 with types and offsets only.
 8. **Transform**: aliases (HMAC under scope key), redaction, generalisation.
    Bind aliases in the ephemeral mapping store.
 9. **Serialise** provider body; **egress invariant** sweep; write ledger; send.
-10. **Output gate** on aliased response; **restore** if app+policy allow.
+10. **Output gate** on aliased response; **restore** if app+policy allow. Each restored value is recorded as a keyed hash in the restore ledger (ADR-0010).
 11. Drop the mapping (best-effort zeroisation; see THREAT_MODEL T16); return.
 
 ## 5. Components
@@ -214,3 +214,4 @@ clients whose contracts require it.
 | 0007 | Egress invariant, fail-closed matrix, PII-free telemetry |
 | 0008 | Incremental streaming restore; output gate on aliased text |
 | 0009 | Tool results and RAG are enforcement points |
+| 0010 | Keyed-hash restore ledger catches restored values re-sent in truncated history |

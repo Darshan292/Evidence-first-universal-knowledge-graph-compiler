@@ -35,6 +35,17 @@ Corpus (synthetic, generated then hand-corrected):
 Name sources must include ≥ 30 % names **absent** from any EDM dictionary, so
 NER is actually tested.
 
+**Statistical power (amendment 2026-09-30, before any run).** A recall gate
+is meaningless if the test split holds 40 positives (one miss = 0.975). Minimum
+*positive instances per type in the test split*: **≥ 150** for each HIGH type,
+EMAIL, PHONE, EMPLOYEE_ID (zero misses at n = 150 bounds the true miss rate at
+≈ 2 % with 95 % confidence, rule of three); **≥ 400** for PERSON; **≥ 200** for
+COMPENSATION. Generators are sized to hit these after the 60/20/20 split. Every
+per-type result is reported with its Wilson 95 % interval; a gate passes on the
+point estimate **and** requires the interval's lower bound to be within 0.03 of
+the gate. Types that cannot reach the minimum n are reported as *underpowered*,
+not as passing.
+
 Metrics: per-type precision, recall, F1 (exact span and overlap); **leak rate**
 = fraction of gold sensitive characters that reach the egress body.
 
@@ -90,6 +101,15 @@ alias, multi-choice streams, interleaved tool-call deltas, Anthropic
 content-block streams, abrupt termination. **Gate:** 0 raw-alias emissions to
 client, 0 un-restored complete aliases, 0 split-value leaks; TTFT overhead
 p95 ≤ 50 ms.
+
+### E-STREAM-T21 — re-ingested restored output (ADR-0010)
+
+Multi-turn scripts (≥ 200) where the user turn that introduced a value is
+dropped before turn *n*; NER is forced to miss (mock detector); the in-process
+detection cache is cleared between turns; turns alternate between two gateway
+pods. **Gate: 0 raw restored values in any egress body.** Also asserts
+`400 PGW_CONVERSATION_ID_REQUIRED` for restore-enabled apps sending assistant
+turns without a conversation id.
 
 ## E-EGRESS-FUZZ — bug-leak hunting
 

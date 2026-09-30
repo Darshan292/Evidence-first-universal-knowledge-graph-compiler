@@ -33,7 +33,7 @@ DurableMappingStore     # Phase 3. PostgreSQL + envelope encryption. Only for:
                         #   (a) stateful provider APIs (Responses API previous_response_id,
                         #       Assistants threads) where history is NOT re-sent,
                         #   (b) async/batch jobs whose output is restored later,
-                        #   (c) RAG corpora tokenised at ingestion (ADR-0008),
+                        #   (c) RAG corpora tokenised at ingestion (ADR-0009),
                         #   (d) audited re-identification after the fact.
 ```
 
